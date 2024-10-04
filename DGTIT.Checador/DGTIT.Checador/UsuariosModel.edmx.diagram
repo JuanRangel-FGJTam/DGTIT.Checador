@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8b91b7fed01448879b308ea5cdc86619" Name="Diagram1">
+        <EntityTypeShape EntityType="UsuariosDBModel.CntrlDeAsistencia" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="UsuariosDBModel.ControlDeAsistencia" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="UsuariosDBModel.department" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="UsuariosDBModel.direction" Width="1.5" PointX="0.75" PointY="9.75" />
+        <EntityTypeShape EntityType="UsuariosDBModel.EmpleadoRegistro" Width="1.5" PointX="7.75" PointY="9.75" />
+        <EntityTypeShape EntityType="UsuariosDBModel.employee" Width="1.5" PointX="3.75" PointY="1" />
+        <EntityTypeShape EntityType="UsuariosDBModel.employees_respaldo" Width="1.5" PointX="9.75" PointY="9.75" />
+        <EntityTypeShape EntityType="UsuariosDBModel.failed_jobs" Width="1.5" PointX="10.75" PointY="0.75" />
+        <EntityTypeShape EntityType="UsuariosDBModel.general_directions" PointX="0.75" PointY="0.75" Width="1.5" />
+        <EntityTypeShape EntityType="UsuariosDBModel.incident_states" Width="1.5" PointX="3.75" PointY="5.5" />
+        <EntityTypeShape EntityType="UsuariosDBModel.incident_types" Width="1.5" PointX="3.75" PointY="8.25" />
+        <EntityTypeShape EntityType="UsuariosDBModel.incident" Width="1.5" PointX="6" PointY="1.25" />
+        <EntityTypeShape EntityType="UsuariosDBModel.menu_user" Width="1.5" PointX="8" PointY="6" />
+        <EntityTypeShape EntityType="UsuariosDBModel.menu" Width="1.5" PointX="5.75" PointY="6" />
+        <EntityTypeShape EntityType="UsuariosDBModel.migration" Width="1.5" PointX="2.75" PointY="11.75" />
+        <EntityTypeShape EntityType="UsuariosDBModel.record" Width="1.5" PointX="11.75" PointY="7.75" />
+        <EntityTypeShape EntityType="UsuariosDBModel.subdirectorate" Width="1.5" PointX="11.75" PointY="10.75" />
+        <EntityTypeShape EntityType="UsuariosDBModel.type_files" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="UsuariosDBModel.type_justifies" Width="1.5" PointX="12.75" PointY="3.75" />
+        <EntityTypeShape EntityType="UsuariosDBModel.user" Width="1.5" PointX="5.75" PointY="11.25" />
+        <EntityTypeShape EntityType="UsuariosDBModel.working_hours" Width="1.5" PointX="13.75" PointY="6.75" />
+        <EntityTypeShape EntityType="UsuariosDBModel.file" Width="1.5" PointX="13.75" PointY="10.75" />
+        <EntityTypeShape EntityType="UsuariosDBModel.justify" Width="1.5" PointX="11.75" PointY="13.75" />
+        <EntityTypeShape EntityType="UsuariosDBModel.password_resets" Width="1.5" PointX="13.75" PointY="13.75" />
+        <EntityTypeShape EntityType="UsuariosDBModel.Vw_plazas_nomina" PointX="8.375" PointY="14.75" Width="1.5" />
+        <EntityTypeShape EntityType="UsuariosDBModel.VwEmpleadoRegistro" Width="1.5" PointX="0.75" PointY="14.75" />
+        <AssociationConnector Association="UsuariosDBModel.fk_employee_id" />
+        <AssociationConnector Association="UsuariosDBModel.fk_incident_state_id" />
+        <AssociationConnector Association="UsuariosDBModel.fk_incident_type_id" />
+        <AssociationConnector Association="UsuariosDBModel.menu_user_menu_id_foreign" />
+        <AssociationConnector Association="UsuariosDBModel.menu_user_user_id_foreign" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
