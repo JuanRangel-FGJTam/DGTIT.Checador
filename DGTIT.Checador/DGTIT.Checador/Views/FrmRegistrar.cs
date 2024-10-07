@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DGTIT.Checador.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,15 +15,79 @@ namespace DGTIT.Checador
 {
     public partial class FrmRegistrar : Form
     {
+        private readonly ChecadorService checadorService;
+        private readonly FiscaliaService fiscaliaService;
+
         private DPFP.Template Template;
         private UsuariosDBEntities contexto;
         private procuraduriaEntities1 procu;
-        private string numeroEmpleado = "";
 
-        public FrmRegistrar()
+        private readonly int employeeNumber;
+        private employee currentEmployee;
+        
+        public FrmRegistrar(int employeeNumber)
         {
             InitializeComponent();
+            this.employeeNumber = employeeNumber;
+
+            contexto = new UsuariosDBEntities();
+            procu = new procuraduriaEntities1();
+
+            this.checadorService = new ChecadorService(contexto);
+            this.fiscaliaService = new FiscaliaService(procu, contexto);
+            
         }
+        private void OnLoaded(object sender, EventArgs e)
+        {
+            LoadCatalogs();
+
+            // * load the employee
+            this.currentEmployee = checadorService.GetEmployee(employeeNumber);
+
+            // * display the employee info
+            this.tb_employeeNumber.Text = employeeNumber.ToString();
+            this.txtNombre.Text = currentEmployee.name;
+            this.cboDirGral.SelectedValue = currentEmployee.general_direction_id;
+            this.cboDireccion.SelectedValue = currentEmployee.direction_id;
+            this.cboSubdireccion.SelectedValue = currentEmployee.subdirectorate_id;
+            this.cboDepartamento.SelectedValue = currentEmployee.department_id;
+
+            // * get the working hours
+            var workingHours = checadorService.GetWorkinHours(employeeNumber);
+            if( workingHours != null)
+            {
+                this.txtEntrada.Text = workingHours.checkin;
+                this.txtComida.Text = workingHours.toeat;
+                this.txtRegreso.Text = workingHours.toarrive;
+                this.txtSalida.Text = workingHours.checkout;
+            }                                               
+
+            // * get the image of the fingerprint
+            if (this.currentEmployee.fingerprint != null)
+            {
+                this.btnRegistrarHuella.Text = "Actualizar Huella";
+                //Bitmap bmp = null;
+                //using (var ms = new MemoryStream(this.currentEmployee.fingerprint))
+                //{
+                //    var sample = new DPFP.Sample(ms);
+                //    var sampleConversion = new DPFP.Capture.SampleConversion();
+                //    sampleConversion.ConvertToPicture(sample, ref bmp);
+                //}
+                //this.img_fingerPrint.Image = bmp;
+
+                var x = Convert.ToBase64String(this.currentEmployee.fingerprint);
+                this.tbFingerPrint.Text = x;
+            }
+            else
+            {
+                this.btnRegistrarHuella.Text = "Registrar Huella";
+            }
+
+
+            // * set the employee foto
+            this.img_photo.Image = this.fiscaliaService.GetEmployeePhoto(employeeNumber);
+        }
+
 
         private void btnRegistrarHuella_Click(object sender, EventArgs e)
         {
@@ -33,14 +98,13 @@ namespace DGTIT.Checador
 
         private void OnTemplate(DPFP.Template template)
         {
-            this.Invoke(new Function(delegate ()
-            {
+            this.Invoke(new Function(delegate () {
                 Template = template;
                 btnAgregar.Enabled = (Template != null);
                 if (Template != null)
                 {
                     MessageBox.Show("The fingerprint template is ready for fingerprint verification.", "Fingerprint Enrollment");
-                    txtHuella.Text = "Huella capturada correctamente";
+                    //txtHuella.Text = "Huella capturada correctamente";
                 }
                 else
                 {
@@ -49,16 +113,8 @@ namespace DGTIT.Checador
             }));
         }
 
-        private void frmRegistrar_Load(object sender, EventArgs e)
-        {
-            contexto = new UsuariosDBEntities();
-            procu = new procuraduriaEntities1();
-            Listar();
-
-            LlenarDirGral();
-        }
-
-        private void LlenarDirGral()
+        
+        private void LoadCatalogs()
         {
             var dirgral = contexto.general_directions.ToList();
             cboDirGral.DataSource = dirgral;
@@ -80,175 +136,42 @@ namespace DGTIT.Checador
             cboDepartamento.ValueMember = "id";
             cboDepartamento.DisplayMember = "name";
         }
-
-        private void Limpiar()
+        
+        private void BtnUpdateClick(object sender, EventArgs e)
         {
-            txtNombre.Text = "";
-        }
+            //try
+            //{
+            //      byte[] streamHuella = Template.Bytes;
 
-        private void Listar()
-        {
-            try
-            {
-                //var products = from p in ne.Products
-                //               where (supplierIDs.Contains((int)p.SupplierID))
-                //               select p;
-
-                var empleados = from emp in procu.EMPLEADO
-                                    where (emp.NUMEMP != 0)
-                                select new
-                                {
-                                    NUM_EMPLEADO = emp.NUMEMP,
-                                    EMPLEADO = emp.NOMBRE,
-                                    PATERNO = emp.APELLIDOPATERNO,
-                                    MATERNO = emp.APELLIDOMATERNO
-                                };
-                if (empleados != null)
-                {
-                    DataTable dt = ToDataTable(empleados.ToList());
-
-                    dgvListar.DataSource = dt;
-                }
-            }
-            catch (Exception ex)
-            {
-
-                MessageBox.Show(ex.Message);
-            }
-        }
-        public static DataTable ToDataTable<T>(List<T> items)
-        {
-            DataTable dataTable = new DataTable(typeof(T).Name);
-
-            //Get all the properties
-            PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            foreach (PropertyInfo prop in Props)
-            {
-                //Setting column names as Property names
-                dataTable.Columns.Add(prop.Name);
-            }
-            foreach (T item in items)
-            {
-                var values = new object[Props.Length];
-                for (int i = 0; i < Props.Length; i++)
-                {
-                    //inserting property values to datatable rows
-                    values[i] = Props[i].GetValue(item, null);
-                }
-                dataTable.Rows.Add(values);
-            }
-            //put a breakpoint here and check datatable
-            return dataTable;
-        }
-        private void txtSearch_TextChanged(object sender, EventArgs e)
-        {
-            (dgvListar.DataSource as DataTable).DefaultView.RowFilter = string.Format("NUM_EMPLEADO like '{0}%' OR EMPLEADO like '{0}%' OR PATERNO like '{0}%' OR MATERNO like '{0}%'", txtSearch.Text);
-        }
-
-        private void btnAgregar_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                  byte[] streamHuella = Template.Bytes;
-
-                using (SqlConnection connection = new SqlConnection("data source=192.168.123.245;initial catalog=UsuariosDB;persist security info=True;user id=usernsjp;password=NSJP010713;MultipleActiveResultSets=True"))
-                {
+            //    using (SqlConnection connection = new SqlConnection("data source=192.168.123.245;initial catalog=UsuariosDB;persist security info=True;user id=usernsjp;password=NSJP010713;MultipleActiveResultSets=True"))
+            //    {
                     
-                    connection.Open();
-                    string sql7 = " insert into employees (general_direction_id,direction_id,subdirectorate_id,department_id,plantilla_id,name,photo,fingerprint,created_at,updated_at)";
-                    sql7 = sql7 + " values ("+ cboDirGral.SelectedValue + ","+ cboDireccion.SelectedValue +","+ cboSubdireccion.SelectedValue +"," + cboDepartamento.SelectedValue + ",RIGHT('100000' + " +  numeroEmpleado  + ", 6),'" + txtNombre.Text + "','photos/',@param1,getdate(),getdate() )";
-                    sql7 = sql7 + " declare @employee_id Int select @employee_id=max(id) from employees "; 
-                    sql7 = sql7 + " insert into working_hours (employee_id,checkin,toeat,toarrive,checkout,created_at) ";
-                    sql7 = sql7 + " values (@employee_id,'"+ txtEntrada.Text + "','"+ txtComida.Text + "','" + txtRegreso.Text + "','"+ txtSalida.Text + "', getdate()) ";
-                   // sql7 = sql7 + " ";
-                    SqlCommand cmd = new SqlCommand(sql7, connection);
-                    cmd.Parameters.Add("@param1", SqlDbType.Image).Value = streamHuella;
-                    cmd.CommandType = CommandType.Text;
-                    cmd.ExecuteNonQuery();
-                    connection.Close(); 
-                }
-                /*  employee empleado = new employee()
-                 *    employee_id_ = empleado.id,
-                      checkin = txtEntrada.Text,
-                      toeat = txtComida.Text,
-                      toarrive = txtRegreso.Text,
-                      checkout = txtSalida.Text,
-                      created_at = DateTime.Now
-                 {
-                      //general_direction_id = (long)cboDirGral.SelectedValue,
-                      //direction_id = (long)cboDireccion.SelectedValue,
-                      //subdirectorate_id = (long)cboSubdireccion.SelectedValue,
-                      //department_id = (long)cboDepartamento.SelectedValue,
-                      //plantilla_id = int.Parse(numeroEmpleado) + 10000,
-                      name = txtNombre.Text,
-                      //photo="C:",
-                      //fingerprint = streamHuella,
-                      //created_at = DateTime.Now,
-                      //updated_at = DateTime.Now,
-                      //status_id=1
-                  };
+            //        connection.Open();
+            //        string sql7 = " insert into employees (general_direction_id,direction_id,subdirectorate_id,department_id,plantilla_id,name,photo,fingerprint,created_at,updated_at)";
+            //        sql7 = sql7 + " values ("+ cboDirGral.SelectedValue + ","+ cboDireccion.SelectedValue +","+ cboSubdireccion.SelectedValue +"," + cboDepartamento.SelectedValue + ",RIGHT('100000' + " +  numeroEmpleado  + ", 6),'" + txtNombre.Text + "','photos/',@param1,getdate(),getdate() )";
+            //        sql7 = sql7 + " declare @employee_id Int select @employee_id=max(id) from employees "; 
+            //        sql7 = sql7 + " insert into working_hours (employee_id,checkin,toeat,toarrive,checkout,created_at) ";
+            //        sql7 = sql7 + " values (@employee_id,'"+ txtEntrada.Text + "','"+ txtComida.Text + "','" + txtRegreso.Text + "','"+ txtSalida.Text + "', getdate()) ";
+            //       // sql7 = sql7 + " ";
+            //        SqlCommand cmd = new SqlCommand(sql7, connection);
+            //        cmd.Parameters.Add("@param1", SqlDbType.Image).Value = streamHuella;
+            //        cmd.CommandType = CommandType.Text;
+            //        cmd.ExecuteNonQuery();
+            //        connection.Close(); 
+            //    }
+                
 
 
-          public long general_direction_id { get; set; }
-          public long direction_id { get; set; }
-          public long subdirectorate_id { get; set; }
-          public long department_id { get; set; }
-          public Nullable<int> plantilla_id { get; set; }
-          public string name { get; set; }
-          public string photo { get; set; }
-          public byte[] fingerprint { get; set; }
-          public Nullable<System.DateTime> created_at { get; set; }
-          public Nullable<System.DateTime> updated_at { get; set; }
-          public Nullable<int> status_id { get; set; }
+            //    MessageBox.Show("Registro agregado a la BD correctamente");
+            //    Template = null;
+            //    btnAgregar.Enabled = false;
 
+            //}
+            //catch (Exception ex)
+            //{
 
-                  contexto.employees.Add(empleado);
-                 contexto.SaveChanges();
-
-                  working_hours horario = new working_hours()
-                  {
-                      employee_id_ = empleado.id,
-                      checkin = txtEntrada.Text,
-                      toeat = txtComida.Text,
-                      toarrive = txtRegreso.Text,
-                      checkout = txtSalida.Text,
-                      created_at = DateTime.Now
-                  };
-
-                  contexto.working_hours.Add(horario);
-                  contexto.SaveChanges();*/
-
-
-                MessageBox.Show("Registro agregado a la BD correctamente");
-                Limpiar();
-                Listar();
-                Template = null;
-                btnAgregar.Enabled = false;
-
-            }
-            catch (Exception ex)
-            {
-
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        private void dgvListar_SelectionChanged(object sender, EventArgs e)
-        {
-            if (dgvListar.CurrentRow.Index != -1)
-            {
-                foreach (DataGridViewRow row in dgvListar.SelectedRows)
-                {
-                     numeroEmpleado = row.Cells[0].Value.ToString();
-                    string nombre = row.Cells[1].Value.ToString();
-                    string paterno = row.Cells[2].Value.ToString();
-                    string materno = row.Cells[3].Value.ToString();
-
-                    txtNombre.Text = paterno + ' ' + materno + ' ' + nombre;
-
-
-                }
-            }
+            //    MessageBox.Show(ex.Message);
+            //}
         }
     }
 }

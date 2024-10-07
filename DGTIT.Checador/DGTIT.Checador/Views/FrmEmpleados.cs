@@ -21,7 +21,7 @@ namespace DGTIT.Checador
 
         private UsuariosDBEntities contexto;
         private procuraduriaEntities1 procu;
-        private string numeroEmpleado = "";
+        private int numeroEmpleado = 0;
         private string nombreEmpleado = "";
         private List<AREA> areasList = new List<AREA>();
         
@@ -37,6 +37,7 @@ namespace DGTIT.Checador
             // * initialized services
             fiscaliaService = new FiscaliaService(procu, contexto);
 
+            this.btnEdit.Click += new EventHandler(BtnEditarClick);
         }
 
         private void FormOnLoad(object sender, EventArgs e)
@@ -46,9 +47,9 @@ namespace DGTIT.Checador
             this.dataGridEmpleados.Columns.Clear();
             this.dataGridEmpleados.Columns.Add(new DataGridViewTextBoxColumn
             {
-                HeaderText = "ID",
-                DataPropertyName = "Id",
-                 Width = 60
+                HeaderText = "Nu Empleado",
+                DataPropertyName = "NumEmpleado",
+                Width = 120
             });
             this.dataGridEmpleados.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -169,7 +170,7 @@ namespace DGTIT.Checador
             {
                 foreach (DataGridViewRow row in dataGridEmpleados.SelectedRows)
                 {
-                    numeroEmpleado = row.Cells[0].Value.ToString();
+                    numeroEmpleado = Convert.ToInt32(row.Cells[0].Value.ToString());
                     string nombre = row.Cells[1].Value.ToString();
                     string paterno = row.Cells[2].Value.ToString();
                     string materno = row.Cells[3].Value.ToString();
@@ -186,6 +187,11 @@ namespace DGTIT.Checador
             }
 
         }
-        
+           
+        private void BtnEditarClick(object sender, EventArgs e)
+        {
+            var formRegistrar = new FrmRegistrar(this.numeroEmpleado);
+            formRegistrar.ShowDialog(this);
+        }
     }
 }

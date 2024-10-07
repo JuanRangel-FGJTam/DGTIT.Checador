@@ -22,6 +22,7 @@ namespace DGTIT.Checador.ViewModels
         {
             var item = new EmployeeViewModel();
             item.Id = entity.IDEMPLEADO;
+            item.NumEmpleado = entity.NUMEMP.Value;
             item.Nombre = entity.NOMBRE;
             item.Paterno = entity.APELLIDOPATERNO;
             item.Materno = entity.APELLIDOMATERNO;

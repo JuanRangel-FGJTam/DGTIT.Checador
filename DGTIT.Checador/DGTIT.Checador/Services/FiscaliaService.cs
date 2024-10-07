@@ -1,7 +1,9 @@
 ﻿using DGTIT.Checador.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Printing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,7 +40,7 @@ namespace DGTIT.Checador.Services {
             }
 
             // * map the employees for retrieving only the necessary columns
-            var empleados = empleadosQuery.ToList().Select(emp => EmployeeViewModel.FromEntity(emp)).ToList();
+            var empleados = empleadosQuery.Take(30).ToList().Select(emp => EmployeeViewModel.FromEntity(emp)).ToList();
 
             //foreach (var emp in empleados)
             //{
@@ -51,6 +53,23 @@ namespace DGTIT.Checador.Services {
 
             return empleados;
             
+        }
+
+        public Bitmap GetEmployeePhoto(int employeeNumber)
+        {
+            var foto = (procuraduriaEntities
+                .EMPLEADO
+                .Where(u => u.NUMEMP == employeeNumber)
+                .Select(u => u.FOTO)
+                .SingleOrDefault()
+            );
+
+            Bitmap bmp;
+            using (var ms = new MemoryStream(foto))
+            {
+                bmp = new Bitmap(ms);
+            }
+            return bmp;
         }
 
     }
