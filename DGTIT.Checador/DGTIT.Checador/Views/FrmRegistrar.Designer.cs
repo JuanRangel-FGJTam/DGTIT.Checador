@@ -1,6 +1,6 @@
 ﻿namespace DGTIT.Checador
 {
-    partial class frmRegistrar
+    partial class FrmRegistrar
     {
         /// <summary>
         /// Required designer variable.

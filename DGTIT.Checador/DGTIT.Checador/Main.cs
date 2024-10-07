@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Windows.Forms;
 
@@ -14,18 +15,25 @@ namespace DGTIT.Checador
         public Main()
         {
             InitializeComponent();
+
+            this.btnRegistrar.Click += new EventHandler(BtnRegistrar_Click);
+            this.btnVerificar.Click += new EventHandler(BtnVerificar_Click);
         }
 
-        private void btnRegistrar_Click(object sender, EventArgs e)
+        private void BtnRegistrar_Click(object sender, EventArgs e)
         {
-            frmRegistrar registrar = new frmRegistrar();
-            registrar.ShowDialog();
+            var empleados = new FrmEmpleados();
+            empleados.ShowDialog(this);
+
+            //FrmRegistrar registrar = new FrmRegistrar();
+            //registrar.ShowDialog();
         }
 
-        private void btnVerificar_Click(object sender, EventArgs e)
+        private void BtnVerificar_Click(object sender, EventArgs e)
         {
             frmVerificar verificar = new frmVerificar();
-            verificar.ShowDialog();
+            verificar.ShowDialog(this);
         }
+
     }
 }

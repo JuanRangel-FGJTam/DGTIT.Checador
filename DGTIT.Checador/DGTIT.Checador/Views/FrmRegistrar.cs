@@ -12,14 +12,14 @@ using System.Windows.Forms;
 
 namespace DGTIT.Checador
 {
-    public partial class frmRegistrar : Form
+    public partial class FrmRegistrar : Form
     {
         private DPFP.Template Template;
         private UsuariosDBEntities contexto;
         private procuraduriaEntities1 procu;
         private string numeroEmpleado = "";
 
-        public frmRegistrar()
+        public FrmRegistrar()
         {
             InitializeComponent();
         }
