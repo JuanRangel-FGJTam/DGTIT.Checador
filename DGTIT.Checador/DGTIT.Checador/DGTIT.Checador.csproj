@@ -187,6 +187,8 @@
       <DependentUpon>FrmCaptura.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\CollectionsHelper.cs" />
+    <Compile Include="Services\FiscaliaService.cs" />
+    <Compile Include="ViewModels\EmployeeViewModel.cs" />
     <Compile Include="Views\FrmEmpleados.cs">
       <SubType>Form</SubType>
     </Compile>

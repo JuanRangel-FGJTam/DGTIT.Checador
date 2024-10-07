@@ -11,28 +11,72 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using DGTIT.Checador.Helpers;
+using DGTIT.Checador.Services;
 
 namespace DGTIT.Checador
 {
     public partial class FrmEmpleados : Form
     {
+        private readonly FiscaliaService fiscaliaService;
+
         private UsuariosDBEntities contexto;
         private procuraduriaEntities1 procu;
         private string numeroEmpleado = "";
         private string nombreEmpleado = "";
         private List<AREA> areasList = new List<AREA>();
-
+        
 
         public FrmEmpleados()
         {
             InitializeComponent();
+            
+            // * initialized the dbContext 
+            contexto = new UsuariosDBEntities();
+            procu = new procuraduriaEntities1();
+            
+            // * initialized services
+            fiscaliaService = new FiscaliaService(procu, contexto);
+
         }
 
         private void FormOnLoad(object sender, EventArgs e)
         {
-            contexto = new UsuariosDBEntities();
-            procu = new procuraduriaEntities1();
+            // * initialize the dataGrid
+            this.dataGridEmpleados.AutoGenerateColumns = false;
+            this.dataGridEmpleados.Columns.Clear();
+            this.dataGridEmpleados.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = "ID",
+                DataPropertyName = "Id",
+                 Width = 60
+            });
+            this.dataGridEmpleados.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Nombre",
+                DataPropertyName = "Nombre",
+                Width = 180
+            });
+            this.dataGridEmpleados.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Apellido Paterno",
+                DataPropertyName = "Paterno",
+                Width = 180
+            });
+            this.dataGridEmpleados.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Apellido Materno",
+                DataPropertyName = "Materno",
+                Width = 180
+            });
+            this.dataGridEmpleados.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Curp",
+                DataPropertyName = "Curp",
+                Width = 180
+            });
+            this.dataGridEmpleados.DataSource = null;
             
+
             LoadAreaComboBox();
         }
 
@@ -52,45 +96,20 @@ namespace DGTIT.Checador
             {
                 dataGridEmpleados.DataSource = null;
 
-                var empleadosQuery = procu.EMPLEADO.Where(item => item.NUMEMP != 0);
-                
-                // * attempt to filter the employees by the area selecetd
-                var areaSelected = (AREA)this.areaComboBox.SelectedItem;
-                if ( areaSelected != null)
-                {
-                    empleadosQuery = empleadosQuery.Where(item => item.IDAREA == areaSelected.IDAREA);
-                }
-
-                // * attempt to filter the employees by the name
+                var areaSelected = (AREA) this.areaComboBox.SelectedItem;
                 var textSearch = this.txtSearch.Text;
-                if(!string.IsNullOrEmpty(textSearch) && textSearch.Length >= 3)
-                {
-                    empleadosQuery = empleadosQuery.Where(item => 
-                            item.NOMBRE.Contains(textSearch) ||
-                            item.APELLIDOPATERNO.Contains(textSearch) ||
-                            item.APELLIDOMATERNO.Contains(textSearch) 
-                    );
-                }
 
                 // * ensured that at least one filter is specified to prevent display all the employees
-                if ( empleadosQuery == null && ( string.IsNullOrEmpty(textSearch) || textSearch.Length < 3))
+                if (areaSelected == null && (string.IsNullOrEmpty(textSearch) || textSearch.Length < 3))
                 {
-                    empleadosQuery = empleadosQuery.Where(item => false);
+                    return;
                 }
 
-                // * map the employees for retrieving only the necessary columns
-                var empleados = empleadosQuery.Select(emp => new {
-                    NUM_EMPLEADO = emp.NUMEMP,
-                    EMPLEADO = emp.NOMBRE,
-                    PATERNO = emp.APELLIDOPATERNO,
-                    MATERNO = emp.APELLIDOMATERNO,
-                    CURP = emp.CURP
-                }).ToList();
+                // * retrive the employees
+                var areaSelectedID = areaSelected == null ? 0 : areaSelected.IDAREA;
+                var empleados = fiscaliaService.SearchEmployees(textSearch, areaSelectedID ).ToList();
+                dataGridEmpleados.DataSource = empleados;
 
-                if (empleados != null)
-                {
-                    dataGridEmpleados.DataSource = empleados;
-                }
             }
             catch (Exception ex)
             {
