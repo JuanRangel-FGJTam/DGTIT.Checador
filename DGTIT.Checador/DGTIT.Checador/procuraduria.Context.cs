@@ -26,5 +26,6 @@ namespace DGTIT.Checador
         }
     
         public virtual DbSet<EMPLEADO> EMPLEADO { get; set; }
+        public virtual DbSet<AREA> AREA { get; set; }
     }
 }

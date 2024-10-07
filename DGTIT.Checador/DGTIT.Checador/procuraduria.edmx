@@ -4,7 +4,25 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="procuraduriaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="procuraduriaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AREA">
+          <Key>
+            <PropertyRef Name="IDAREA" />
+          </Key>
+          <Property Name="IDAREA" Type="int" Nullable="false" />
+          <Property Name="CVEAREA" Type="nvarchar" MaxLength="13" />
+          <Property Name="AREA" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="IDMUNICIPIO" Type="smallint" Nullable="false" />
+          <Property Name="SUBPROCURADURIA" Type="bit" Nullable="false" />
+          <Property Name="IDDIRECCION" Type="tinyint" Nullable="false" />
+          <Property Name="BAJA" Type="bit" Nullable="false" />
+          <Property Name="BODEGAARMA" Type="bit" Nullable="false" />
+          <Property Name="IDRESPONSABLEBODEGA" Type="smallint" />
+          <Property Name="IDTIPOAREA" Type="tinyint" Nullable="false" />
+          <Property Name="TELEFONO" Type="nvarchar" MaxLength="50" />
+          <Property Name="DIRECCION" Type="nvarchar" MaxLength="150" />
+          <Property Name="SECUESTROS" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="EMPLEADO">
           <Key>
             <PropertyRef Name="IDEMPLEADO" />
@@ -136,12 +154,16 @@
           <Property Name="CELULAR" Type="varchar" MaxLength="50" />
           <Property Name="NUMIPSSET" Type="varchar" MaxLength="50" />
           <Property Name="NUMSICNO" Type="varchar" MaxLength="50" />
+          <Property Name="folio_colaborador" Type="varchar" MaxLength="50" />
+          <Property Name="DEPENDENCIA_FORANEA" Type="int" />
+          <Property Name="CP_DOMICILIO_FISCAL" Type="varchar" MaxLength="50" />
+          <Property Name="ID_REGIMEN_FISCAL" Type="int" />
         </EntityType>
         <EntityContainer Name="procuraduriaModelStoreContainer">
+          <EntitySet Name="AREA" EntityType="Self.AREA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EMPLEADO" EntityType="Self.EMPLEADO" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="procuraduriaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -276,10 +298,33 @@
           <Property Name="CELULAR" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="NUMIPSSET" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="NUMSICNO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="folio_colaborador" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DEPENDENCIA_FORANEA" Type="Int32" />
+          <Property Name="CP_DOMICILIO_FISCAL" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ID_REGIMEN_FISCAL" Type="Int32" />
         </EntityType>
         <EntityContainer Name="procuraduriaEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="EMPLEADO" EntityType="Self.EMPLEADO" />
+          <EntitySet Name="AREA" EntityType="procuraduriaModel.AREA" />
         </EntityContainer>
+        <EntityType Name="AREA">
+          <Key>
+            <PropertyRef Name="IDAREA" />
+          </Key>
+          <Property Name="IDAREA" Type="Int32" Nullable="false" />
+          <Property Name="CVEAREA" Type="String" MaxLength="13" FixedLength="false" Unicode="true" />
+          <Property Name="AREA1" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="IDMUNICIPIO" Type="Int16" Nullable="false" />
+          <Property Name="SUBPROCURADURIA" Type="Boolean" Nullable="false" />
+          <Property Name="IDDIRECCION" Type="Byte" Nullable="false" />
+          <Property Name="BAJA" Type="Boolean" Nullable="false" />
+          <Property Name="BODEGAARMA" Type="Boolean" Nullable="false" />
+          <Property Name="IDRESPONSABLEBODEGA" Type="Int16" />
+          <Property Name="IDTIPOAREA" Type="Byte" Nullable="false" />
+          <Property Name="TELEFONO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DIRECCION" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="SECUESTROS" Type="Boolean" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -289,6 +334,10 @@
           <EntitySetMapping Name="EMPLEADO">
             <EntityTypeMapping TypeName="procuraduriaModel.EMPLEADO">
               <MappingFragment StoreEntitySet="EMPLEADO">
+                <ScalarProperty Name="ID_REGIMEN_FISCAL" ColumnName="ID_REGIMEN_FISCAL" />
+                <ScalarProperty Name="CP_DOMICILIO_FISCAL" ColumnName="CP_DOMICILIO_FISCAL" />
+                <ScalarProperty Name="DEPENDENCIA_FORANEA" ColumnName="DEPENDENCIA_FORANEA" />
+                <ScalarProperty Name="folio_colaborador" ColumnName="folio_colaborador" />
                 <ScalarProperty Name="IDAREA" ColumnName="IDAREA" />
                 <ScalarProperty Name="IDEMPLEADO" ColumnName="IDEMPLEADO" />
                 <ScalarProperty Name="IDESTADOEMPLEADO" ColumnName="IDESTADOEMPLEADO" />
@@ -416,6 +465,25 @@
                 <ScalarProperty Name="CELULAR" ColumnName="CELULAR" />
                 <ScalarProperty Name="NUMIPSSET" ColumnName="NUMIPSSET" />
                 <ScalarProperty Name="NUMSICNO" ColumnName="NUMSICNO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AREA">
+            <EntityTypeMapping TypeName="procuraduriaModel.AREA">
+              <MappingFragment StoreEntitySet="AREA">
+                <ScalarProperty Name="SECUESTROS" ColumnName="SECUESTROS" />
+                <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
+                <ScalarProperty Name="TELEFONO" ColumnName="TELEFONO" />
+                <ScalarProperty Name="IDTIPOAREA" ColumnName="IDTIPOAREA" />
+                <ScalarProperty Name="IDRESPONSABLEBODEGA" ColumnName="IDRESPONSABLEBODEGA" />
+                <ScalarProperty Name="BODEGAARMA" ColumnName="BODEGAARMA" />
+                <ScalarProperty Name="BAJA" ColumnName="BAJA" />
+                <ScalarProperty Name="IDDIRECCION" ColumnName="IDDIRECCION" />
+                <ScalarProperty Name="SUBPROCURADURIA" ColumnName="SUBPROCURADURIA" />
+                <ScalarProperty Name="IDMUNICIPIO" ColumnName="IDMUNICIPIO" />
+                <ScalarProperty Name="AREA1" ColumnName="AREA" />
+                <ScalarProperty Name="CVEAREA" ColumnName="CVEAREA" />
+                <ScalarProperty Name="IDAREA" ColumnName="IDAREA" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

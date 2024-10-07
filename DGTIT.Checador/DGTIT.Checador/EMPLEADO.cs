@@ -141,5 +141,9 @@ namespace DGTIT.Checador
         public string CELULAR { get; set; }
         public string NUMIPSSET { get; set; }
         public string NUMSICNO { get; set; }
+        public string folio_colaborador { get; set; }
+        public Nullable<int> DEPENDENCIA_FORANEA { get; set; }
+        public string CP_DOMICILIO_FISCAL { get; set; }
+        public Nullable<int> ID_REGIMEN_FISCAL { get; set; }
     }
 }

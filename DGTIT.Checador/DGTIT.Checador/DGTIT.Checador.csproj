@@ -117,6 +117,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AREA.cs">
+      <DependentUpon>procuraduria.tt</DependentUpon>
+    </Compile>
     <Compile Include="CapturarHuella.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -183,11 +186,18 @@
     <Compile Include="FrmCaptura.Designer.cs">
       <DependentUpon>FrmCaptura.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmRegistrar.cs">
+    <Compile Include="Helpers\CollectionsHelper.cs" />
+    <Compile Include="Views\FrmEmpleados.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmRegistrar.Designer.cs">
-      <DependentUpon>frmRegistrar.cs</DependentUpon>
+    <Compile Include="Views\FrmEmpleados.Designer.cs">
+      <DependentUpon>FrmEmpleados.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FrmRegistrar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\FrmRegistrar.Designer.cs">
+      <DependentUpon>FrmRegistrar.cs</DependentUpon>
     </Compile>
     <Compile Include="frmVerificar.cs">
       <SubType>Form</SubType>
@@ -303,8 +313,11 @@
     <EmbeddedResource Include="FrmCaptura.resx">
       <DependentUpon>FrmCaptura.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmRegistrar.resx">
-      <DependentUpon>frmRegistrar.cs</DependentUpon>
+    <EmbeddedResource Include="Views\FrmEmpleados.resx">
+      <DependentUpon>FrmEmpleados.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\FrmRegistrar.resx">
+      <DependentUpon>FrmRegistrar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmVerificar.resx">
       <DependentUpon>frmVerificar.cs</DependentUpon>
