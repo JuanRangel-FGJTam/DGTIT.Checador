@@ -44,25 +44,31 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox_horarios = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.txtComida = new System.Windows.Forms.MaskedTextBox();
             this.txtSalida = new System.Windows.Forms.MaskedTextBox();
             this.txtRegreso = new System.Windows.Forms.MaskedTextBox();
             this.txtEntrada = new System.Windows.Forms.MaskedTextBox();
-            this.chkComida = new System.Windows.Forms.CheckBox();
-            this.chkRegreso = new System.Windows.Forms.CheckBox();
-            this.chkSalida = new System.Windows.Forms.CheckBox();
-            this.chkEntrada = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.tbFingerPrint = new System.Windows.Forms.TextBox();
-            this.img_fingerPrint = new System.Windows.Forms.Label();
             this.img_photo = new System.Windows.Forms.Label();
             this.panelActions = new System.Windows.Forms.Panel();
+            this.label111 = new System.Windows.Forms.Label();
+            this.lblUpdatedAt = new System.Windows.Forms.Label();
+            this.panelHours = new System.Windows.Forms.Panel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cb_check = new System.Windows.Forms.CheckBox();
             this.groupBox_generales.SuspendLayout();
             this.groupBox_horarios.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.panelActions.SuspendLayout();
+            this.panelHours.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -77,12 +83,11 @@
             // btnAgregar
             // 
             this.btnAgregar.BackColor = System.Drawing.Color.ForestGreen;
-            this.btnAgregar.Enabled = false;
             this.btnAgregar.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAgregar.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnAgregar.Location = new System.Drawing.Point(277, 3);
+            this.btnAgregar.Location = new System.Drawing.Point(284, 3);
             this.btnAgregar.Name = "btnAgregar";
-            this.btnAgregar.Size = new System.Drawing.Size(99, 35);
+            this.btnAgregar.Size = new System.Drawing.Size(137, 35);
             this.btnAgregar.TabIndex = 2;
             this.btnAgregar.Text = "Actualizar";
             this.btnAgregar.UseVisualStyleBackColor = false;
@@ -97,14 +102,14 @@
             // 
             // btnRegistrarHuella
             // 
-            this.btnRegistrarHuella.Location = new System.Drawing.Point(32, 3);
+            this.btnRegistrarHuella.Location = new System.Drawing.Point(32, 171);
             this.btnRegistrarHuella.Margin = new System.Windows.Forms.Padding(32, 3, 3, 3);
             this.btnRegistrarHuella.Name = "btnRegistrarHuella";
             this.btnRegistrarHuella.Size = new System.Drawing.Size(114, 23);
             this.btnRegistrarHuella.TabIndex = 5;
-            this.btnRegistrarHuella.Text = "Capturar Huella";
+            this.btnRegistrarHuella.Text = "Actualizar Huella";
             this.btnRegistrarHuella.UseVisualStyleBackColor = true;
-            this.btnRegistrarHuella.Click += new System.EventHandler(this.btnRegistrarHuella_Click);
+            this.btnRegistrarHuella.Click += new System.EventHandler(this.BtnRegistrarHuellaClick);
             // 
             // cboDirGral
             // 
@@ -116,6 +121,8 @@
             // 
             // groupBox_generales
             // 
+            this.groupBox_generales.Controls.Add(this.lblUpdatedAt);
+            this.groupBox_generales.Controls.Add(this.label111);
             this.groupBox_generales.Controls.Add(this.tb_employeeNumber);
             this.groupBox_generales.Controls.Add(this.label2);
             this.groupBox_generales.Controls.Add(this.cboSubdireccion);
@@ -131,7 +138,7 @@
             this.groupBox_generales.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox_generales.Location = new System.Drawing.Point(183, 3);
             this.groupBox_generales.Name = "groupBox_generales";
-            this.groupBox_generales.Size = new System.Drawing.Size(495, 215);
+            this.groupBox_generales.Size = new System.Drawing.Size(495, 230);
             this.groupBox_generales.TabIndex = 8;
             this.groupBox_generales.TabStop = false;
             this.groupBox_generales.Text = "Datos Generales";
@@ -215,24 +222,60 @@
             // 
             // groupBox_horarios
             // 
+            this.groupBox_horarios.Controls.Add(this.label10);
+            this.groupBox_horarios.Controls.Add(this.label9);
+            this.groupBox_horarios.Controls.Add(this.label8);
+            this.groupBox_horarios.Controls.Add(this.label4);
             this.groupBox_horarios.Controls.Add(this.txtComida);
             this.groupBox_horarios.Controls.Add(this.txtSalida);
             this.groupBox_horarios.Controls.Add(this.txtRegreso);
             this.groupBox_horarios.Controls.Add(this.txtEntrada);
-            this.groupBox_horarios.Controls.Add(this.chkComida);
-            this.groupBox_horarios.Controls.Add(this.chkRegreso);
-            this.groupBox_horarios.Controls.Add(this.chkSalida);
-            this.groupBox_horarios.Controls.Add(this.chkEntrada);
-            this.groupBox_horarios.Location = new System.Drawing.Point(183, 224);
+            this.groupBox_horarios.Location = new System.Drawing.Point(3, 3);
             this.groupBox_horarios.Name = "groupBox_horarios";
-            this.groupBox_horarios.Size = new System.Drawing.Size(380, 216);
+            this.groupBox_horarios.Size = new System.Drawing.Size(262, 204);
             this.groupBox_horarios.TabIndex = 10;
             this.groupBox_horarios.TabStop = false;
             this.groupBox_horarios.Text = "Horario";
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(55, 119);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(36, 13);
+            this.label10.TabIndex = 11;
+            this.label10.Text = "Salida";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(44, 92);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(47, 13);
+            this.label9.TabIndex = 10;
+            this.label9.Text = "Regreso";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(49, 59);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(42, 13);
+            this.label8.TabIndex = 9;
+            this.label8.Text = "Comida";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(47, 28);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(44, 13);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Entrada";
+            // 
             // txtComida
             // 
-            this.txtComida.Location = new System.Drawing.Point(114, 56);
+            this.txtComida.Location = new System.Drawing.Point(101, 56);
             this.txtComida.Mask = "00:00";
             this.txtComida.Name = "txtComida";
             this.txtComida.Size = new System.Drawing.Size(100, 20);
@@ -241,7 +284,7 @@
             // 
             // txtSalida
             // 
-            this.txtSalida.Location = new System.Drawing.Point(114, 116);
+            this.txtSalida.Location = new System.Drawing.Point(101, 116);
             this.txtSalida.Mask = "00:00";
             this.txtSalida.Name = "txtSalida";
             this.txtSalida.Size = new System.Drawing.Size(100, 20);
@@ -250,7 +293,7 @@
             // 
             // txtRegreso
             // 
-            this.txtRegreso.Location = new System.Drawing.Point(114, 89);
+            this.txtRegreso.Location = new System.Drawing.Point(101, 89);
             this.txtRegreso.Mask = "00:00";
             this.txtRegreso.Name = "txtRegreso";
             this.txtRegreso.Size = new System.Drawing.Size(100, 20);
@@ -259,62 +302,22 @@
             // 
             // txtEntrada
             // 
-            this.txtEntrada.Location = new System.Drawing.Point(114, 25);
+            this.txtEntrada.Location = new System.Drawing.Point(101, 25);
             this.txtEntrada.Mask = "00:00";
             this.txtEntrada.Name = "txtEntrada";
             this.txtEntrada.Size = new System.Drawing.Size(100, 20);
             this.txtEntrada.TabIndex = 4;
             this.txtEntrada.ValidatingType = typeof(System.DateTime);
             // 
-            // chkComida
-            // 
-            this.chkComida.AutoSize = true;
-            this.chkComida.Location = new System.Drawing.Point(36, 60);
-            this.chkComida.Name = "chkComida";
-            this.chkComida.Size = new System.Drawing.Size(61, 17);
-            this.chkComida.TabIndex = 3;
-            this.chkComida.Text = "Comida";
-            this.chkComida.UseVisualStyleBackColor = true;
-            // 
-            // chkRegreso
-            // 
-            this.chkRegreso.AutoSize = true;
-            this.chkRegreso.Location = new System.Drawing.Point(36, 92);
-            this.chkRegreso.Name = "chkRegreso";
-            this.chkRegreso.Size = new System.Drawing.Size(66, 17);
-            this.chkRegreso.TabIndex = 2;
-            this.chkRegreso.Text = "Regreso";
-            this.chkRegreso.UseVisualStyleBackColor = true;
-            // 
-            // chkSalida
-            // 
-            this.chkSalida.AutoSize = true;
-            this.chkSalida.Location = new System.Drawing.Point(36, 118);
-            this.chkSalida.Name = "chkSalida";
-            this.chkSalida.Size = new System.Drawing.Size(55, 17);
-            this.chkSalida.TabIndex = 1;
-            this.chkSalida.Text = "Salida";
-            this.chkSalida.UseVisualStyleBackColor = true;
-            // 
-            // chkEntrada
-            // 
-            this.chkEntrada.AutoSize = true;
-            this.chkEntrada.Location = new System.Drawing.Point(36, 29);
-            this.chkEntrada.Name = "chkEntrada";
-            this.chkEntrada.Size = new System.Drawing.Size(63, 17);
-            this.chkEntrada.TabIndex = 0;
-            this.chkEntrada.Text = "Entrada";
-            this.chkEntrada.UseVisualStyleBackColor = true;
-            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.groupBox_generales, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.groupBox_horarios, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.img_photo, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.groupBox_generales, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.panelHours, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.panelActions, 0, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -323,38 +326,28 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(681, 504);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(681, 521);
             this.tableLayoutPanel1.TabIndex = 11;
             // 
             // flowLayoutPanel1
             // 
-            this.flowLayoutPanel1.Controls.Add(this.btnRegistrarHuella);
             this.flowLayoutPanel1.Controls.Add(this.tbFingerPrint);
-            this.flowLayoutPanel1.Controls.Add(this.img_fingerPrint);
+            this.flowLayoutPanel1.Controls.Add(this.btnRegistrarHuella);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 224);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 239);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(174, 216);
             this.flowLayoutPanel1.TabIndex = 11;
             // 
             // tbFingerPrint
             // 
-            this.tbFingerPrint.Location = new System.Drawing.Point(3, 32);
+            this.tbFingerPrint.Font = new System.Drawing.Font("Consolas", 8F);
+            this.tbFingerPrint.Location = new System.Drawing.Point(3, 3);
             this.tbFingerPrint.Multiline = true;
             this.tbFingerPrint.Name = "tbFingerPrint";
             this.tbFingerPrint.ReadOnly = true;
-            this.tbFingerPrint.Size = new System.Drawing.Size(171, 156);
+            this.tbFingerPrint.Size = new System.Drawing.Size(171, 162);
             this.tbFingerPrint.TabIndex = 14;
-            // 
-            // img_fingerPrint
-            // 
-            this.img_fingerPrint.AutoSize = true;
-            this.img_fingerPrint.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.img_fingerPrint.Location = new System.Drawing.Point(3, 191);
-            this.img_fingerPrint.Name = "img_fingerPrint";
-            this.img_fingerPrint.Padding = new System.Windows.Forms.Padding(4);
-            this.img_fingerPrint.Size = new System.Drawing.Size(171, 21);
-            this.img_fingerPrint.TabIndex = 13;
             // 
             // img_photo
             // 
@@ -363,24 +356,71 @@
             this.img_photo.Location = new System.Drawing.Point(3, 0);
             this.img_photo.Name = "img_photo";
             this.img_photo.Padding = new System.Windows.Forms.Padding(4);
-            this.img_photo.Size = new System.Drawing.Size(174, 221);
+            this.img_photo.Size = new System.Drawing.Size(174, 236);
             this.img_photo.TabIndex = 12;
             // 
             // panelActions
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.panelActions, 2);
             this.panelActions.Controls.Add(this.btnAgregar);
-            this.panelActions.Location = new System.Drawing.Point(3, 457);
+            this.panelActions.Location = new System.Drawing.Point(3, 474);
             this.panelActions.Name = "panelActions";
             this.panelActions.Size = new System.Drawing.Size(675, 44);
             this.panelActions.TabIndex = 13;
+            // 
+            // label111
+            // 
+            this.label111.AutoSize = true;
+            this.label111.Location = new System.Drawing.Point(6, 203);
+            this.label111.Name = "label111";
+            this.label111.Size = new System.Drawing.Size(104, 13);
+            this.label111.TabIndex = 17;
+            this.label111.Text = "Ultima actualizacion:";
+            // 
+            // lblUpdatedAt
+            // 
+            this.lblUpdatedAt.AutoSize = true;
+            this.lblUpdatedAt.Location = new System.Drawing.Point(112, 203);
+            this.lblUpdatedAt.Name = "lblUpdatedAt";
+            this.lblUpdatedAt.Size = new System.Drawing.Size(0, 13);
+            this.lblUpdatedAt.TabIndex = 18;
+            // 
+            // panelHours
+            // 
+            this.panelHours.Controls.Add(this.groupBox1);
+            this.panelHours.Controls.Add(this.groupBox_horarios);
+            this.panelHours.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelHours.Location = new System.Drawing.Point(183, 239);
+            this.panelHours.Name = "panelHours";
+            this.panelHours.Size = new System.Drawing.Size(495, 229);
+            this.panelHours.TabIndex = 12;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.cb_check);
+            this.groupBox1.Location = new System.Drawing.Point(271, 3);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(149, 204);
+            this.groupBox1.TabIndex = 12;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Opciones";
+            // 
+            // cb_check
+            // 
+            this.cb_check.AutoSize = true;
+            this.cb_check.Location = new System.Drawing.Point(6, 28);
+            this.cb_check.Name = "cb_check";
+            this.cb_check.Size = new System.Drawing.Size(115, 17);
+            this.cb_check.TabIndex = 1;
+            this.cb_check.Text = "Registra asistencia";
+            this.cb_check.UseVisualStyleBackColor = true;
             // 
             // FrmRegistrar
             // 
             this.AcceptButton = this.btnAgregar;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(681, 504);
+            this.ClientSize = new System.Drawing.Size(681, 521);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "FrmRegistrar";
@@ -397,6 +437,9 @@
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
             this.panelActions.ResumeLayout(false);
+            this.panelHours.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -411,10 +454,6 @@
         private System.Windows.Forms.GroupBox groupBox_generales;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox_horarios;
-        private System.Windows.Forms.CheckBox chkComida;
-        private System.Windows.Forms.CheckBox chkRegreso;
-        private System.Windows.Forms.CheckBox chkSalida;
-        private System.Windows.Forms.CheckBox chkEntrada;
         private System.Windows.Forms.MaskedTextBox txtComida;
         private System.Windows.Forms.MaskedTextBox txtSalida;
         private System.Windows.Forms.MaskedTextBox txtRegreso;
@@ -431,7 +470,15 @@
         private System.Windows.Forms.Panel panelActions;
         private System.Windows.Forms.TextBox tb_employeeNumber;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label img_fingerPrint;
         private System.Windows.Forms.TextBox tbFingerPrint;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label111;
+        private System.Windows.Forms.Label lblUpdatedAt;
+        private System.Windows.Forms.Panel panelHours;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox cb_check;
     }
 }

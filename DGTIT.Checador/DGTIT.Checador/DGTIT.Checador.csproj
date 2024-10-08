@@ -120,6 +120,12 @@
     <Compile Include="AREA.cs">
       <DependentUpon>procuraduria.tt</DependentUpon>
     </Compile>
+    <Compile Include="Views\BusyDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\BusyDialog.Designer.cs">
+      <DependentUpon>BusyDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="CapturarHuella.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -297,6 +303,9 @@
     <Compile Include="working_hours.cs">
       <DependentUpon>UsuariosModel.tt</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Views\BusyDialog.resx">
+      <DependentUpon>BusyDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CapturarHuella.resx">
       <DependentUpon>CapturarHuella.cs</DependentUpon>
     </EmbeddedResource>

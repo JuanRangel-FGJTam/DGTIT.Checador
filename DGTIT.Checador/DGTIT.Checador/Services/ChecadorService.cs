@@ -1,34 +1,107 @@
 ﻿using DGTIT.Checador.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.TextFormatting;
 
 namespace DGTIT.Checador.Services {
     public class ChecadorService
     {
         private readonly UsuariosDBEntities usuariosDBEntities;
+        private readonly procuraduriaEntities1 procuraduriaEntities;
 
-        public ChecadorService( UsuariosDBEntities context)
+        public ChecadorService( UsuariosDBEntities context, procuraduriaEntities1 procuraduriaContext)
         {
             this.usuariosDBEntities = context;
+            this.procuraduriaEntities = procuraduriaContext;
         }
 
-        public employee GetEmployee(int employeeNumber)
+        /// <summary>
+        ///     attempt to get the employee from the checadorDB and if is not registered make a new one with data of the RH.        
+        /// </summary>
+        /// <param name="employeeNumber"></param>
+        /// <param name="makeRecordIfNotExist">sets if the employee not exist on checadorDB make the record </param>
+        /// <returns></returns>
+        /// <exception cref="KeyNotFoundException">The employee is not found</exception>
+        public employee GetEmployee(int employeeNumber, bool makeRecordIfNotExist = true)
         {
             var _plantillaId = employeeNumber + 100000;
-            return this.usuariosDBEntities.employees.FirstOrDefault( item => item.plantilla_id == _plantillaId);
+            
+            // * search for the employee in the checadorDB
+            var employeeChec = this.usuariosDBEntities.employees.FirstOrDefault( item => item.plantilla_id == _plantillaId);
+
+            // * if there is not record in the checadorDB, generate a new one
+            if(employeeChec == null && makeRecordIfNotExist)
+            {
+                // * retrive employee from procu DB (RH)
+                var employeeRH = this.procuraduriaEntities.EMPLEADO.FirstOrDefault(item => item.NUMEMP == employeeNumber);
+                if (employeeRH == null)
+                {
+                    throw new KeyNotFoundException("The employee is not registered on the system.");
+                }
+
+                // * make the new employee and save them
+                employeeChec = new employee
+                {
+                    plantilla_id = _plantillaId,
+                    name = $"{employeeRH.NOMBRE} {employeeRH.APELLIDO}",
+                    general_direction_id = 1, /* 1 => Desconocido */
+                    direction_id = 1, /* 1 => Desconocido */
+                    subdirectorate_id = 1, /* 1 => Desconocido */
+                    department_id = 1 /* 1 => Desconocido */,
+                    created_at = DateTime.Now,
+                    updated_at = DateTime.Now,
+                    fingerprint = Array.Empty<byte>()
+                };
+                this.usuariosDBEntities.employees.Add(employeeChec);
+                this.usuariosDBEntities.SaveChanges();
+            }
+
+            if (employeeChec == null && !makeRecordIfNotExist)
+            {
+                throw new KeyNotFoundException("The employee is not registered on the system.");
+            }
+
+            return employeeChec;
+            
         }
 
         public working_hours GetWorkinHours(int employeeNumber)
         {
             var _plantillaId = employeeNumber + 100000;
             var empl = this.usuariosDBEntities.employees.FirstOrDefault(item => item.plantilla_id == _plantillaId);
-            return this.usuariosDBEntities.working_hours.FirstOrDefault(item => item.employee_id_ == empl.id);
+            var workingHours = this.usuariosDBEntities.working_hours.FirstOrDefault(item => item.employee_id_ == empl.id);
 
+            if( workingHours == null)
+            {
+                workingHours = new working_hours
+                {
+                    created_at = DateTime.Now,
+                    employee_id_ = empl.id
+                };
+            }
+            return workingHours;
+        }
+
+        public employee UpdateEmployee(employee emp)
+        {
+            emp.updated_at = DateTime.Now;
+            this.usuariosDBEntities.employees.AddOrUpdate(emp);
+            this.usuariosDBEntities.SaveChanges();
+            return emp;
+        }
+
+        public working_hours UpdateWorkingHours(working_hours hours)
+        {
+            hours.updated_at = DateTime.Now;
+            this.usuariosDBEntities.working_hours.AddOrUpdate(hours);
+            this.usuariosDBEntities.SaveChanges();
+            return hours;
         }
 
     }
