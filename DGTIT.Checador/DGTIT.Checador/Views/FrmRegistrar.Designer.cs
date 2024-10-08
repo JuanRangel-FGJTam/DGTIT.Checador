@@ -28,12 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmRegistrar));
             this.label1 = new System.Windows.Forms.Label();
             this.btnAgregar = new System.Windows.Forms.Button();
             this.txtNombre = new System.Windows.Forms.TextBox();
             this.btnRegistrarHuella = new System.Windows.Forms.Button();
             this.cboDirGral = new System.Windows.Forms.ComboBox();
             this.groupBox_generales = new System.Windows.Forms.GroupBox();
+            this.lblUpdatedAt = new System.Windows.Forms.Label();
+            this.label111 = new System.Windows.Forms.Label();
             this.tb_employeeNumber = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cboSubdireccion = new System.Windows.Forms.ComboBox();
@@ -53,22 +56,20 @@
             this.txtRegreso = new System.Windows.Forms.MaskedTextBox();
             this.txtEntrada = new System.Windows.Forms.MaskedTextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.tbFingerPrint = new System.Windows.Forms.TextBox();
             this.img_photo = new System.Windows.Forms.Label();
-            this.panelActions = new System.Windows.Forms.Panel();
-            this.label111 = new System.Windows.Forms.Label();
-            this.lblUpdatedAt = new System.Windows.Forms.Label();
             this.panelHours = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cb_check = new System.Windows.Forms.CheckBox();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.tbFingerPrint = new System.Windows.Forms.TextBox();
+            this.panelActions = new System.Windows.Forms.Panel();
             this.groupBox_generales.SuspendLayout();
             this.groupBox_horarios.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
-            this.panelActions.SuspendLayout();
             this.panelHours.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
+            this.panelActions.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -142,6 +143,23 @@
             this.groupBox_generales.TabIndex = 8;
             this.groupBox_generales.TabStop = false;
             this.groupBox_generales.Text = "Datos Generales";
+            // 
+            // lblUpdatedAt
+            // 
+            this.lblUpdatedAt.AutoSize = true;
+            this.lblUpdatedAt.Location = new System.Drawing.Point(112, 203);
+            this.lblUpdatedAt.Name = "lblUpdatedAt";
+            this.lblUpdatedAt.Size = new System.Drawing.Size(0, 13);
+            this.lblUpdatedAt.TabIndex = 18;
+            // 
+            // label111
+            // 
+            this.label111.AutoSize = true;
+            this.label111.Location = new System.Drawing.Point(6, 203);
+            this.label111.Name = "label111";
+            this.label111.Size = new System.Drawing.Size(104, 13);
+            this.label111.TabIndex = 17;
+            this.label111.Text = "Ultima actualizacion:";
             // 
             // tb_employeeNumber
             // 
@@ -329,26 +347,6 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(681, 521);
             this.tableLayoutPanel1.TabIndex = 11;
             // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.Controls.Add(this.tbFingerPrint);
-            this.flowLayoutPanel1.Controls.Add(this.btnRegistrarHuella);
-            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 239);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(174, 216);
-            this.flowLayoutPanel1.TabIndex = 11;
-            // 
-            // tbFingerPrint
-            // 
-            this.tbFingerPrint.Font = new System.Drawing.Font("Consolas", 8F);
-            this.tbFingerPrint.Location = new System.Drawing.Point(3, 3);
-            this.tbFingerPrint.Multiline = true;
-            this.tbFingerPrint.Name = "tbFingerPrint";
-            this.tbFingerPrint.ReadOnly = true;
-            this.tbFingerPrint.Size = new System.Drawing.Size(171, 162);
-            this.tbFingerPrint.TabIndex = 14;
-            // 
             // img_photo
             // 
             this.img_photo.AutoSize = true;
@@ -358,32 +356,6 @@
             this.img_photo.Padding = new System.Windows.Forms.Padding(4);
             this.img_photo.Size = new System.Drawing.Size(174, 236);
             this.img_photo.TabIndex = 12;
-            // 
-            // panelActions
-            // 
-            this.tableLayoutPanel1.SetColumnSpan(this.panelActions, 2);
-            this.panelActions.Controls.Add(this.btnAgregar);
-            this.panelActions.Location = new System.Drawing.Point(3, 474);
-            this.panelActions.Name = "panelActions";
-            this.panelActions.Size = new System.Drawing.Size(675, 44);
-            this.panelActions.TabIndex = 13;
-            // 
-            // label111
-            // 
-            this.label111.AutoSize = true;
-            this.label111.Location = new System.Drawing.Point(6, 203);
-            this.label111.Name = "label111";
-            this.label111.Size = new System.Drawing.Size(104, 13);
-            this.label111.TabIndex = 17;
-            this.label111.Text = "Ultima actualizacion:";
-            // 
-            // lblUpdatedAt
-            // 
-            this.lblUpdatedAt.AutoSize = true;
-            this.lblUpdatedAt.Location = new System.Drawing.Point(112, 203);
-            this.lblUpdatedAt.Name = "lblUpdatedAt";
-            this.lblUpdatedAt.Size = new System.Drawing.Size(0, 13);
-            this.lblUpdatedAt.TabIndex = 18;
             // 
             // panelHours
             // 
@@ -415,6 +387,35 @@
             this.cb_check.Text = "Registra asistencia";
             this.cb_check.UseVisualStyleBackColor = true;
             // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Controls.Add(this.tbFingerPrint);
+            this.flowLayoutPanel1.Controls.Add(this.btnRegistrarHuella);
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 239);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(174, 216);
+            this.flowLayoutPanel1.TabIndex = 11;
+            // 
+            // tbFingerPrint
+            // 
+            this.tbFingerPrint.Font = new System.Drawing.Font("Consolas", 8F);
+            this.tbFingerPrint.Location = new System.Drawing.Point(3, 3);
+            this.tbFingerPrint.Multiline = true;
+            this.tbFingerPrint.Name = "tbFingerPrint";
+            this.tbFingerPrint.ReadOnly = true;
+            this.tbFingerPrint.Size = new System.Drawing.Size(171, 162);
+            this.tbFingerPrint.TabIndex = 14;
+            // 
+            // panelActions
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.panelActions, 2);
+            this.panelActions.Controls.Add(this.btnAgregar);
+            this.panelActions.Location = new System.Drawing.Point(3, 474);
+            this.panelActions.Name = "panelActions";
+            this.panelActions.Size = new System.Drawing.Size(675, 44);
+            this.panelActions.TabIndex = 13;
+            // 
             // FrmRegistrar
             // 
             this.AcceptButton = this.btnAgregar;
@@ -423,6 +424,7 @@
             this.ClientSize = new System.Drawing.Size(681, 521);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmRegistrar";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "DGTIT - Actualizar Empleado";
@@ -434,12 +436,12 @@
             this.groupBox_horarios.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            this.flowLayoutPanel1.ResumeLayout(false);
-            this.flowLayoutPanel1.PerformLayout();
-            this.panelActions.ResumeLayout(false);
             this.panelHours.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
+            this.panelActions.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

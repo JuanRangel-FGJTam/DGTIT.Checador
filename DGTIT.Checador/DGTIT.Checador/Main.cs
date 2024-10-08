@@ -22,8 +22,10 @@ namespace DGTIT.Checador
 
         private void BtnRegistrar_Click(object sender, EventArgs e)
         {
+            this.Visible = false;
             var empleados = new FrmEmpleados();
             empleados.ShowDialog(this);
+            this.Visible = true;
 
             //FrmRegistrar registrar = new FrmRegistrar();
             //registrar.ShowDialog();
