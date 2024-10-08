@@ -21,9 +21,9 @@ namespace DGTIT.Checador
 
         private UsuariosDBEntities contexto;
         private procuraduriaEntities1 procu;
-        private int numeroEmpleado = 0;
+        private int serachEmployeeNumber = 0;
+        private int selectedEmployeeNumber = 0;
         private string nombreEmpleado = "";
-        private List<AREA> areasList = new List<AREA>();
         
 
         public FrmEmpleados()
@@ -36,8 +36,11 @@ namespace DGTIT.Checador
             
             // * initialized services
             fiscaliaService = new FiscaliaService(procu, contexto);
-
-            this.btnEdit.Click += new EventHandler(BtnEditarClick);
+               
+            // hidden search box
+            txtSearch.Enabled = false;
+            txtSearch.Visible = false;
+            txtEmployeeNumber.Text = "";
         }
 
         private void FormOnLoad(object sender, EventArgs e)
@@ -77,38 +80,38 @@ namespace DGTIT.Checador
             });
             this.dataGridEmpleados.DataSource = null;
             
+            
+            // * add the events 
+            this.btnEdit.Click += new EventHandler(BtnEditarClick);
+            this.txtEmployeeNumber.TextChanged += new EventHandler(TextBoxEmployeeNumberChanged);
+            this.txtSearch.TextChanged += new EventHandler(TextBoxSearchTextChanged);
 
-            LoadAreaComboBox();
+            txtEmployeeNumber.Focus();
+            txtEmployeeNumber.Select();
         }
 
-        private void LoadAreaComboBox()
-        {
-            this.areasList = procu.AREA.ToList();
-            this.areaComboBox.DataSource = this.areasList;
-            this.areaComboBox.ValueMember = "IDAREA";
-            this.areaComboBox.DisplayMember = "AREA1";
-            this.areaComboBox.SelectedItem = null;
-            this.areaComboBox.SelectedValueChanged += new EventHandler(ComboBoxAreaValueChanged);
-        }
-        
         private void ListarEmpleados()
         {
+
+            // * clear selection 
+            this.btnEdit.Text = "Editar empleado";
+            this.btnEdit.Enabled = false;
+            this.selectedEmployeeNumber = 0;
+            this.nombreEmpleado = "";
+
+
             try
             {
                 dataGridEmpleados.DataSource = null;
 
-                var areaSelected = (AREA) this.areaComboBox.SelectedItem;
-                var textSearch = this.txtSearch.Text;
-
                 // * ensured that at least one filter is specified to prevent display all the employees
-                if (areaSelected == null && (string.IsNullOrEmpty(textSearch) || textSearch.Length < 3))
+                if (serachEmployeeNumber.ToString().Length <= 3)
                 {
                     return;
                 }
 
                 // * retrive the employees
-                var areaSelectedID = areaSelected == null ? 0 : areaSelected.IDAREA;
-                var empleados = fiscaliaService.SearchEmployees(textSearch, areaSelectedID ).ToList();
+                var empleados = fiscaliaService.SearchEmployees(serachEmployeeNumber.ToString()).ToList();
                 dataGridEmpleados.DataSource = empleados;
 
             }
@@ -118,59 +121,23 @@ namespace DGTIT.Checador
             }
         }
 
+        private void TextBoxEmployeeNumberChanged(object sender, EventArgs e)
+        {
+            serachEmployeeNumber = Convert.ToInt32( txtEmployeeNumber.ValidateText() );
+            ListarEmpleados();
+        }
         private void TextBoxSearchTextChanged(object sender, EventArgs e)
         {
             ListarEmpleados();
         }
-        private void ComboBoxAreaValueChanged(object sender, EventArgs e)
-        {
-            ListarEmpleados();
-        }
-
-        private void btnAgregar_Click(object sender, EventArgs e)
-        {
-            //try
-            //{
-            //    byte[] streamHuella = Template.Bytes;
-
-            //    using (SqlConnection connection = new SqlConnection("data source=192.168.123.245;initial catalog=UsuariosDB;persist security info=True;user id=usernsjp;password=NSJP010713;MultipleActiveResultSets=True"))
-            //    {
-                    
-            //        connection.Open();
-            //        string sql7 = " insert into employees (general_direction_id,direction_id,subdirectorate_id,department_id,plantilla_id,name,photo,fingerprint,created_at,updated_at)";
-            //        sql7 = sql7 + " values ("+ cboDirGral.SelectedValue + ","+ cboDireccion.SelectedValue +","+ cboSubdireccion.SelectedValue +"," + cboDepartamento.SelectedValue + ",RIGHT('100000' + " +  numeroEmpleado  + ", 6),'" + txtNombre.Text + "','photos/',@param1,getdate(),getdate() )";
-            //        sql7 = sql7 + " declare @employee_id Int select @employee_id=max(id) from employees "; 
-            //        sql7 = sql7 + " insert into working_hours (employee_id,checkin,toeat,toarrive,checkout,created_at) ";
-            //        sql7 = sql7 + " values (@employee_id,'"+ txtEntrada.Text + "','"+ txtComida.Text + "','" + txtRegreso.Text + "','"+ txtSalida.Text + "', getdate()) ";
-            //       // sql7 = sql7 + " ";
-            //        SqlCommand cmd = new SqlCommand(sql7, connection);
-            //        cmd.Parameters.Add("@param1", SqlDbType.Image).Value = streamHuella;
-            //        cmd.CommandType = CommandType.Text;
-            //        cmd.ExecuteNonQuery();
-            //        connection.Close(); 
-            //    }
-
-            //    MessageBox.Show("Registro agregado a la BD correctamente");
-            //    Limpiar();
-            //    Listar();
-            //    Template = null;
-            //    btnAgregar.Enabled = false;
-
-            //}
-            //catch (Exception ex)
-            //{
-
-            //    MessageBox.Show(ex.Message);
-            //}
-        }
-
+        
         private void DataGridSelectionChanged(object sender, EventArgs e)
         {
             if (dataGridEmpleados.CurrentRow.Index != -1)
             {
                 foreach (DataGridViewRow row in dataGridEmpleados.SelectedRows)
                 {
-                    numeroEmpleado = Convert.ToInt32(row.Cells[0].Value.ToString());
+                    selectedEmployeeNumber = Convert.ToInt32(row.Cells[0].Value.ToString());
                     string nombre = row.Cells[1].Value.ToString();
                     string paterno = row.Cells[2].Value.ToString();
                     string materno = row.Cells[3].Value.ToString();
@@ -190,8 +157,11 @@ namespace DGTIT.Checador
            
         private void BtnEditarClick(object sender, EventArgs e)
         {
-            var formRegistrar = new FrmRegistrar(this.numeroEmpleado);
+            var formRegistrar = new FrmRegistrar(this.selectedEmployeeNumber);
             formRegistrar.ShowDialog(this);
+
+            txtEmployeeNumber.Focus();
+            txtEmployeeNumber.Select();
         }
     }
 }

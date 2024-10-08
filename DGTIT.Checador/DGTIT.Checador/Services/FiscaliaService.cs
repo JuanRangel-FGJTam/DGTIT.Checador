@@ -20,27 +20,23 @@ namespace DGTIT.Checador.Services {
             this.usuariosDBEntities = contextCheca;
         }
         
-        public IEnumerable<EmployeeViewModel> SearchEmployees(string search, int areaId)
+        public IEnumerable<EmployeeViewModel> SearchEmployees(string search)
         {
             
             var empleadosQuery = procuraduriaEntities.EMPLEADO.Where(item => item.NUMEMP != 0);
            
-            if (areaId > 0)
-            {
-                empleadosQuery = empleadosQuery.Where(item => item.IDAREA == areaId);
-            }
-
             if (!string.IsNullOrEmpty(search))
             {
                 empleadosQuery = empleadosQuery.Where(item =>
-                        item.NOMBRE.Contains(search) ||
-                        item.APELLIDOPATERNO.Contains(search) ||
-                        item.APELLIDOMATERNO.Contains(search)
+                        item.NUMEMP.ToString().Contains(search)
+                        //item.NOMBRE.Contains(search) ||
+                        //item.APELLIDOPATERNO.Contains(search) ||
+                        //item.APELLIDOMATERNO.Contains(search)
                 );
             }
 
             // * map the employees for retrieving only the necessary columns
-            var empleados = empleadosQuery.Take(30).ToList().Select(emp => EmployeeViewModel.FromEntity(emp)).ToList();
+            var empleados = empleadosQuery.Take(25).ToList().Select(emp => EmployeeViewModel.FromEntity(emp)).ToList();
 
             //foreach (var emp in empleados)
             //{
