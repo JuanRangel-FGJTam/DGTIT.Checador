@@ -8,10 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Threading;
-using System.Net;
-using System.Net.NetworkInformation;
 using DGTIT.Checador.Services;
-using static System.Net.Mime.MediaTypeNames;
+
 
 namespace DGTIT.Checador
 {
@@ -23,8 +21,8 @@ namespace DGTIT.Checador
         private readonly FiscaliaService fiscaliaService;
         private readonly int currentAreaId = 0;
 
-        private DPFP.Template Template;
         private DPFP.Verification.Verification Verificator;
+
         public Checador()
         {
             InitializeComponent();
@@ -35,26 +33,14 @@ namespace DGTIT.Checador
             fiscaliaService = new FiscaliaService(procu, contexto);
 
             // * read the area id
-            this.currentAreaId = Convert.ToInt32( System.IO.File.ReadAllText(@"C:\area.ini") );
+            this.currentAreaId = Convert.ToInt32( File.ReadAllText(@"C:\area.ini") );
         }
 
         protected override void Init()
         {
             base.Init();
             base.Text = "Verificación de Huella Digital";
-            Verificator = new DPFP.Verification.Verification();     // Create a fingerprint template verificator
-            UpdateStatus(0);
-        }
-
-        private void UpdateStatus(int FAR)
-        {
-            // Show "False accept rate" value
-            SetStatus(String.Format("False Accept Rate (FAR) = {0}", FAR));
-        }
-
-        private bool ValidateEmployeeCheck(employee emp)
-        {
-            return false;
+            Verificator = new DPFP.Verification.Verification();
         }
 
         protected override void Process(DPFP.Sample Sample)
@@ -88,20 +74,29 @@ namespace DGTIT.Checador
                     {
                         continue;
                     }
-                    
+
+                    // * validete if the employee is active
+                    if (!emp.active)
+                    {
+                        SetNoRegistrada("Empleado en baja");
+                        SetAreaNoEncontrada();
+                        break;
+                    }
+
+
                     // * validete if the employee direction has assigned the area
                     if (emp.general_direction_id <=  0 )
                     {
-                        setNoRegistrada("No cuenta con area registrada");
-                        setAreaNoEncontrada();
+                        SetNoRegistrada("No cuenta con area registrada");
+                        SetAreaNoEncontrada();
                         break;
                     }
 
                     // * validate if the employee area its the same area of the checador
                     if (emp.general_direction_id != currentAreaId)
                     {
-                        setNoRegistrada("No pertenece a esta Area");
-                        setAreaNoEncontrada();
+                        SetNoRegistrada("No pertenece a esta Area");
+                        SetAreaNoEncontrada();
                         break;
                     }
 
@@ -109,14 +104,14 @@ namespace DGTIT.Checador
                     var employeeNumber = Convert.ToInt32(emp.plantilla_id) - 100000;
 
                     // * display the photo and name of the employee
-                    setFotoEmpleado( fiscaliaService.GetEmployeePhoto(employeeNumber) );
-                    setNombre( emp.name.ToString() );
+                    SetFotoEmpleado( fiscaliaService.GetEmployeePhoto(employeeNumber) );
+                    SetNombre( emp.name.ToString() );
 
                     // * make the checkin record
                     var cheeckTime = this.checadorService.CheckInEmployee(employeeNumber);
 
                     // * display the employee is checked on the UI
-                    setChecada(cheeckTime);
+                    SetChecada(cheeckTime);
                     PlayBell();
 
                     break;
@@ -124,39 +119,21 @@ namespace DGTIT.Checador
 
                 if(result.Verified == false ) //error en huella
                 {
-                    setNoRegistrada("No se reconoce la huella, favor de reintentar");
+                    SetNoRegistrada("No se reconoce la huella, favor de reintentar");
                 }
                    
                 // * clear the UI and unlock the fingerPrint device
                 DelayAction(4000, new Action(() => {
-                    this.Limpiar();
+                    LimpiarCampos();
                 }));
                 
             }
         }
-
-        public void Limpiar()
-        {
-            LimpiarCampos();
-        }
-
-        private void PlayBell()
-        {
-            try
-            {
-                System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"c:\Timbre.wav");
-                player.Play();
-            }
-            catch (Exception)
-            {
-            }
-        }
-
+        
         public static void DelayAction(int millisecond, Action action)
         {
             var timer = new DispatcherTimer();
             timer.Tick += delegate
-
             {
                 action.Invoke();
                 timer.Stop();

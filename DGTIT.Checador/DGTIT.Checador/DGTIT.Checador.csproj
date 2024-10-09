@@ -211,12 +211,6 @@
     <Compile Include="Views\FrmRegistrar.Designer.cs">
       <DependentUpon>FrmRegistrar.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmVerificar.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmVerificar.Designer.cs">
-      <DependentUpon>frmVerificar.cs</DependentUpon>
-    </Compile>
     <Compile Include="general_directions.cs">
       <DependentUpon>UsuariosModel.tt</DependentUpon>
     </Compile>
@@ -333,9 +327,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\FrmRegistrar.resx">
       <DependentUpon>FrmRegistrar.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmVerificar.resx">
-      <DependentUpon>frmVerificar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>

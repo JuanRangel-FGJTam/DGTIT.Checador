@@ -45,7 +45,7 @@ namespace DGTIT.Checador
 			DrawPicture( DGTIT.Checador.Helpers.FingerPrint.ConvertSampleToBitmap(Sample));
 		}
 
-		protected void Start()
+		protected void StartCapturing()
 		{
             if (null != Capturer)
             {
@@ -61,7 +61,7 @@ namespace DGTIT.Checador
             }
 		}
 
-		protected void Stop()
+		protected void StopCapturing()
 		{
             if (null != Capturer)
             {
@@ -75,58 +75,60 @@ namespace DGTIT.Checador
                 }
             }
 		}
-		
-		#region Form Event Handlers:
 
-		private void CaptureForm_Load(object sender, EventArgs e)
+        protected void SetPrompt(string prompt)
+        {
+            this.Invoke(new Function(delegate () {
+                // MessageBox.Show(prompt, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }));
+        }
+        
+        protected void MakeReport(string message)
+        {
+            this.Invoke(new Function(delegate () {
+                //StatusText.AppendText(message + "\r\n");
+                //lblNombre.Text = message + "\r\n";
+            }));
+        }
+
+        protected virtual void PlayBell()
+        {
+            try
+            {
+                System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"c:\Timbre.wav");
+                player.Play();
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        #region Form Events Handler
+        private void CaptureForm_Load(object sender, EventArgs e)
 		{
-			Init();
-			Start();												// Start capture operation.
+            lblFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
+            lblHora.Text = DateTime.Now.ToString("hh:mm tt");
+
+            Init();
+			StartCapturing();
 		}
 
 		private void CaptureForm_FormClosed(object sender, FormClosedEventArgs e)
 		{
-			Stop();
+			StopCapturing();
 		}
 		#endregion
 
-		
-		protected void SetStatus(string status)
-		{
-			this.Invoke(new Function(delegate() {
-				//StatusLine.Text = status;
-			}));
-		}
-
-		protected void SetPrompt(string prompt)
-		{
-			this.Invoke(new Function(delegate() {
-				//Prompt.Text = prompt;
-			}));
-		}
-		protected void MakeReport(string message)
-		{
-			this.Invoke(new Function(delegate() {
-			 	//StatusText.AppendText(message + "\r\n");
-				//lblNombre.Text = message + "\r\n";
-			}));
-		}
-
-		private void DrawPicture(Bitmap bitmap)
+        #region Update UI methods
+        
+        private void DrawPicture(Bitmap bitmap)
 		{
 			this.Invoke(new Function(delegate() {
 				Picture.Image = new Bitmap(bitmap, Picture.Size);	// fit the image into the picture box
 			}));
 		}
 
-
-        private void OnTimerTick(object sender, EventArgs e)
-        {
-			lblFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
-			lblHora.Text = DateTime.Now.ToString("hh:mm tt");
-		}
-
-		protected void setNombre(string NombreEmpleado)
+		protected void SetNombre(string NombreEmpleado)
         {
 			this.Invoke(new Function(delegate () {
 				this.lblNombre.ForeColor = Color.Black;
@@ -134,7 +136,7 @@ namespace DGTIT.Checador
 			}));
         }
 
-		protected void setNoRegistrada(string NombreEmpleado)
+		protected void SetNoRegistrada(string NombreEmpleado)
 		{
 			this.Invoke(new Function(delegate () {
 				this.lblNombre.ForeColor = Color.PaleVioletRed;
@@ -142,14 +144,14 @@ namespace DGTIT.Checador
 			}));
 		}
 
-		protected void setFotoEmpleado(Bitmap bitmap)
+		protected void SetFotoEmpleado(Bitmap bitmap)
 		{
 			this.Invoke(new Function(delegate () {
 				fotoEmpleado.Image = new Bitmap(bitmap, fotoEmpleado.Size);   // fit the image into the picture box
 			}));
 		}
 
-		protected void setChecada(DateTime time)
+		protected void SetChecada(DateTime time)
 		{
 			this.Invoke(new Function(delegate () {
 
@@ -161,15 +163,15 @@ namespace DGTIT.Checador
 
 			}));
 		}
-		protected void setAreaNoEncontrada( )
+		
+		protected void SetAreaNoEncontrada( )
 		{
 			this.Invoke(new Function(delegate () { 
 				picX.Visible = true;
-
 			}));
 		}
 
-		protected void setHuellaNoEncontrada()
+		protected void SetHuellaNoEncontrada()
 		{
 			this.Invoke(new Function(delegate () {
 				this.lblNombre.ForeColor = Color.DarkSalmon;
@@ -192,7 +194,7 @@ namespace DGTIT.Checador
 				picX.Visible = false;
 			}));
 		}
-
+        #endregion
 
         #region FingerPrint EventsHandler
         protected DPFP.FeatureSet ExtractFeatures(DPFP.Sample Sample, DPFP.Processing.DataPurpose Purpose)
