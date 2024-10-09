@@ -27,20 +27,20 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="bigint" />
-          <Property Name="name" Nullable="false" MaxLength="255" Type="nvarchar" />
-          <Property Name="created_at" Type="datetime" />
-          <Property Name="updated_at" Type="datetime" />
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="created_at" Type="datetime2" Precision="7" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" />
           <Property Name="subdirectorate_id" Type="int" />
         </EntityType>
         <EntityType Name="directions">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="bigint" />
-          <Property Name="name" Nullable="false" MaxLength="255" Type="nvarchar" />
-          <Property Name="created_at" Type="datetime" />
-          <Property Name="updated_at" Type="datetime" />
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="created_at" Type="datetime2" Precision="7" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" />
           <Property Name="general_direction_id" Type="int" />
         </EntityType>
         <EntityType Name="EmpleadoRegistro">
@@ -61,18 +61,19 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="general_direction_id" Nullable="false" Type="bigint" />
-          <Property Name="direction_id" Nullable="false" Type="bigint" />
-          <Property Name="subdirectorate_id" Nullable="false" Type="bigint" />
-          <Property Name="department_id" Nullable="false" Type="bigint" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="general_direction_id" Type="bigint" Nullable="false" />
+          <Property Name="direction_id" Type="bigint" Nullable="false" />
+          <Property Name="subdirectorate_id" Type="bigint" Nullable="false" />
+          <Property Name="department_id" Type="bigint" Nullable="false" />
           <Property Name="plantilla_id" Type="int" />
-          <Property Name="name" Nullable="false" MaxLength="255" Type="varchar" />
-          <Property Name="photo" MaxLength="255" Type="varchar" />
-          <Property Name="fingerprint" Nullable="false" Type="varbinary(max)" />
-          <Property Name="created_at" Type="datetime" />
-          <Property Name="updated_at" Type="datetime" />
+          <Property Name="name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="photo" Type="varchar" MaxLength="255" />
+          <Property Name="fingerprint" Type="varbinary(max)" Nullable="false" />
+          <Property Name="created_at" Type="datetime2" Precision="7" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" />
           <Property Name="status_id" Type="int" />
+          <Property Name="active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="employees_respaldo">
           <Key>
@@ -95,13 +96,13 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="bigint" />
-          <Property Name="uuid" Nullable="false" MaxLength="255" Type="nvarchar" />
-          <Property Name="connection" Nullable="false" Type="nvarchar(max)" />
-          <Property Name="queue" Nullable="false" Type="nvarchar(max)" />
-          <Property Name="payload" Nullable="false" Type="nvarchar(max)" />
-          <Property Name="exception" Nullable="false" Type="nvarchar(max)" />
-          <Property Name="failed_at" Nullable="false" Type="datetime" />
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="uuid" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="connection" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="queue" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="payload" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="exception" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="failed_at" Type="datetime2" Precision="7" Nullable="false" />
         </EntityType>
         <!--Errores durante la generación:
 advertencia 6002: La tabla o vista 'UsuariosDB.dbo.files' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
@@ -109,10 +110,10 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.files' no tiene definida ning
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="bigint" />
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="type_id" Type="int" />
-          <Property Name="name" MaxLength="255" Type="varchar" />
-          <Property Name="url" MaxLength="255" Type="varchar" />
+          <Property Name="name" Type="varchar" MaxLength="255" />
+          <Property Name="url" Type="varchar" MaxLength="255" />
           <Property Name="updated_at" Type="datetime" />
           <Property Name="created_at" Type="datetime" />
         </EntityType>
@@ -120,41 +121,41 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.files' no tiene definida ning
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="bigint" />
-          <Property Name="name" Nullable="false" MaxLength="255" Type="nvarchar" />
-          <Property Name="abbreviation" Nullable="false" MaxLength="255" Type="nvarchar" />
-          <Property Name="created_at" Type="datetime" />
-          <Property Name="updated_at" Type="datetime" />
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="abbreviation" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="created_at" Type="datetime2" Precision="7" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" />
         </EntityType>
         <EntityType Name="incident_states">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" Type="int" />
-          <Property Name="name" MaxLength="255" Type="nvarchar" />
-          <Property Name="updated_at" Type="datetime" />
-          <Property Name="created_at" Type="datetime" />
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="255" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" />
+          <Property Name="created_at" Type="datetime2" Precision="7" />
         </EntityType>
         <EntityType Name="incident_types">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="name" MaxLength="255" Type="varchar" />
-          <Property Name="updated_at" Type="datetime" />
-          <Property Name="created_at" Type="datetime" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="255" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" />
+          <Property Name="created_at" Type="datetime2" Precision="7" />
         </EntityType>
         <EntityType Name="incidents">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="employee_id" Nullable="false" Type="int" />
-          <Property Name="incident_type_id" Nullable="false" Type="int" />
-          <Property Name="incident_state_id" Nullable="false" Type="int" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="employee_id" Type="int" Nullable="false" />
+          <Property Name="incident_type_id" Type="int" Nullable="false" />
+          <Property Name="incident_state_id" Type="int" Nullable="false" />
           <Property Name="date" Type="date" />
-          <Property Name="updated_at" Type="datetime" />
-          <Property Name="created_at" Type="datetime" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" />
+          <Property Name="created_at" Type="datetime2" Precision="7" />
         </EntityType>
         <!--Errores durante la generación:
 advertencia 6002: La tabla o vista 'UsuariosDB.dbo.justifies' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
@@ -162,45 +163,45 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.justifies' no tiene definida 
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="bigint" />
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="employee_id" Type="int" />
           <Property Name="type_justify_id" Type="int" />
           <Property Name="date_start" Type="date" />
           <Property Name="date_finish" Type="date" />
-          <Property Name="file" MaxLength="255" Type="varchar" />
-          <Property Name="details" MaxLength="255" Type="varchar" />
-          <Property Name="updated_at" Type="datetime" />
-          <Property Name="created_at" Type="datetime" />
+          <Property Name="file" Type="varchar" MaxLength="255" />
+          <Property Name="details" Type="varchar" MaxLength="255" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" />
+          <Property Name="created_at" Type="datetime2" Precision="7" />
           <Property Name="user_id" Type="bigint" />
         </EntityType>
         <EntityType Name="menu_user">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="bigint" />
-          <Property Name="menu_id" Nullable="false" Type="bigint" />
-          <Property Name="user_id" Nullable="false" Type="bigint" />
-          <Property Name="created_at" Type="datetime" />
-          <Property Name="updated_at" Type="datetime" />
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="menu_id" Type="bigint" Nullable="false" />
+          <Property Name="user_id" Type="bigint" Nullable="false" />
+          <Property Name="created_at" Type="datetime2" Precision="7" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" />
         </EntityType>
         <EntityType Name="menus">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="bigint" />
-          <Property Name="name" Nullable="false" MaxLength="255" Type="nvarchar" />
-          <Property Name="url" Nullable="false" MaxLength="255" Type="nvarchar" />
-          <Property Name="route" Nullable="false" MaxLength="255" Type="nvarchar" />
-          <Property Name="created_at" Type="datetime" />
-          <Property Name="updated_at" Type="datetime" />
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="url" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="route" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="created_at" Type="datetime2" Precision="7" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" />
         </EntityType>
         <EntityType Name="migrations">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="migration" Nullable="false" MaxLength="255" Type="nvarchar" />
-          <Property Name="batch" Nullable="false" Type="int" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="migration" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="batch" Type="int" Nullable="false" />
         </EntityType>
         <!--Errores durante la generación:
 advertencia 6002: La tabla o vista 'UsuariosDB.dbo.password_resets' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
@@ -209,76 +210,77 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.password_resets' no tiene def
             <PropertyRef Name="email" />
             <PropertyRef Name="token" />
           </Key>
-          <Property Name="email" Nullable="false" MaxLength="255" Type="nvarchar" />
-          <Property Name="token" Nullable="false" MaxLength="255" Type="nvarchar" />
-          <Property Name="created_at" Type="datetime" />
+          <Property Name="email" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="token" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="created_at" Type="datetime2" Precision="7" />
         </EntityType>
         <EntityType Name="records">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="employee_id" Nullable="false" Type="int" />
-          <Property Name="check" Nullable="false" Type="datetime" />
-          <Property Name="created_at" Type="datetime" />
-          <Property Name="updated_at" Type="datetime" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="employee_id" Type="int" Nullable="false" />
+          <Property Name="check" Type="datetime" Nullable="false" />
+          <Property Name="created_at" Type="datetime2" Precision="7" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" />
         </EntityType>
         <EntityType Name="subdirectorates">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="bigint" />
-          <Property Name="name" Nullable="false" MaxLength="255" Type="nvarchar" />
-          <Property Name="created_at" Type="datetime" />
-          <Property Name="updated_at" Type="datetime" />
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="created_at" Type="datetime2" Precision="7" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" />
           <Property Name="direction_id" Type="int" />
         </EntityType>
         <EntityType Name="type_files">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="bigint" />
-          <Property Name="name" MaxLength="100" Type="varchar" />
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="type_justifies">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="bigint" />
-          <Property Name="name" Nullable="false" MaxLength="255" Type="nvarchar" />
-          <Property Name="created_at" Type="datetime" />
-          <Property Name="updated_at" Type="datetime" />
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="created_at" Type="datetime2" Precision="7" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" />
         </EntityType>
         <EntityType Name="users">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="bigint" />
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="general_direction_id" Type="bigint" />
           <Property Name="direction_id" Type="bigint" />
           <Property Name="subdirectorate_id" Type="bigint" />
           <Property Name="department_id" Type="bigint" />
-          <Property Name="name" Nullable="false" MaxLength="255" Type="nvarchar" />
-          <Property Name="email" Nullable="false" MaxLength="255" Type="nvarchar" />
-          <Property Name="email_verified_at" Type="datetime" />
-          <Property Name="password" Nullable="false" MaxLength="255" Type="nvarchar" />
-          <Property Name="remember_token" MaxLength="100" Type="nvarchar" />
-          <Property Name="created_at" Type="datetime" />
-          <Property Name="updated_at" Type="datetime" />
+          <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="email_verified_at" Type="datetime2" Precision="7" />
+          <Property Name="password" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="remember_token" Type="nvarchar" MaxLength="100" />
+          <Property Name="created_at" Type="datetime2" Precision="7" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" />
           <Property Name="level_id" Type="int" />
+          <Property Name="deleted_at" Type="datetime2" Precision="7" />
         </EntityType>
         <EntityType Name="working_hours">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="employee_id " Nullable="false" Type="int" />
-          <Property Name="checkin" MaxLength="5" Type="varchar" />
-          <Property Name="toeat" MaxLength="5" Type="varchar" />
-          <Property Name="toarrive" MaxLength="5" Type="varchar" />
-          <Property Name="checkout" MaxLength="5" Type="varchar" />
-          <Property Name="created_at" Type="datetime" />
-          <Property Name="updated_at" Type="datetime" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="employee_id " Type="int" Nullable="false" />
+          <Property Name="checkin" Type="varchar" MaxLength="5" />
+          <Property Name="toeat" Type="varchar" MaxLength="5" />
+          <Property Name="toarrive" Type="varchar" MaxLength="5" />
+          <Property Name="checkout" Type="varchar" MaxLength="5" />
+          <Property Name="created_at" Type="datetime2" Precision="7" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" />
         </EntityType>
         <!--Errores durante la generación:
 advertencia 6002: La tabla o vista 'UsuariosDB.dbo.Vw_plazas_nomina' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
@@ -332,8 +334,8 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <Property Name="QUEBRADO" Nullable="false" Type="int" />
         </EntityType>
         <Association Name="fk_employee_id">
-          <End Type="Self.employees" Multiplicity="1" Role="employees" />
-          <End Type="Self.incidents" Multiplicity="*" Role="incidents" />
+          <End Role="employees" Type="Self.employees" Multiplicity="1" />
+          <End Role="incidents" Type="Self.incidents" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="employees">
               <PropertyRef Name="id" />
@@ -344,8 +346,8 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           </ReferentialConstraint>
         </Association>
         <Association Name="fk_incident_state_id">
-          <End Type="Self.incident_states" Multiplicity="1" Role="incident_states" />
-          <End Type="Self.incidents" Multiplicity="*" Role="incidents" />
+          <End Role="incident_states" Type="Self.incident_states" Multiplicity="1" />
+          <End Role="incidents" Type="Self.incidents" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="incident_states">
               <PropertyRef Name="id" />
@@ -356,8 +358,8 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           </ReferentialConstraint>
         </Association>
         <Association Name="fk_incident_type_id">
-          <End Type="Self.incident_types" Multiplicity="1" Role="incident_types" />
-          <End Type="Self.incidents" Multiplicity="*" Role="incidents" />
+          <End Role="incident_types" Type="Self.incident_types" Multiplicity="1" />
+          <End Role="incidents" Type="Self.incidents" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="incident_types">
               <PropertyRef Name="id" />
@@ -368,10 +370,10 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           </ReferentialConstraint>
         </Association>
         <Association Name="menu_user_menu_id_foreign">
-          <End Type="Self.menus" Multiplicity="1" Role="menus">
+          <End Role="menus" Type="Self.menus" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="Self.menu_user" Multiplicity="*" Role="menu_user" />
+          <End Role="menu_user" Type="Self.menu_user" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="menus">
               <PropertyRef Name="id" />
@@ -382,10 +384,10 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           </ReferentialConstraint>
         </Association>
         <Association Name="menu_user_user_id_foreign">
-          <End Type="Self.users" Multiplicity="1" Role="users">
+          <End Role="users" Type="Self.users" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="Self.menu_user" Multiplicity="*" Role="menu_user" />
+          <End Role="menu_user" Type="Self.menu_user" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="users">
               <PropertyRef Name="id" />
@@ -580,8 +582,8 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           </Key>
           <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="created_at" Type="DateTime" Precision="3" />
-          <Property Name="updated_at" Type="DateTime" Precision="3" />
+          <Property Name="created_at" Type="DateTime" Precision="7" />
+          <Property Name="updated_at" Type="DateTime" Precision="7" />
           <Property Name="subdirectorate_id" Type="Int32" />
         </EntityType>
         <EntityType Name="direction">
@@ -590,8 +592,8 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           </Key>
           <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="created_at" Type="DateTime" Precision="3" />
-          <Property Name="updated_at" Type="DateTime" Precision="3" />
+          <Property Name="created_at" Type="DateTime" Precision="7" />
+          <Property Name="updated_at" Type="DateTime" Precision="7" />
           <Property Name="general_direction_id" Type="Int32" />
         </EntityType>
         <EntityType Name="EmpleadoRegistro">
@@ -621,10 +623,11 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <Property Name="name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="photo" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="fingerprint" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
-          <Property Name="created_at" Type="DateTime" Precision="3" />
-          <Property Name="updated_at" Type="DateTime" Precision="3" />
+          <Property Name="created_at" Type="DateTime" Precision="7" />
+          <Property Name="updated_at" Type="DateTime" Precision="7" />
           <Property Name="status_id" Type="Int32" />
           <NavigationProperty Name="incidents" Relationship="UsuariosDBModel.fk_employee_id" FromRole="employee" ToRole="incident" />
+          <Property Name="active" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="employees_respaldo">
           <Key>
@@ -653,7 +656,7 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <Property Name="queue" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="payload" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="exception" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="failed_at" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="failed_at" Type="DateTime" Nullable="false" Precision="7" />
         </EntityType>
         <EntityType Name="general_directions">
           <Key>
@@ -662,8 +665,8 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <Property Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int64" />
           <Property Name="name" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" Type="String" />
           <Property Name="abbreviation" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" Type="String" />
-          <Property Name="created_at" Precision="3" Type="DateTime" />
-          <Property Name="updated_at" Precision="3" Type="DateTime" />
+          <Property Name="created_at" Precision="7" Type="DateTime" />
+          <Property Name="updated_at" Precision="7" Type="DateTime" />
         </EntityType>
         <EntityType Name="incident_states">
           <Key>
@@ -671,8 +674,8 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="updated_at" Type="DateTime" Precision="3" />
-          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="updated_at" Type="DateTime" Precision="7" />
+          <Property Name="created_at" Type="DateTime" Precision="7" />
           <NavigationProperty Name="incidents" Relationship="UsuariosDBModel.fk_incident_state_id" FromRole="incident_states" ToRole="incident" />
         </EntityType>
         <EntityType Name="incident_types">
@@ -681,8 +684,8 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="updated_at" Type="DateTime" Precision="3" />
-          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="updated_at" Type="DateTime" Precision="7" />
+          <Property Name="created_at" Type="DateTime" Precision="7" />
           <NavigationProperty Name="incidents" Relationship="UsuariosDBModel.fk_incident_type_id" FromRole="incident_types" ToRole="incident" />
         </EntityType>
         <EntityType Name="incident">
@@ -694,8 +697,8 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <Property Name="incident_type_id" Type="Int32" Nullable="false" />
           <Property Name="incident_state_id" Type="Int32" Nullable="false" />
           <Property Name="date" Type="DateTime" Precision="0" />
-          <Property Name="updated_at" Type="DateTime" Precision="3" />
-          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="updated_at" Type="DateTime" Precision="7" />
+          <Property Name="created_at" Type="DateTime" Precision="7" />
           <NavigationProperty Name="employee" Relationship="UsuariosDBModel.fk_employee_id" FromRole="incident" ToRole="employee" />
           <NavigationProperty Name="incident_states" Relationship="UsuariosDBModel.fk_incident_state_id" FromRole="incident" ToRole="incident_states" />
           <NavigationProperty Name="incident_types" Relationship="UsuariosDBModel.fk_incident_type_id" FromRole="incident" ToRole="incident_types" />
@@ -707,8 +710,8 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="menu_id" Type="Int64" Nullable="false" />
           <Property Name="user_id" Type="Int64" Nullable="false" />
-          <Property Name="created_at" Type="DateTime" Precision="3" />
-          <Property Name="updated_at" Type="DateTime" Precision="3" />
+          <Property Name="created_at" Type="DateTime" Precision="7" />
+          <Property Name="updated_at" Type="DateTime" Precision="7" />
           <NavigationProperty Name="menu" Relationship="UsuariosDBModel.menu_user_menu_id_foreign" FromRole="menu_user" ToRole="menu" />
           <NavigationProperty Name="user" Relationship="UsuariosDBModel.menu_user_user_id_foreign" FromRole="menu_user" ToRole="user" />
         </EntityType>
@@ -720,8 +723,8 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <Property Name="name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="url" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="route" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="created_at" Type="DateTime" Precision="3" />
-          <Property Name="updated_at" Type="DateTime" Precision="3" />
+          <Property Name="created_at" Type="DateTime" Precision="7" />
+          <Property Name="updated_at" Type="DateTime" Precision="7" />
           <NavigationProperty Name="menu_user" Relationship="UsuariosDBModel.menu_user_menu_id_foreign" FromRole="menu" ToRole="menu_user" />
         </EntityType>
         <EntityType Name="migration">
@@ -739,8 +742,8 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="employee_id" Type="Int32" Nullable="false" />
           <Property Name="check" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="created_at" Type="DateTime" Precision="3" />
-          <Property Name="updated_at" Type="DateTime" Precision="3" />
+          <Property Name="created_at" Type="DateTime" Precision="7" />
+          <Property Name="updated_at" Type="DateTime" Precision="7" />
         </EntityType>
         <EntityType Name="subdirectorate">
           <Key>
@@ -748,8 +751,8 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           </Key>
           <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="created_at" Type="DateTime" Precision="3" />
-          <Property Name="updated_at" Type="DateTime" Precision="3" />
+          <Property Name="created_at" Type="DateTime" Precision="7" />
+          <Property Name="updated_at" Type="DateTime" Precision="7" />
           <Property Name="direction_id" Type="Int32" />
         </EntityType>
         <EntityType Name="type_files">
@@ -765,8 +768,8 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           </Key>
           <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="created_at" Type="DateTime" Precision="3" />
-          <Property Name="updated_at" Type="DateTime" Precision="3" />
+          <Property Name="created_at" Type="DateTime" Precision="7" />
+          <Property Name="updated_at" Type="DateTime" Precision="7" />
         </EntityType>
         <EntityType Name="user">
           <Key>
@@ -779,13 +782,14 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <Property Name="department_id" Type="Int64" />
           <Property Name="name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="email_verified_at" Type="DateTime" Precision="3" />
+          <Property Name="email_verified_at" Type="DateTime" Precision="7" />
           <Property Name="password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="remember_token" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="created_at" Type="DateTime" Precision="3" />
-          <Property Name="updated_at" Type="DateTime" Precision="3" />
+          <Property Name="created_at" Type="DateTime" Precision="7" />
+          <Property Name="updated_at" Type="DateTime" Precision="7" />
           <Property Name="level_id" Type="Int32" />
           <NavigationProperty Name="menu_user" Relationship="UsuariosDBModel.menu_user_user_id_foreign" FromRole="user" ToRole="menu_user" />
+          <Property Name="deleted_at" Type="DateTime" Precision="7" />
         </EntityType>
         <EntityType Name="working_hours">
           <Key>
@@ -797,8 +801,8 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <Property Name="toeat" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
           <Property Name="toarrive" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
           <Property Name="checkout" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="created_at" Type="DateTime" Precision="3" />
-          <Property Name="updated_at" Type="DateTime" Precision="3" />
+          <Property Name="created_at" Type="DateTime" Precision="7" />
+          <Property Name="updated_at" Type="DateTime" Precision="7" />
         </EntityType>
         <EntityType Name="file">
           <Key>
@@ -822,8 +826,8 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <Property Name="date_finish" Type="DateTime" Precision="0" />
           <Property Name="file" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="details" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="updated_at" Type="DateTime" Precision="3" />
-          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="updated_at" Type="DateTime" Precision="7" />
+          <Property Name="created_at" Type="DateTime" Precision="7" />
           <Property Name="user_id" Type="Int64" />
         </EntityType>
         <EntityType Name="password_resets">
@@ -833,7 +837,7 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           </Key>
           <Property Name="email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="token" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="created_at" Type="DateTime" Precision="7" />
         </EntityType>
         <EntityType Name="Vw_plazas_nomina">
           <Key>
@@ -858,7 +862,7 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <Property Name="id_status_plantilla" Type="Int16" />
           <Property Name="Fec_Asignacion" Precision="3" Type="DateTime" />
           <Property Name="Fec_Ingreso" Precision="3" Type="DateTime" />
-          <Property Name="Id_Division_Nomina" Nullable="false" Type="String" FixedLength="true" Unicode="false" MaxLength="3" />
+          <Property Name="Id_Division_Nomina" Nullable="false" Type="String" />
           <Property Name="txt_division_nomina" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" Type="String" />
           <Property Name="Id_Depto_Nomina" Type="Int32" />
           <Property Name="txt_depto_nomina" MaxLength="Max" FixedLength="false" Unicode="false" Type="String" />
@@ -1012,6 +1016,7 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <EntitySetMapping Name="employees">
             <EntityTypeMapping TypeName="UsuariosDBModel.employee">
               <MappingFragment StoreEntitySet="employees">
+                <ScalarProperty Name="active" ColumnName="active" />
                 <ScalarProperty Name="status_id" ColumnName="status_id" />
                 <ScalarProperty Name="updated_at" ColumnName="updated_at" />
                 <ScalarProperty Name="created_at" ColumnName="created_at" />
@@ -1177,6 +1182,7 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <EntitySetMapping Name="users">
             <EntityTypeMapping TypeName="UsuariosDBModel.user">
               <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
                 <ScalarProperty Name="level_id" ColumnName="level_id" />
                 <ScalarProperty Name="updated_at" ColumnName="updated_at" />
                 <ScalarProperty Name="created_at" ColumnName="created_at" />

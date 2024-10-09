@@ -33,6 +33,7 @@ namespace DGTIT.Checador
         public Nullable<System.DateTime> created_at { get; set; }
         public Nullable<System.DateTime> updated_at { get; set; }
         public Nullable<int> level_id { get; set; }
+        public Nullable<System.DateTime> deleted_at { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<menu_user> menu_user { get; set; }
