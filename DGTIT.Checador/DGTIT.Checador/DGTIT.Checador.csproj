@@ -122,6 +122,7 @@
     <Compile Include="AREA.cs">
       <DependentUpon>procuraduria.tt</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\FingerPrint.cs" />
     <Compile Include="Views\BusyDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -134,16 +135,16 @@
     <Compile Include="CapturarHuella.Designer.cs">
       <DependentUpon>CapturarHuella.cs</DependentUpon>
     </Compile>
-    <Compile Include="CaptureForm.cs">
+    <Compile Include="Views\CaptureForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CaptureForm.Designer.cs">
+    <Compile Include="Views\CaptureForm.Designer.cs">
       <DependentUpon>CaptureForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Checador.cs">
+    <Compile Include="Views\Checador.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Checador.Designer.cs">
+    <Compile Include="Views\Checador.Designer.cs">
       <DependentUpon>Checador.cs</DependentUpon>
     </Compile>
     <Compile Include="ChecadorMini.cs">
@@ -311,11 +312,11 @@
     <EmbeddedResource Include="CapturarHuella.resx">
       <DependentUpon>CapturarHuella.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CaptureForm.resx">
+    <EmbeddedResource Include="Views\CaptureForm.resx">
       <DependentUpon>CaptureForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Checador.resx">
+    <EmbeddedResource Include="Views\Checador.resx">
       <DependentUpon>Checador.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ChecadorMini.resx">

@@ -33,7 +33,7 @@ namespace DGTIT.Checador
 
         private void BtnVerificar_Click(object sender, EventArgs e)
         {
-            frmVerificar verificar = new frmVerificar();
+            var verificar = new Checador();
             verificar.ShowDialog(this);
         }
 

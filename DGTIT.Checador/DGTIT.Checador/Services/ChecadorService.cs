@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,11 @@ namespace DGTIT.Checador.Services {
         {
             this.usuariosDBEntities = context;
             this.procuraduriaEntities = procuraduriaContext;
+        }
+
+        public IEnumerable<employee> GetEmployees()
+        {
+            return this.usuariosDBEntities.employees.Where(item => item.fingerprint != null).ToList();
         }
 
         /// <summary>
@@ -102,6 +108,26 @@ namespace DGTIT.Checador.Services {
             this.usuariosDBEntities.working_hours.AddOrUpdate(hours);
             this.usuariosDBEntities.SaveChanges();
             return hours;
+        }
+
+        public DateTime CheckInEmployee(int employeeNumber)
+        {
+            // * get the server time
+            DateTime serverDate = this.usuariosDBEntities.Database.SqlQuery<DateTime>("SELECT getdate()").AsEnumerable().First();
+
+            // * get the employee id
+            var employee = this.GetEmployee(employeeNumber, false);
+            
+            // * make the check record
+            var checkRecord = this.usuariosDBEntities.records.Add( new record()
+            {
+                employee_id = employee.id,
+                check = serverDate,
+                created_at = serverDate,
+                updated_at = serverDate
+            });
+            usuariosDBEntities.SaveChanges();
+            return serverDate;
         }
 
     }

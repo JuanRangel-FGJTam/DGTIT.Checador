@@ -35,7 +35,8 @@ namespace DGTIT.Checador
             ((System.ComponentModel.ISupportInitialize)(this.Picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picChecada)).BeginInit();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picOK)).BeginInit(); 
+            ((System.ComponentModel.ISupportInitialize)(this.picOK)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picX)).BeginInit();
             this.SuspendLayout();
             // 
             // fotoEmpleado
@@ -59,7 +60,6 @@ namespace DGTIT.Checador
             // 
             // lblChecadaFecha
             // 
-           // this.lblChecadaFecha.Location = new System.Drawing.Point(1212, 600);
             this.lblChecadaFecha.Location = new System.Drawing.Point(1150, 600);
             // 
             // picChecada
@@ -68,24 +68,22 @@ namespace DGTIT.Checador
             // 
             // lblHora
             // 
-           // this.lblHora.Location = new System.Drawing.Point(164, 284);
             this.lblHora.Location = new System.Drawing.Point(145, 284);
             // 
             // lblChecadaHora
             // 
-           // this.lblChecadaHora.Location = new System.Drawing.Point(1212, 649);
             this.lblChecadaHora.Location = new System.Drawing.Point(1150, 649);
             // 
             // picOK
             // 
             this.picOK.Location = new System.Drawing.Point(1466, 440);
-            this.picOK.Size = new System.Drawing.Size(84, 54); 
+            this.picOK.Size = new System.Drawing.Size(84, 54);
             // 
             // timer1
             // 
             this.timer1.Enabled = true;
             this.timer1.Interval = 1000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timer1.Tick += new System.EventHandler(this.OnTimerTick);
             // 
             // Checador
             // 
@@ -93,7 +91,7 @@ namespace DGTIT.Checador
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(1600, 900);
-            this.ControlBox = false;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Checador";
             this.ShowIcon = false;
             this.Text = "Sistema de Registro de Asistencia";
@@ -101,7 +99,8 @@ namespace DGTIT.Checador
             ((System.ComponentModel.ISupportInitialize)(this.Picture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picChecada)).EndInit();
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picOK)).EndInit(); 
+            ((System.ComponentModel.ISupportInitialize)(this.picOK)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picX)).EndInit();
             this.ResumeLayout(false);
 
         }
