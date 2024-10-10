@@ -1,32 +1,27 @@
-﻿using System;
+﻿using DGTIT.Checador.Services;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
+using System.Threading.Tasks;
 using System.Windows.Threading;
-using DGTIT.Checador.Services;
 
-
-namespace DGTIT.Checador
+namespace DGTIT.Checador.Views
 {
-    public partial class Checador : CaptureForm
+    public class Checador : CaptureForm
     {
         private readonly UsuariosDBEntities contexto;
         private readonly procuraduriaEntities1 procu;
         private readonly ChecadorService checadorService;
         private readonly FiscaliaService fiscaliaService;
         private readonly int currentAreaId = 0;
+        private System.Windows.Forms.Timer timer1;
 
         private DPFP.Verification.Verification Verificator;
 
-        public Checador()
+        public Checador() : base()
         {
-            InitializeComponent();
-
             contexto = new UsuariosDBEntities();
             procu = new procuraduriaEntities1();
             checadorService = new ChecadorService(contexto, procu);
@@ -41,6 +36,12 @@ namespace DGTIT.Checador
             base.Init();
             base.Text = "Verificación de Huella Digital";
             Verificator = new DPFP.Verification.Verification();
+            
+            
+            timer1 = new System.Windows.Forms.Timer();
+            timer1.Interval = 1000;
+            timer1.Tick += new EventHandler(OnTimerTick);
+            timer1.Start();
         }
 
         protected override void Process(DPFP.Sample Sample)
@@ -59,13 +60,13 @@ namespace DGTIT.Checador
                 DPFP.Template template = new DPFP.Template();
                 Stream stream;
 
-                foreach (var emp in checadorService.GetEmployees() )
+                foreach (var emp in checadorService.GetEmployees())
                 {
-                    if( emp.fingerprint == null )
+                    if (emp.fingerprint == null)
                     {
                         continue;
                     }
-                    
+
                     // * validate the fingerprint of each employee
                     stream = new MemoryStream(emp.fingerprint);
                     template = new DPFP.Template(stream);
@@ -85,7 +86,7 @@ namespace DGTIT.Checador
 
 
                     // * validete if the employee direction has assigned the area
-                    if (emp.general_direction_id <=  0 )
+                    if (emp.general_direction_id <= 0)
                     {
                         SetNoRegistrada("No cuenta con area registrada");
                         SetAreaNoEncontrada();
@@ -104,8 +105,8 @@ namespace DGTIT.Checador
                     var employeeNumber = Convert.ToInt32(emp.plantilla_id) - 100000;
 
                     // * display the photo and name of the employee
-                    SetFotoEmpleado( fiscaliaService.GetEmployeePhoto(employeeNumber) );
-                    SetNombre( emp.name.ToString() );
+                    SetFotoEmpleado(fiscaliaService.GetEmployeePhoto(employeeNumber));
+                    SetNombre(emp.name.ToString());
 
                     // * make the checkin record
                     var cheeckTime = this.checadorService.CheckInEmployee(employeeNumber);
@@ -117,19 +118,19 @@ namespace DGTIT.Checador
                     break;
                 }
 
-                if(result.Verified == false ) //error en huella
+                if (result.Verified == false) //error en huella
                 {
                     SetNoRegistrada("No se reconoce la huella, favor de reintentar");
                 }
-                   
+
                 // * clear the UI and unlock the fingerPrint device
                 DelayAction(4000, new Action(() => {
                     LimpiarCampos();
                 }));
-                
+
             }
         }
-        
+
         public static void DelayAction(int millisecond, Action action)
         {
             var timer = new DispatcherTimer();
@@ -142,7 +143,7 @@ namespace DGTIT.Checador
             timer.Interval = TimeSpan.FromMilliseconds(millisecond);
             timer.Start();
         }
-        
+
         private void OnTimerTick(object sender, EventArgs e)
         {
             var dateQuery = contexto.Database.SqlQuery<DateTime>("SELECT getdate()");
@@ -153,4 +154,3 @@ namespace DGTIT.Checador
 
     }
 }
-

@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using static DGTIT.Checador.User32;
+
 
 namespace DGTIT.Checador
 {
@@ -16,11 +19,17 @@ namespace DGTIT.Checador
     public partial class CaptureForm : Form, DPFP.Capture.EventHandler
 	{
         private DPFP.Capture.Capture Capturer;
-
+        
         public CaptureForm()
 		{
 			InitializeComponent();
-		}
+
+            lblFecha.BorderStyle = BorderStyle.None;
+            lblHora.BorderStyle = BorderStyle.None;
+            lblChecadaHora.BorderStyle = BorderStyle.None;
+            lblChecadaFecha.BorderStyle = BorderStyle.None;
+            lblNombre.BorderStyle = BorderStyle.None;
+        }
 
         protected virtual void Init()
 		{
@@ -111,11 +120,18 @@ namespace DGTIT.Checador
 
             Init();
 			StartCapturing();
-		}
+
+
+            // Set the form to full screen
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.WindowState = FormWindowState.Maximized;
+            ChangeScreenResolution(new Size(1600, 900));
+            //ChangeScreenResolution(new Size(1280, 1024));
+        }
 
 		private void CaptureForm_FormClosed(object sender, FormClosedEventArgs e)
 		{
-			StopCapturing();
+            StopCapturing();
 		}
 		#endregion
 
@@ -124,7 +140,7 @@ namespace DGTIT.Checador
         private void DrawPicture(Bitmap bitmap)
 		{
 			this.Invoke(new Function(delegate() {
-				Picture.Image = new Bitmap(bitmap, Picture.Size);	// fit the image into the picture box
+				fingerPrintImg.Image = new Bitmap(bitmap, fingerPrintImg.Size);	// fit the image into the picture box
 			}));
 		}
 
@@ -188,7 +204,7 @@ namespace DGTIT.Checador
                     fotoEmpleado.Image = null;
                     lblNombre.Text = "";
                     lblNombre.ForeColor = Color.Black;
-                    Picture.Image = null;
+                    fingerPrintImg.Image = null;
                     lblChecadaFecha.Text = "";
                     lblChecadaHora.Text = "";
                     picChecada.Visible = false;
@@ -249,5 +265,23 @@ namespace DGTIT.Checador
                 MakeReport("La calidad de la muestra es MALA");
         }
         #endregion
+
+
+        #region change resolution settings
+        private void ChangeScreenResolution(Size size)
+        {
+            DEVMODE dm = new DEVMODE();
+            dm.dmDeviceName = new String(new char[32]);
+            dm.dmFormName = new String(new char[32]);
+            dm.dmSize = (short)Marshal.SizeOf(dm);
+
+            if (0 != User32.EnumDisplaySettings(null, User32.ENUM_CURRENT_SETTINGS, ref dm) ) {
+                dm.dmPelsWidth = size.Width;
+                dm.dmPelsHeight = size.Height;
+                int iRet = User32.ChangeDisplaySettings( ref dm, User32.CDS_UPDATEREGISTRY);
+            }
+        }
+        #endregion
+
     }
 }

@@ -4,10 +4,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Windows.Forms;
+using static DGTIT.Checador.User32;
 
 namespace DGTIT.Checador
 {
@@ -15,15 +18,16 @@ namespace DGTIT.Checador
     {
 
         private Configuration ca;
-
+        private Views.Checador checadorForm;
+        
         public Main()
         {
             InitializeComponent();
 
+            // * prepare the events
             this.btnRegistrar.Click += new EventHandler(BtnRegistrar_Click);
             this.btnVerificar.Click += new EventHandler(BtnVerificar_Click);
             this.btnSettings.Click += new EventHandler(ShowConfiguracion);
-
         }
 
         private void BtnRegistrar_Click(object sender, EventArgs e)
@@ -39,8 +43,8 @@ namespace DGTIT.Checador
 
         private void BtnVerificar_Click(object sender, EventArgs e)
         {
-            var verificar = new Checador();
-            verificar.ShowDialog(this);
+            checadorForm = new Views.Checador();
+            checadorForm.ShowDialog(this);
         }
 
         private void ShowConfiguracion(object sender, EventArgs e)
@@ -52,5 +56,6 @@ namespace DGTIT.Checador
                 ca = null;
             }
         }
+
     }
 }

@@ -123,6 +123,7 @@
       <DependentUpon>procuraduria.tt</DependentUpon>
     </Compile>
     <Compile Include="Helpers\FingerPrint.cs" />
+    <Compile Include="User32.cs" />
     <Compile Include="Views\BusyDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -140,24 +141,6 @@
     </Compile>
     <Compile Include="Views\CaptureForm.Designer.cs">
       <DependentUpon>CaptureForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Checador.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Checador.Designer.cs">
-      <DependentUpon>Checador.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ChecadorMini.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ChecadorMini.Designer.cs">
-      <DependentUpon>ChecadorMini.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ChecadorSmall.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ChecadorSmall.Designer.cs">
-      <DependentUpon>ChecadorSmall.cs</DependentUpon>
     </Compile>
     <Compile Include="CntrlDeAsistencia.cs">
       <DependentUpon>UsuariosModel.tt</DependentUpon>
@@ -199,6 +182,9 @@
     <Compile Include="Services\ChecadorService.cs" />
     <Compile Include="Services\FiscaliaService.cs" />
     <Compile Include="ViewModels\EmployeeViewModel.cs" />
+    <Compile Include="Views\Checador.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Views\Configuration.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -315,15 +301,6 @@
     <EmbeddedResource Include="Views\CaptureForm.resx">
       <DependentUpon>CaptureForm.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Checador.resx">
-      <DependentUpon>Checador.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ChecadorMini.resx">
-      <DependentUpon>ChecadorMini.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ChecadorSmall.resx">
-      <DependentUpon>ChecadorSmall.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmCaptura.resx">
       <DependentUpon>FrmCaptura.cs</DependentUpon>
