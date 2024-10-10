@@ -33,7 +33,7 @@ namespace DGTIT.Checador
             fiscaliaService = new FiscaliaService(procu, contexto);
 
             // * read the area id
-            this.currentAreaId = Convert.ToInt32( File.ReadAllText(@"C:\area.ini") );
+            this.currentAreaId = Convert.ToInt32(Properties.Settings.Default["generalDirectionId"]);
         }
 
         protected override void Init()

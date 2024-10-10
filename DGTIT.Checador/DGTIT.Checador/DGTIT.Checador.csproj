@@ -199,6 +199,12 @@
     <Compile Include="Services\ChecadorService.cs" />
     <Compile Include="Services\FiscaliaService.cs" />
     <Compile Include="ViewModels\EmployeeViewModel.cs" />
+    <Compile Include="Views\Configuration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Configuration.Designer.cs">
+      <DependentUpon>Configuration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\FrmEmpleados.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -321,6 +327,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmCaptura.resx">
       <DependentUpon>FrmCaptura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Configuration.resx">
+      <DependentUpon>Configuration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\FrmEmpleados.resx">
       <DependentUpon>FrmEmpleados.cs</DependentUpon>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DGTIT.Checador.Views;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,12 +13,17 @@ namespace DGTIT.Checador
 {
     public partial class Main : Form
     {
+
+        private Configuration ca;
+
         public Main()
         {
             InitializeComponent();
 
             this.btnRegistrar.Click += new EventHandler(BtnRegistrar_Click);
             this.btnVerificar.Click += new EventHandler(BtnVerificar_Click);
+            this.btnSettings.Click += new EventHandler(ShowConfiguracion);
+
         }
 
         private void BtnRegistrar_Click(object sender, EventArgs e)
@@ -37,5 +43,14 @@ namespace DGTIT.Checador
             verificar.ShowDialog(this);
         }
 
+        private void ShowConfiguracion(object sender, EventArgs e)
+        {
+            if(ca == null)
+            {
+                var ca = new Configuration();
+                ca.ShowDialog(this);
+                ca = null;
+            }
+        }
     }
 }

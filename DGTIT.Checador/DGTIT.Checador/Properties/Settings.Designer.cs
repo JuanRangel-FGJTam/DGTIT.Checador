@@ -22,5 +22,23 @@ namespace DGTIT.Checador.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int generalDirectionId {
+            get {
+                return ((int)(this["generalDirectionId"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("app-name")]
+        public string name {
+            get {
+                return ((string)(this["name"]));
+            }
+        }
     }
 }

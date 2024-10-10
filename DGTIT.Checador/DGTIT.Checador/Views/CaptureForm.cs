@@ -181,18 +181,23 @@ namespace DGTIT.Checador
 
 		protected void LimpiarCampos()
 		{
-			
-			Invoke( new Action( () => {
-				fotoEmpleado.Image = null;
-				lblNombre.Text = "";
-				lblNombre.ForeColor = Color.Black;
-				Picture.Image = null;
-				lblChecadaFecha.Text = "";
-				lblChecadaHora.Text = "";
-				picChecada.Visible = false;
-				picOK.Visible = false;
-				picX.Visible = false;
-			}));
+            try
+            {
+                Invoke(new Action(() =>
+                {
+                    fotoEmpleado.Image = null;
+                    lblNombre.Text = "";
+                    lblNombre.ForeColor = Color.Black;
+                    Picture.Image = null;
+                    lblChecadaFecha.Text = "";
+                    lblChecadaHora.Text = "";
+                    picChecada.Visible = false;
+                    picOK.Visible = false;
+                    picX.Visible = false;
+                }));
+            }
+            catch (Exception) { }
+
 		}
         #endregion
 
