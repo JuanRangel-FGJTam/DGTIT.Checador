@@ -43,13 +43,13 @@ namespace DGTIT.Checador
             this.lblFecha = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panelHour = new System.Windows.Forms.Panel();
+            this.btnClose = new System.Windows.Forms.Button();
             this.panelIcons = new System.Windows.Forms.FlowLayoutPanel();
             this.paneluser = new System.Windows.Forms.Panel();
             this.panelClock = new System.Windows.Forms.Panel();
             this.panelCalendar = new System.Windows.Forms.Panel();
             this.fingerPrint = new System.Windows.Forms.Panel();
             this.picLock = new System.Windows.Forms.PictureBox();
-            this.btnClose = new System.Windows.Forms.Button();
             this.panelFotos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fingerPrintImg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fotoEmpleado)).BeginInit();
@@ -246,6 +246,20 @@ namespace DGTIT.Checador
             this.panelHour.Size = new System.Drawing.Size(544, 854);
             this.panelHour.TabIndex = 11;
             // 
+            // btnClose
+            // 
+            this.btnClose.BackColor = System.Drawing.Color.Transparent;
+            this.btnClose.BackgroundImage = global::DGTIT.Checador.Properties.Resources.cross;
+            this.btnClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClose.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClose.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnClose.Location = new System.Drawing.Point(9, 9);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(22, 22);
+            this.btnClose.TabIndex = 7;
+            this.btnClose.UseVisualStyleBackColor = false;
+            // 
             // panelIcons
             // 
             this.panelIcons.BackColor = System.Drawing.Color.Transparent;
@@ -317,20 +331,6 @@ namespace DGTIT.Checador
             this.picLock.TabIndex = 0;
             this.picLock.TabStop = false;
             // 
-            // btnClose
-            // 
-            this.btnClose.BackColor = System.Drawing.Color.Transparent;
-            this.btnClose.BackgroundImage = global::DGTIT.Checador.Properties.Resources.cross;
-            this.btnClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClose.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnClose.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnClose.Location = new System.Drawing.Point(9, 9);
-            this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(22, 22);
-            this.btnClose.TabIndex = 7;
-            this.btnClose.UseVisualStyleBackColor = false;
-            // 
             // CaptureForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -346,7 +346,7 @@ namespace DGTIT.Checador
             this.MinimumSize = new System.Drawing.Size(1598, 868);
             this.Name = "CaptureForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CaptureForm_FormClosed);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CaptureFormClosing);
             this.Load += new System.EventHandler(this.CaptureForm_Load);
             this.panelFotos.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fingerPrintImg)).EndInit();

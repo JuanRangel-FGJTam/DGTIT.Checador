@@ -24,21 +24,22 @@ namespace DGTIT.Checador
         private bool _allowCapture = false;
         public bool allowCapture
         {
-            get
-            {
-                return _allowCapture;
-            }
+            get => _allowCapture;
             set
             {
-                Invoke( new Action( () => {
-                    
-                    picLock.Visible = !value;
-                }) );
+                try
+                {
+                    Invoke(new Action(() =>
+                    {
+
+                        picLock.Visible = !value;
+                    }));
+                }
+                catch (Exception) { }
                 _allowCapture = value;
             }
         }
-
-
+        
 
         public CaptureForm()
 		{
@@ -117,17 +118,25 @@ namespace DGTIT.Checador
 
         protected void SetPrompt(string prompt)
         {
-            this.Invoke(new Function(delegate () {
-                // MessageBox.Show(prompt, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }));
+            try
+            {
+                this.Invoke(new Function(delegate () {
+                    // MessageBox.Show(prompt, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }));
+            }
+            catch (Exception) { }
         }
         
         protected void MakeReport(string message)
         {
-            this.Invoke(new Function(delegate () {
-                //StatusText.AppendText(message + "\r\n");
-                //lblNombre.Text = message + "\r\n";
-            }));
+            try {                  
+                this.Invoke(new Function(delegate () {
+                    //StatusText.AppendText(message + "\r\n");
+                    //lblNombre.Text = message + "\r\n";
+                }));
+            }
+            catch (Exception){
+            }
         }
 
         protected virtual void PlayBell()
@@ -168,7 +177,7 @@ namespace DGTIT.Checador
             });
         }
 
-		private void CaptureForm_FormClosed(object sender, FormClosedEventArgs e)
+		protected virtual void CaptureFormClosing(object sender, FormClosingEventArgs e)
 		{
             StopCapturing();
 		}

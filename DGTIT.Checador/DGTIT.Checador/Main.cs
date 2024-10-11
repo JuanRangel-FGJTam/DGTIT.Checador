@@ -45,8 +45,14 @@ namespace DGTIT.Checador
 
         private void BtnVerificar_Click(object sender, EventArgs e)
         {
+            this.Visible = false;
+            this.ShowInTaskbar = false;
+
             checadorForm = new Views.Checador();
             checadorForm.ShowDialog(this);
+
+            this.Visible = true;
+            this.ShowInTaskbar = true;
         }
 
         private void ShowConfiguracion(object sender, KeyEventArgs e)

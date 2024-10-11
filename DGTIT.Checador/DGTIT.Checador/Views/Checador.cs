@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Threading;
 
 namespace DGTIT.Checador.Views
@@ -20,7 +22,9 @@ namespace DGTIT.Checador.Views
         
         private DPFP.Verification.Verification Verificator;
 
-        private Task taskAfter;
+        private Task taskAfterCheck;
+        private CancellationTokenSource cancelationSource;
+
 
         public Checador() : base()
         {
@@ -56,7 +60,7 @@ namespace DGTIT.Checador.Views
             // Check quality of the sample and start verification if it's good
             if (features != null)
             {
-
+                // * stop the service of the capturing the fingerprints
                 StopCapturing();
 
                 // prepare for validate each employees fingerprints
@@ -129,12 +133,28 @@ namespace DGTIT.Checador.Views
                     SetNoRegistrada("No se reconoce la huella, favor de reintentar");
                 }
 
-                // * clear the UI and unlock the fingerPrint device
-                taskAfter = Task.Run(() => {
-                    System.Threading.Thread.Sleep(4000);
-                    LimpiarCampos();
-                    StartCapturing();
-                });
+
+                // * task for clear the UI and unlock the fingerPrint device after some delay
+                cancelationSource = new CancellationTokenSource();
+                CancellationToken ct = cancelationSource.Token;
+                taskAfterCheck = Task.Run(() => {
+                    try
+                    {
+                        // sleep 3 seconds
+                        System.Threading.Thread.Sleep(3000);
+                        
+                        // check if the task was cancelled
+                        if (ct.IsCancellationRequested)
+                        {
+                            return;
+                        }
+
+                        // clear UI and restart eh capturing service
+                        LimpiarCampos();
+                        StartCapturing();
+                    }
+                    catch (OperationCanceledException) {}
+                }, ct);
             }
         }
 
@@ -157,6 +177,15 @@ namespace DGTIT.Checador.Views
             DateTime serverDate = dateQuery.AsEnumerable().First();
             this.lblFecha.Text = serverDate.ToString("dd/MM/yyyy");
             this.lblHora.Text = serverDate.ToString("hh:mm:ss");
+        }
+
+        protected override void CaptureFormClosing(object sender, FormClosingEventArgs e)
+        {
+            base.CaptureFormClosing(sender, e);
+            if( cancelationSource != null)
+            {
+                cancelationSource.Cancel();
+            }
         }
 
     }
