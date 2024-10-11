@@ -15,7 +15,7 @@ namespace DGTIT.Checador.Views
         private readonly procuraduriaEntities1 procu;
         private readonly ChecadorService checadorService;
         private readonly FiscaliaService fiscaliaService;
-        private readonly int currentAreaId = 0;
+        private readonly List<long> areasAvailables = new List<long>();
         private System.Windows.Forms.Timer timer1;
 
         private DPFP.Verification.Verification Verificator;
@@ -28,7 +28,7 @@ namespace DGTIT.Checador.Views
             fiscaliaService = new FiscaliaService(procu, contexto);
 
             // * read the area id
-            this.currentAreaId = Convert.ToInt32(Properties.Settings.Default["generalDirectionId"]);
+            this.areasAvailables = Properties.Settings.Default["generalDirectionId"].ToString().Split(',').Select(i => Convert.ToInt64(i)).ToList();   
         }
 
         protected override void Init()
@@ -54,12 +54,11 @@ namespace DGTIT.Checador.Views
             // Check quality of the sample and start verification if it's good
             if (features != null)
             {
-                // Compare the feature set with our template
+                // prepare for validate each employees fingerprints
                 DPFP.Verification.Verification.Result result = new DPFP.Verification.Verification.Result();
-
                 DPFP.Template template = new DPFP.Template();
-                Stream stream;
-
+                
+                // loop for each employee and validate the finger print
                 foreach (var emp in checadorService.GetEmployees())
                 {
                     if (emp.fingerprint == null)
@@ -68,8 +67,10 @@ namespace DGTIT.Checador.Views
                     }
 
                     // * validate the fingerprint of each employee
-                    stream = new MemoryStream(emp.fingerprint);
-                    template = new DPFP.Template(stream);
+                    using( Stream ms = new MemoryStream(emp.fingerprint) ){ 
+                        template = new DPFP.Template(ms);
+                    }
+
                     Verificator.Verify(features, template, ref result);
                     if (!result.Verified)
                     {
@@ -94,7 +95,7 @@ namespace DGTIT.Checador.Views
                     }
 
                     // * validate if the employee area its the same area of the checador
-                    if (emp.general_direction_id != currentAreaId)
+                    if (!this.areasAvailables.Contains(emp.general_direction_id))
                     {
                         SetNoRegistrada("No pertenece a esta Area");
                         SetAreaNoEncontrada();

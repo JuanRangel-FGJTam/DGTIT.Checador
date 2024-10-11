@@ -32,9 +32,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.checkListAreas = new System.Windows.Forms.CheckedListBox();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -63,17 +63,9 @@
             this.txtName.Size = new System.Drawing.Size(156, 20);
             this.txtName.TabIndex = 4;
             // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(68, 51);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(248, 21);
-            this.comboBox1.TabIndex = 5;
-            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(117, 111);
+            this.button1.Location = new System.Drawing.Point(111, 310);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(125, 23);
             this.button1.TabIndex = 8;
@@ -82,22 +74,30 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.comboBox1);
+            this.groupBox2.Controls.Add(this.checkListAreas);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.txtName);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(337, 84);
+            this.groupBox2.Size = new System.Drawing.Size(337, 292);
             this.groupBox2.TabIndex = 10;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Generales";
+            // 
+            // checkListAreas
+            // 
+            this.checkListAreas.FormattingEnabled = true;
+            this.checkListAreas.Location = new System.Drawing.Point(21, 71);
+            this.checkListAreas.Name = "checkListAreas";
+            this.checkListAreas.Size = new System.Drawing.Size(295, 214);
+            this.checkListAreas.TabIndex = 6;
             // 
             // Configuration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(361, 145);
+            this.ClientSize = new System.Drawing.Size(361, 345);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -105,6 +105,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Configuration";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Configuration";
             this.TopMost = true;
             this.groupBox2.ResumeLayout(false);
@@ -118,8 +119,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtName;
-        private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.CheckedListBox checkListAreas;
     }
 }

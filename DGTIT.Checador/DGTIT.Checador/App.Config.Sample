@@ -29,15 +29,15 @@
     <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.8"/>
   </startup>
 
-	<applicationSettings>
-		<DGTIT.Checador.Properties.Settings>
-			<setting name="generalDirectionId" serializeAs="String">
-				<value>0</value>
-			</setting>
-			<setting name="name" serializeAs="String">
-				<value>my-name</value>
-			</setting>
-		</DGTIT.Checador.Properties.Settings>
-	</applicationSettings>
+    <userSettings>
+	    <DGTIT.Checador.Properties.Settings>
+		    <setting name="name" serializeAs="String">
+			    <value>app-name</value>
+		    </setting>
+		    <setting name="generalDirectionId" serializeAs="String">
+			    <value>1</value>
+		    </setting>
+	    </DGTIT.Checador.Properties.Settings>
+    </userSettings>
 
 </configuration>

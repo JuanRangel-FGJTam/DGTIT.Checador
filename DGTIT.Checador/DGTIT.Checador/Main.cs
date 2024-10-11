@@ -10,7 +10,6 @@ using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Windows.Forms;
-using static DGTIT.Checador.User32;
 
 namespace DGTIT.Checador
 {
@@ -19,15 +18,18 @@ namespace DGTIT.Checador
 
         private Configuration ca;
         private Views.Checador checadorForm;
-        
+
+        bool ctrlKPressed = false; 
+
         public Main()
         {
             InitializeComponent();
+            this.KeyPreview = true;
 
             // * prepare the events
             this.btnRegistrar.Click += new EventHandler(BtnRegistrar_Click);
             this.btnVerificar.Click += new EventHandler(BtnVerificar_Click);
-            this.btnSettings.Click += new EventHandler(ShowConfiguracion);
+            this.KeyDown += new KeyEventHandler(ShowConfiguracion);
         }
 
         private void BtnRegistrar_Click(object sender, EventArgs e)
@@ -47,13 +49,25 @@ namespace DGTIT.Checador
             checadorForm.ShowDialog(this);
         }
 
-        private void ShowConfiguracion(object sender, EventArgs e)
+        private void ShowConfiguracion(object sender, KeyEventArgs e)
         {
-            if(ca == null)
+
+            // Check if Ctrl is pressed along with K
+            if (e.Control && e.KeyCode == Keys.K)
+            {
+                ctrlKPressed = true; // Set flag that Ctrl + K was pressed
+            }
+            // Check if Ctrl is pressed along with O and Ctrl + K was already pressed
+            else if (ctrlKPressed && e.Control && e.KeyCode == Keys.O)
             {
                 var ca = new Configuration();
                 ca.ShowDialog(this);
                 ca = null;
+                ctrlKPressed = false; // Reset flag
+            }
+            else
+            {
+                ctrlKPressed = false; // Reset if any other key is pressed
             }
         }
 

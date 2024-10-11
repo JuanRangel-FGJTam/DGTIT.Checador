@@ -2,11 +2,11 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DGTIT.Checador.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="generalDirectionId" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">2</Value>
-    </Setting>
-    <Setting Name="name" Type="System.String" Scope="Application">
+    <Setting Name="name" Type="System.String" Scope="User">
       <Value Profile="(Default)">app-name</Value>
+    </Setting>
+    <Setting Name="generalDirectionId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1</Value>
     </Setting>
   </Settings>
 </SettingsFile>
