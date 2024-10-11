@@ -47,6 +47,8 @@ namespace DGTIT.Checador
             this.paneluser = new System.Windows.Forms.Panel();
             this.panelClock = new System.Windows.Forms.Panel();
             this.panelCalendar = new System.Windows.Forms.Panel();
+            this.fingerPrint = new System.Windows.Forms.Panel();
+            this.picLock = new System.Windows.Forms.PictureBox();
             this.panelFotos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fingerPrintImg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fotoEmpleado)).BeginInit();
@@ -58,6 +60,8 @@ namespace DGTIT.Checador
             this.panelIcons.SuspendLayout();
             this.paneluser.SuspendLayout();
             this.panelClock.SuspendLayout();
+            this.fingerPrint.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picLock)).BeginInit();
             this.SuspendLayout();
             // 
             // panelFotos
@@ -246,6 +250,7 @@ namespace DGTIT.Checador
             this.panelIcons.Controls.Add(this.paneluser);
             this.panelIcons.Controls.Add(this.panelClock);
             this.panelIcons.Controls.Add(this.panelCalendar);
+            this.panelIcons.Controls.Add(this.fingerPrint);
             this.panelIcons.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelIcons.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.panelIcons.Location = new System.Drawing.Point(1413, 3);
@@ -287,6 +292,29 @@ namespace DGTIT.Checador
             this.panelCalendar.Size = new System.Drawing.Size(80, 80);
             this.panelCalendar.TabIndex = 13;
             // 
+            // fingerPrint
+            // 
+            this.fingerPrint.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("fingerPrint.BackgroundImage")));
+            this.fingerPrint.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.fingerPrint.Controls.Add(this.picLock);
+            this.fingerPrint.Location = new System.Drawing.Point(43, 465);
+            this.fingerPrint.Margin = new System.Windows.Forms.Padding(3, 25, 3, 25);
+            this.fingerPrint.Name = "fingerPrint";
+            this.fingerPrint.Size = new System.Drawing.Size(80, 80);
+            this.fingerPrint.TabIndex = 14;
+            // 
+            // picLock
+            // 
+            this.picLock.Image = ((System.Drawing.Image)(resources.GetObject("picLock.Image")));
+            this.picLock.InitialImage = null;
+            this.picLock.Location = new System.Drawing.Point(0, 0);
+            this.picLock.Name = "picLock";
+            this.picLock.Padding = new System.Windows.Forms.Padding(15);
+            this.picLock.Size = new System.Drawing.Size(80, 80);
+            this.picLock.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picLock.TabIndex = 0;
+            this.picLock.TabStop = false;
+            // 
             // CaptureForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -315,6 +343,8 @@ namespace DGTIT.Checador
             this.panelIcons.ResumeLayout(false);
             this.paneluser.ResumeLayout(false);
             this.panelClock.ResumeLayout(false);
+            this.fingerPrint.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picLock)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -338,5 +368,7 @@ namespace DGTIT.Checador
         private System.Windows.Forms.Panel panelClock;
         private System.Windows.Forms.Panel paneluser;
         private System.Windows.Forms.Panel panelCalendar;
+        private System.Windows.Forms.Panel fingerPrint;
+        private System.Windows.Forms.PictureBox picLock;
     }
 }

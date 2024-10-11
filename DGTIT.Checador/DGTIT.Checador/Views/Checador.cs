@@ -17,8 +17,10 @@ namespace DGTIT.Checador.Views
         private readonly FiscaliaService fiscaliaService;
         private readonly List<long> areasAvailables = new List<long>();
         private System.Windows.Forms.Timer timer1;
-
+        
         private DPFP.Verification.Verification Verificator;
+
+        private Task taskAfter;
 
         public Checador() : base()
         {
@@ -54,6 +56,9 @@ namespace DGTIT.Checador.Views
             // Check quality of the sample and start verification if it's good
             if (features != null)
             {
+
+                StopCapturing();
+
                 // prepare for validate each employees fingerprints
                 DPFP.Verification.Verification.Result result = new DPFP.Verification.Verification.Result();
                 DPFP.Template template = new DPFP.Template();
@@ -125,10 +130,11 @@ namespace DGTIT.Checador.Views
                 }
 
                 // * clear the UI and unlock the fingerPrint device
-                DelayAction(4000, new Action(() => {
+                taskAfter = Task.Run(() => {
+                    System.Threading.Thread.Sleep(4000);
                     LimpiarCampos();
-                }));
-
+                    StartCapturing();
+                });
             }
         }
 

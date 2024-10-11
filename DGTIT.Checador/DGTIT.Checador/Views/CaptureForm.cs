@@ -5,6 +5,8 @@ using System.Data;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using static DGTIT.Checador.User32;
 
@@ -19,7 +21,24 @@ namespace DGTIT.Checador
     public partial class CaptureForm : Form, DPFP.Capture.EventHandler
 	{
         private DPFP.Capture.Capture Capturer;
-        
+        private bool _allowCapture = false;
+        public bool allowCapture
+        {
+            get
+            {
+                return _allowCapture;
+            }
+            set
+            {
+                Invoke( new Action( () => {
+                    picLock.Visible = !value;
+                }) );
+                _allowCapture = value;
+            }
+        }
+
+
+
         public CaptureForm()
 		{
 			InitializeComponent();
@@ -29,6 +48,7 @@ namespace DGTIT.Checador
             lblChecadaHora.BorderStyle = BorderStyle.None;
             lblChecadaFecha.BorderStyle = BorderStyle.None;
             lblNombre.BorderStyle = BorderStyle.None;
+            this.FormBorderStyle = FormBorderStyle.None;
         }
 
         protected virtual void Init()
@@ -56,32 +76,41 @@ namespace DGTIT.Checador
 
 		protected void StartCapturing()
 		{
-            if (null != Capturer)
+            this.allowCapture = true;
+            
+            if (null == Capturer)
             {
-                try
-                {
-                    Capturer.StartCapture();
-                    SetPrompt("Escanea tu huella usando el lector");
-                }
-                catch
-                {
-                    SetPrompt("No se puede iniciar la captura");
-                }
+                return;
             }
+
+            try
+            {
+                Capturer.StartCapture();
+                SetPrompt("Escanea tu huella usando el lector");
+            }
+            catch
+            {
+                SetPrompt("No se puede iniciar la captura");
+            }
+            
 		}
 
 		protected void StopCapturing()
 		{
-            if (null != Capturer)
+            this.allowCapture = false;
+
+            if (null == Capturer)
             {
-                try
-                {
-                    Capturer.StopCapture();
-                }
-                catch
-                {
-                    SetPrompt("No se puede terminar la captura");
-                }
+                return;
+            }
+
+            try
+            {
+                Capturer.StopCapture();
+            }
+            catch
+            {
+                SetPrompt("No se puede terminar la captura");
             }
 		}
 
@@ -115,18 +144,21 @@ namespace DGTIT.Checador
         #region Form Events Handler
         private void CaptureForm_Load(object sender, EventArgs e)
 		{
-            lblFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
-            lblHora.Text = DateTime.Now.ToString("hh:mm tt");
-
-            Init();
-			StartCapturing();
-
-
             // Set the form to full screen
-            this.FormBorderStyle = FormBorderStyle.None;
             this.WindowState = FormWindowState.Maximized;
             ChangeScreenResolution(new Size(1600, 900));
-            //ChangeScreenResolution(new Size(1280, 1024));
+
+            lblFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
+            lblHora.Text = DateTime.Now.ToString("HH:mm");
+
+            Init();
+
+            // * delay the start of capturing the fingerprints
+            Task.Run(() =>
+            {
+                Thread.Sleep(2000);
+                StartCapturing();
+            });
         }
 
 		private void CaptureForm_FormClosed(object sender, FormClosedEventArgs e)
