@@ -79,8 +79,14 @@ namespace DGTIT.Checador.Views
                     using( Stream ms = new MemoryStream(emp.fingerprint) ){ 
                         template = new DPFP.Template(ms);
                     }
+                    try
+                    {
+                        Verificator.Verify(features, template, ref result);
+                    }
+                    catch(Exception){
+                        continue;
+                    }
 
-                    Verificator.Verify(features, template, ref result);
                     if (!result.Verified)
                     {
                         continue;
