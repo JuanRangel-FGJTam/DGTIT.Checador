@@ -31,6 +31,7 @@ namespace DGTIT.Checador
             set
             {
                 Invoke( new Action( () => {
+                    
                     picLock.Visible = !value;
                 }) );
                 _allowCapture = value;
@@ -158,6 +159,12 @@ namespace DGTIT.Checador
             {
                 Thread.Sleep(2000);
                 StartCapturing();
+            });
+
+            btnClose.Enabled = true;
+            btnClose.Click += new EventHandler((object s, EventArgs ee) =>
+            {
+                this.DialogResult = DialogResult.Cancel;
             });
         }
 

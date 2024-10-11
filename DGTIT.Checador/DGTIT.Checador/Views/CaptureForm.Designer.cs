@@ -49,6 +49,7 @@ namespace DGTIT.Checador
             this.panelCalendar = new System.Windows.Forms.Panel();
             this.fingerPrint = new System.Windows.Forms.Panel();
             this.picLock = new System.Windows.Forms.PictureBox();
+            this.btnClose = new System.Windows.Forms.Button();
             this.panelFotos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fingerPrintImg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fotoEmpleado)).BeginInit();
@@ -236,6 +237,7 @@ namespace DGTIT.Checador
             // panelHour
             // 
             this.panelHour.BackColor = System.Drawing.Color.Transparent;
+            this.panelHour.Controls.Add(this.btnClose);
             this.panelHour.Controls.Add(this.lblHora);
             this.panelHour.Controls.Add(this.lblFecha);
             this.panelHour.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -315,6 +317,20 @@ namespace DGTIT.Checador
             this.picLock.TabIndex = 0;
             this.picLock.TabStop = false;
             // 
+            // btnClose
+            // 
+            this.btnClose.BackColor = System.Drawing.Color.Transparent;
+            this.btnClose.BackgroundImage = global::DGTIT.Checador.Properties.Resources.cross;
+            this.btnClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClose.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClose.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnClose.Location = new System.Drawing.Point(9, 9);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(22, 22);
+            this.btnClose.TabIndex = 7;
+            this.btnClose.UseVisualStyleBackColor = false;
+            // 
             // CaptureForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -370,5 +386,6 @@ namespace DGTIT.Checador
         private System.Windows.Forms.Panel panelCalendar;
         private System.Windows.Forms.Panel fingerPrint;
         private System.Windows.Forms.PictureBox picLock;
+        private System.Windows.Forms.Button btnClose;
     }
 }

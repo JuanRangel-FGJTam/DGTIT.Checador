@@ -368,6 +368,7 @@
       <DependentUpon>procuraduria.edmx</DependentUpon>
       <LastGenOutput>procuraduria.cs</LastGenOutput>
     </Content>
+    <None Include="Resources\cross.png" />
     <Content Include="UsuariosModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>UsuariosModel.Context.cs</LastGenOutput>
