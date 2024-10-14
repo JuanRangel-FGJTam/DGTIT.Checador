@@ -4,8 +4,8 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Alias="Self" Namespace="UsuariosDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012">
-        <EntityType Name="CntrlDeAsistencia">
+    <Schema Namespace="UsuariosDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <EntityType Name="CntrlDeAsistencia">
           <Key>
             <PropertyRef Name="IdCntrlDeAsistencia" />
           </Key>
@@ -74,6 +74,7 @@
           <Property Name="updated_at" Type="datetime2" Precision="7" />
           <Property Name="status_id" Type="int" />
           <Property Name="active" Type="bit" Nullable="false" />
+          <Property Name="employee_number" Type="int" />
         </EntityType>
         <EntityType Name="employees_respaldo">
           <Key>
@@ -288,30 +289,30 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.Vw_plazas_nomina' no tiene de
           <Key>
             <PropertyRef Name="id_tipo_nomina" />
             <PropertyRef Name="id_plantilla" />
-            <PropertyRef Name="num_plaza" />
-            <PropertyRef Name="id_categoria" />
             <PropertyRef Name="id_tipo_contrato_nomina" />
             <PropertyRef Name="id_status_plaza" />
             <PropertyRef Name="Id_Division_Nomina" />
             <PropertyRef Name="txt_division_nomina" />
+            <PropertyRef Name="num_plaza" />
+            <PropertyRef Name="id_categoria" />
           </Key>
-          <Property Name="id_tipo_nomina" Nullable="false" Type="tinyint" />
-          <Property Name="id_plantilla" Nullable="false" Type="int" />
-          <Property Name="num_plaza" Nullable="false" Type="int" />
-          <Property Name="id_categoria" Nullable="false" Type="smallint" />
+          <Property Name="id_tipo_nomina" Type="int" Nullable="false" />
+          <Property Name="id_plantilla" Type="int" Nullable="false" />
+          <Property Name="num_plaza" Type="int" Nullable="false" />
+          <Property Name="id_categoria" Type="smallint" Nullable="false" />
           <Property Name="efiscal" Type="smallint" />
           <Property Name="id_uejecutora" Type="smallint" />
-          <Property Name="id_tipo_contrato_nomina" Nullable="false" Type="tinyint" />
+          <Property Name="id_tipo_contrato_nomina" Type="int" Nullable="false" />
           <Property Name="fec_fin" Type="datetime" />
-          <Property Name="id_status_plaza" Nullable="false" Type="smallint" />
-          <Property Name="id_status_plantilla" Type="smallint" />
+          <Property Name="id_status_plaza" Type="int" Nullable="false" />
+          <Property Name="id_status_plantilla" Type="int" />
           <Property Name="Fec_Asignacion" Type="datetime" />
           <Property Name="Fec_Ingreso" Type="datetime" />
-          <Property Name="Id_Division_Nomina" Nullable="false" MaxLength="3" Type="char" />
-          <Property Name="txt_division_nomina" Nullable="false" MaxLength="100" Type="varchar" />
+          <Property Name="Id_Division_Nomina" Type="char" Nullable="false" />
+          <Property Name="txt_division_nomina" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Id_Depto_Nomina" Type="int" />
           <Property Name="txt_depto_nomina" Type="varchar(max)" />
-          <Property Name="Nombre" MaxLength="452" Type="varchar" />
+          <Property Name="Nombre" Type="varchar" MaxLength="452" />
         </EntityType>
         <!--Errores durante la generación:
 advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
@@ -322,16 +323,16 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
             <PropertyRef Name="Huella" />
             <PropertyRef Name="QUEBRADO" />
           </Key>
-          <Property Name="idEmpleadoRegistro" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="NombreCompleto" Nullable="false" MaxLength="500" Type="nvarchar" />
+          <Property Name="idEmpleadoRegistro" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NombreCompleto" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="IdPlantilla" Type="int" />
-          <Property Name="DepartamentoNomina" MaxLength="500" Type="nvarchar" />
-          <Property Name="Huella" Nullable="false" Type="varbinary(max)" />
-          <Property Name="HORA1" MaxLength="5" Type="varchar" />
-          <Property Name="HORA2" MaxLength="5" Type="varchar" />
-          <Property Name="HORA3" MaxLength="5" Type="varchar" />
-          <Property Name="HORA4" MaxLength="5" Type="varchar" />
-          <Property Name="QUEBRADO" Nullable="false" Type="int" />
+          <Property Name="DepartamentoNomina" Type="nvarchar" MaxLength="500" />
+          <Property Name="Huella" Type="varbinary(max)" Nullable="false" />
+          <Property Name="HORA1" Type="varchar" MaxLength="5" />
+          <Property Name="HORA2" Type="varchar" MaxLength="5" />
+          <Property Name="HORA3" Type="varchar" MaxLength="5" />
+          <Property Name="HORA4" Type="varchar" MaxLength="5" />
+          <Property Name="QUEBRADO" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="fk_employee_id">
           <End Role="employees" Type="Self.employees" Multiplicity="1" />
@@ -398,7 +399,7 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="UsuariosDBModelStoreContainer">
-          <EntitySet Name="CntrlDeAsistencia" EntityType="Self.CntrlDeAsistencia" Schema="dbo" store:Type="Tables" />
+        <EntitySet Name="CntrlDeAsistencia" EntityType="Self.CntrlDeAsistencia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ControlDeAsistencia" EntityType="Self.ControlDeAsistencia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="departments" EntityType="Self.departments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="directions" EntityType="Self.directions" Schema="dbo" store:Type="Tables" />
@@ -486,24 +487,24 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
     FROM [dbo].[VwEmpleadoRegistro] AS [VwEmpleadoRegistro]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="fk_employee_id" Association="Self.fk_employee_id">
-            <End EntitySet="employees" Role="employees" />
-            <End EntitySet="incidents" Role="incidents" />
+            <End Role="employees" EntitySet="employees" />
+            <End Role="incidents" EntitySet="incidents" />
           </AssociationSet>
           <AssociationSet Name="fk_incident_state_id" Association="Self.fk_incident_state_id">
-            <End EntitySet="incident_states" Role="incident_states" />
-            <End EntitySet="incidents" Role="incidents" />
+            <End Role="incident_states" EntitySet="incident_states" />
+            <End Role="incidents" EntitySet="incidents" />
           </AssociationSet>
           <AssociationSet Name="fk_incident_type_id" Association="Self.fk_incident_type_id">
-            <End EntitySet="incident_types" Role="incident_types" />
-            <End EntitySet="incidents" Role="incidents" />
+            <End Role="incident_types" EntitySet="incident_types" />
+            <End Role="incidents" EntitySet="incidents" />
           </AssociationSet>
           <AssociationSet Name="menu_user_menu_id_foreign" Association="Self.menu_user_menu_id_foreign">
-            <End EntitySet="menus" Role="menus" />
-            <End EntitySet="menu_user" Role="menu_user" />
+            <End Role="menus" EntitySet="menus" />
+            <End Role="menu_user" EntitySet="menu_user" />
           </AssociationSet>
           <AssociationSet Name="menu_user_user_id_foreign" Association="Self.menu_user_user_id_foreign">
-            <End EntitySet="users" Role="users" />
-            <End EntitySet="menu_user" Role="menu_user" />
+            <End Role="users" EntitySet="users" />
+            <End Role="menu_user" EntitySet="menu_user" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -628,6 +629,7 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <Property Name="status_id" Type="Int32" />
           <NavigationProperty Name="incidents" Relationship="UsuariosDBModel.fk_employee_id" FromRole="employee" ToRole="incident" />
           <Property Name="active" Type="Boolean" Nullable="false" />
+          <Property Name="employee_number" Type="Int32" />
         </EntityType>
         <EntityType Name="employees_respaldo">
           <Key>
@@ -956,7 +958,7 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="UsuariosDBModelStoreContainer" CdmEntityContainer="UsuariosDBEntities">
-          <EntitySetMapping Name="CntrlDeAsistencias">
+        <EntitySetMapping Name="CntrlDeAsistencias">
             <EntityTypeMapping TypeName="UsuariosDBModel.CntrlDeAsistencia">
               <MappingFragment StoreEntitySet="CntrlDeAsistencia">
                 <ScalarProperty Name="HoraChecada" ColumnName="HoraChecada" />
@@ -1016,6 +1018,7 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <EntitySetMapping Name="employees">
             <EntityTypeMapping TypeName="UsuariosDBModel.employee">
               <MappingFragment StoreEntitySet="employees">
+                <ScalarProperty Name="employee_number" ColumnName="employee_number" />
                 <ScalarProperty Name="active" ColumnName="active" />
                 <ScalarProperty Name="status_id" ColumnName="status_id" />
                 <ScalarProperty Name="updated_at" ColumnName="updated_at" />

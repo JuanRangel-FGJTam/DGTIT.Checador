@@ -143,7 +143,7 @@ namespace DGTIT.Checador
                     string materno = row.Cells[3].Value.ToString();
 
                     nombreEmpleado = paterno + ' ' + materno + ' ' + nombre;
-                    this.btnEdit.Text = $"Editar '{nombreEmpleado}'";
+                    this.btnEdit.Text = $"Editar: {nombreEmpleado}";
                     this.btnEdit.Enabled = true;
                 }
             }

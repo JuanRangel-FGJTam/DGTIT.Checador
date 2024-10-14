@@ -36,10 +36,8 @@ namespace DGTIT.Checador.Services {
         /// <exception cref="KeyNotFoundException">The employee is not found</exception>
         public employee GetEmployee(int employeeNumber, bool makeRecordIfNotExist = true)
         {
-            var _plantillaId = employeeNumber + 100000;
-            
             // * search for the employee in the checadorDB
-            var employeeChec = this.usuariosDBEntities.employees.FirstOrDefault( item => item.plantilla_id == _plantillaId);
+            var employeeChec = this.usuariosDBEntities.employees.FirstOrDefault( item => item.employee_number == employeeNumber);
 
             // * if there is not record in the checadorDB, generate a new one
             if(employeeChec == null && makeRecordIfNotExist)
@@ -52,6 +50,8 @@ namespace DGTIT.Checador.Services {
                 }
 
                 // * make the new employee and save them
+                var _plantillaId = employeeNumber + 100000;
+
                 employeeChec = new employee
                 {
                     plantilla_id = _plantillaId,
@@ -62,7 +62,8 @@ namespace DGTIT.Checador.Services {
                     department_id = 1 /* 1 => Desconocido */,
                     created_at = DateTime.Now,
                     updated_at = DateTime.Now,
-                    fingerprint = Array.Empty<byte>()
+                    fingerprint = Array.Empty<byte>(),
+                    employee_number = employeeNumber
                 };
                 this.usuariosDBEntities.employees.Add(employeeChec);
                 this.usuariosDBEntities.SaveChanges();
@@ -79,8 +80,7 @@ namespace DGTIT.Checador.Services {
 
         public working_hours GetWorkinHours(int employeeNumber)
         {
-            var _plantillaId = employeeNumber + 100000;
-            var empl = this.usuariosDBEntities.employees.FirstOrDefault(item => item.plantilla_id == _plantillaId);
+            var empl = this.usuariosDBEntities.employees.FirstOrDefault(item => item.employee_number == employeeNumber);
             var workingHours = this.usuariosDBEntities.working_hours.FirstOrDefault(item => item.employee_id_ == empl.id);
 
             if( workingHours == null)

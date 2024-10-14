@@ -45,7 +45,7 @@ namespace DGTIT.Checador
 		{
 			InitializeComponent();
 
-            lblStatus.Text = "v2.0 - 2024";
+            lblStatus.Text = "v2.0.2 - 2024";
             lblFecha.BorderStyle = BorderStyle.None;
             lblHora.BorderStyle = BorderStyle.None;
             lblChecadaHora.BorderStyle = BorderStyle.None;
