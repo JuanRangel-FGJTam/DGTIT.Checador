@@ -370,6 +370,8 @@
       <LastGenOutput>procuraduria.cs</LastGenOutput>
     </Content>
     <None Include="Resources\cross.png" />
+    <None Include="Resources\employee_unknow.bmp" />
+    <None Include="Resources\user%282%29.png" />
     <Content Include="UsuariosModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>UsuariosModel.Context.cs</LastGenOutput>

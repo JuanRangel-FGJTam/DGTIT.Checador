@@ -61,6 +61,14 @@ namespace DGTIT.Checador.Services {
             );
 
             Bitmap bmp;
+
+            // * if employee has no poto, show a provisional one
+            if ( foto == null)
+            {
+                bmp = new Bitmap(Properties.Resources.employee_unknow);
+                return bmp;
+            }
+
             using (var ms = new MemoryStream(foto))
             {
                 bmp = new Bitmap(ms);
