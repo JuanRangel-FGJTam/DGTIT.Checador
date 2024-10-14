@@ -45,7 +45,7 @@ namespace DGTIT.Checador
 		{
 			InitializeComponent();
 
-            lblStatus.Text = "v2.0.2 - 2024";
+            lblStatus.Text = "v2.0.3 - 2024";
             lblFecha.BorderStyle = BorderStyle.None;
             lblHora.BorderStyle = BorderStyle.None;
             lblChecadaHora.BorderStyle = BorderStyle.None;
@@ -174,7 +174,7 @@ namespace DGTIT.Checador
             btnClose.Enabled = true;
             btnClose.Click += new EventHandler((object s, EventArgs ee) =>
             {
-                this.DialogResult = DialogResult.Cancel;
+                this.Close();
             });
         }
 
