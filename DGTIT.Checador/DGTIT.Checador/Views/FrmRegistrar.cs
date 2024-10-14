@@ -117,22 +117,22 @@ namespace DGTIT.Checador
         
         private void LoadCatalogs()
         {
-            var dirgral = contexto.general_directions.ToList();
+            var dirgral = contexto.general_directions.OrderBy(item => item.name).ToList();
             cboDirGral.DataSource = dirgral;
             cboDirGral.ValueMember = "id";
             cboDirGral.DisplayMember = "name";
 
-            var dir = contexto.directions.ToList();
+            var dir = contexto.directions.OrderBy(item => item.name).Where(item => item.general_direction_id == currentEmployee.general_direction_id || item.id == 1).ToList();
             cboDireccion.DataSource = dir;
             cboDireccion.ValueMember = "id";
             cboDireccion.DisplayMember = "name";
 
-            var subdir = contexto.subdirectorates.ToList();
+            var subdir = contexto.subdirectorates.OrderBy(item => item.name).Where(item => item.direction_id == currentEmployee.direction_id || item.id == 1).ToList();
             cboSubdireccion.DataSource = subdir;
             cboSubdireccion.ValueMember = "id";
             cboSubdireccion.DisplayMember = "name";
 
-            var depa = contexto.departments.ToList();
+            var depa = contexto.departments.OrderBy(item => item.name).Where(item => item.subdirectorate_id == currentEmployee.subdirectorate_id|| item.id == 1).ToList();
             cboDepartamento.DataSource = depa;
             cboDepartamento.ValueMember = "id";
             cboDepartamento.DisplayMember = "name";
@@ -249,14 +249,26 @@ namespace DGTIT.Checador
             {
                 case "cboDirGral":
                     currentEmployee.general_direction_id = selectedId;
+                    cboDireccion.DataSource = contexto.directions
+                        .OrderBy(item => item.name)
+                        .Where(item => item.general_direction_id == selectedId || item.id == 1)
+                        .ToList();
                     break;
 
                 case "cboDireccion":
                     currentEmployee.direction_id = selectedId;
+                    cboSubdireccion.DataSource = contexto.subdirectorates
+                        .OrderBy(item => item.name)
+                        .Where(item => item.direction_id == selectedId || item.id == 1)
+                        .ToList();
                     break;
 
                 case "cboSubdireccion":
                     currentEmployee.subdirectorate_id = selectedId;
+                    cboDepartamento.DataSource = contexto.departments
+                        .OrderBy(item => item.name)
+                        .Where(item => item.subdirectorate_id == selectedId || item.id == 1)
+                        .ToList();
                     break;
 
                 case "cboDepartamento":
