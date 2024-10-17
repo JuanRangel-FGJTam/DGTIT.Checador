@@ -59,6 +59,7 @@
             this.dataGridEmpleados.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridEmpleados.Size = new System.Drawing.Size(876, 456);
             this.dataGridEmpleados.TabIndex = 6;
+            this.dataGridEmpleados.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridEmpleadosDoubleClick);
             this.dataGridEmpleados.SelectionChanged += new System.EventHandler(this.DataGridSelectionChanged);
             // 
             // txtSearch

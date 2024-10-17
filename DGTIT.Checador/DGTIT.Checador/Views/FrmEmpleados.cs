@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using DGTIT.Checador.Helpers;
 using DGTIT.Checador.Services;
+using DGTIT.Checador.ViewModels;
 
 namespace DGTIT.Checador
 {
@@ -157,6 +158,18 @@ namespace DGTIT.Checador
         private void BtnEditarClick(object sender, EventArgs e)
         {
             var formRegistrar = new FrmRegistrar(this.selectedEmployeeNumber);
+            formRegistrar.ShowDialog(this);
+
+            txtEmployeeNumber.Focus();
+            txtEmployeeNumber.Select();
+        }
+
+
+        private void DataGridEmpleadosDoubleClick(object sender, DataGridViewCellMouseEventArgs e) {
+            var row = dataGridEmpleados.Rows[e.RowIndex];
+            var data = (EmployeeViewModel)row.DataBoundItem;
+
+            var formRegistrar = new FrmRegistrar(data.NumEmpleado);
             formRegistrar.ShowDialog(this);
 
             txtEmployeeNumber.Focus();
