@@ -90,7 +90,7 @@
             this.btnAgregar.Name = "btnAgregar";
             this.btnAgregar.Size = new System.Drawing.Size(137, 35);
             this.btnAgregar.TabIndex = 2;
-            this.btnAgregar.Text = "Actualizar";
+            this.btnAgregar.Text = "Guardar";
             this.btnAgregar.UseVisualStyleBackColor = false;
             this.btnAgregar.Click += new System.EventHandler(this.BtnUpdateClick);
             // 
@@ -108,7 +108,7 @@
             this.btnRegistrarHuella.Name = "btnRegistrarHuella";
             this.btnRegistrarHuella.Size = new System.Drawing.Size(114, 23);
             this.btnRegistrarHuella.TabIndex = 5;
-            this.btnRegistrarHuella.Text = "Actualizar Huella";
+            this.btnRegistrarHuella.Text = "Capturar Huella";
             this.btnRegistrarHuella.UseVisualStyleBackColor = true;
             this.btnRegistrarHuella.Click += new System.EventHandler(this.BtnRegistrarHuellaClick);
             // 

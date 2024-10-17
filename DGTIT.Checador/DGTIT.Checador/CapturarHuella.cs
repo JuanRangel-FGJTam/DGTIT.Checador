@@ -21,7 +21,7 @@ namespace DGTIT.Checador
         protected override void Init()
         {
             base.Init();
-            base.Text = "Dar de alta Huella";
+            base.Text = "Capturar la huella digital";
             Enroller = new DPFP.Processing.Enrollment();            // Create an enrollment.
             UpdateStatus();
         }
@@ -36,7 +36,7 @@ namespace DGTIT.Checador
             // Check quality of the sample and add to enroller if it's good
             if (features != null) try
                 {
-                    MakeReport("The fingerprint feature set was created1.");
+                    MakeReport("Huella digital capturada.");
                     Enroller.AddFeatures(features);     // Add feature set to template.
                 }
                 finally
@@ -48,8 +48,9 @@ namespace DGTIT.Checador
                     {
                         case DPFP.Processing.Enrollment.Status.Ready:   // report success and stop capturing
                             OnTemplate(Enroller.Template);
-                            SetPrompt("Click Close, and then click Fingerprint Verification.");
+                            SetPrompt("Huella digital registrada.");
                             Stop();
+                            this.DialogResult = DialogResult.OK;
                             break;
 
                         case DPFP.Processing.Enrollment.Status.Failed:  // report failure and restart capturing
@@ -66,7 +67,7 @@ namespace DGTIT.Checador
         private void UpdateStatus()
         {
             // Show number of samples needed.
-            SetStatus(String.Format("Fingerprint samples needed: {0}", Enroller.FeaturesNeeded));
+            SetStatus(String.Format("Capturas de huella digital requeridas: {0}", Enroller.FeaturesNeeded));
         }
 
         public CapturarHuella()

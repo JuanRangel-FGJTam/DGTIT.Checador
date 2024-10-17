@@ -76,7 +76,7 @@ namespace DGTIT.Checador
             // * get the image of the fingerprint
             if (this.currentEmployee.fingerprint != null)
             {
-                this.btnRegistrarHuella.Text = "Actualizar Huella";
+                this.btnRegistrarHuella.Text = "Capturar Huella";
                 //Bitmap bmp = null;
                 //using (var ms = new MemoryStream(this.currentEmployee.fingerprint))
                 //{
@@ -91,7 +91,7 @@ namespace DGTIT.Checador
             }
             else
             {
-                this.btnRegistrarHuella.Text = "Registrar Huella";
+                this.btnRegistrarHuella.Text = "Capturar Huella";
             }
 
 
