@@ -37,10 +37,12 @@
             this.label4 = new System.Windows.Forms.Label();
             this.txtEmployeeNumber = new System.Windows.Forms.MaskedTextBox();
             this.btnEdit = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridEmpleados)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.flowLayout_filters.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridEmpleados
@@ -51,13 +53,12 @@
             this.dataGridEmpleados.AllowUserToResizeRows = false;
             this.dataGridEmpleados.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridEmpleados.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridEmpleados.Location = new System.Drawing.Point(3, 43);
+            this.dataGridEmpleados.Location = new System.Drawing.Point(3, 103);
             this.dataGridEmpleados.MultiSelect = false;
             this.dataGridEmpleados.Name = "dataGridEmpleados";
             this.dataGridEmpleados.ReadOnly = true;
-            this.tableLayoutPanel1.SetRowSpan(this.dataGridEmpleados, 2);
             this.dataGridEmpleados.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridEmpleados.Size = new System.Drawing.Size(876, 456);
+            this.dataGridEmpleados.Size = new System.Drawing.Size(876, 396);
             this.dataGridEmpleados.TabIndex = 6;
             this.dataGridEmpleados.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridEmpleadosDoubleClick);
             this.dataGridEmpleados.SelectionChanged += new System.EventHandler(this.DataGridSelectionChanged);
@@ -74,7 +75,8 @@
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.dataGridEmpleados, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.dataGridEmpleados, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -146,6 +148,17 @@
             this.btnEdit.Text = "EDITAR EMPLEADO";
             this.btnEdit.UseVisualStyleBackColor = false;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox1.Image = global::DGTIT.Checador.Properties.Resources.loading_gif;
+            this.pictureBox1.Location = new System.Drawing.Point(3, 43);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(52, 52);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 15;
+            this.pictureBox1.TabStop = false;
+            // 
             // FrmEmpleados
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -166,6 +179,7 @@
             this.tableLayoutPanel2.PerformLayout();
             this.flowLayout_filters.ResumeLayout(false);
             this.flowLayout_filters.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -179,5 +193,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.MaskedTextBox txtEmployeeNumber;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

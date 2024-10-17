@@ -372,6 +372,11 @@
     <None Include="Resources\cross.png" />
     <None Include="Resources\employee_unknow.bmp" />
     <None Include="Resources\user%282%29.png" />
+    <None Include="Resources\loading-gif.gif" />
+    <None Include="Resources\fondo.png" />
+    <None Include="Resources\fingerprint-lock.png" />
+    <None Include="Resources\check.png" />
+    <None Include="Resources\fail.png" />
     <Content Include="UsuariosModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>UsuariosModel.Context.cs</LastGenOutput>

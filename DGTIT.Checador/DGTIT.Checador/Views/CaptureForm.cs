@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static DGTIT.Checador.User32;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 
 namespace DGTIT.Checador
@@ -45,11 +47,11 @@ namespace DGTIT.Checador
 		{
 			InitializeComponent();
 
-            lblStatus.Text = "v2.0.3 - 2024";
+            lblNombre.Text = "";
+            lblMessage.Text = "";
             lblFecha.BorderStyle = BorderStyle.None;
             lblHora.BorderStyle = BorderStyle.None;
-            lblChecadaHora.BorderStyle = BorderStyle.None;
-            lblChecadaFecha.BorderStyle = BorderStyle.None;
+            lblMessage.BorderStyle = BorderStyle.None;
             lblNombre.BorderStyle = BorderStyle.None;
             this.FormBorderStyle = FormBorderStyle.None;
         }
@@ -69,7 +71,17 @@ namespace DGTIT.Checador
             {               
                 MessageBox.Show("No se pudo iniciar la operación de captura", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);            
             }
-		}
+
+            using (var gp = new GraphicsPath()) {
+                gp.AddEllipse(new Rectangle(0, 0, fotoEmpleado.Width - 1, fotoEmpleado.Height - 1 ));
+                fotoEmpleado.Region = new Region(gp);
+            }
+
+            using (var gp = new GraphicsPath()) {
+                gp.AddEllipse(new Rectangle(0, 0, fingerPrintImg.Width - 1, fingerPrintImg.Height - 1));
+                fingerPrintImg.Region = new Region(gp);
+            }
+        }
 
 		protected virtual void Process(DPFP.Sample Sample)
 		{
@@ -157,7 +169,7 @@ namespace DGTIT.Checador
 		{
             // Set the form to full screen
             this.WindowState = FormWindowState.Maximized;
-            ChangeScreenResolution(new Size(1600, 900));
+            ChangeScreenResolution(new Size(1280, 720));
 
             lblFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
             lblHora.Text = DateTime.Now.ToString("HH:mm");
@@ -204,8 +216,8 @@ namespace DGTIT.Checador
 		protected void SetNoRegistrada(string NombreEmpleado)
 		{
 			this.Invoke(new Function(delegate () {
-				this.lblNombre.ForeColor = Color.PaleVioletRed;
-				this.lblNombre.Text = NombreEmpleado;
+				this.lblMessage.ForeColor= Color.PaleVioletRed;
+				this.lblMessage.Text = NombreEmpleado;
 			}));
 		}
 
@@ -219,10 +231,8 @@ namespace DGTIT.Checador
 		protected void SetChecada(DateTime time)
 		{
 			this.Invoke(new Function(delegate () {
-
-
-				lblChecadaFecha.Text = time.ToString("dd/MM/yyyy");
-				lblChecadaHora.Text = time.ToString("hh:mm:ss");
+                lblMessage.ForeColor = Color.RoyalBlue;
+                lblMessage.Text = "Entrada registrada " +  time.ToString("hh:mm:ss");
 				//picChecada.Visible = true; se comento 
 				picOK.Visible = true;
 
@@ -239,8 +249,8 @@ namespace DGTIT.Checador
 		protected void SetHuellaNoEncontrada()
 		{
 			this.Invoke(new Function(delegate () {
-				this.lblNombre.ForeColor = Color.DarkSalmon;
-				this.lblNombre.Text = "No se reconoce la huella, favor de reintentar";
+                lblMessage.ForeColor = Color.DarkSalmon;
+                lblMessage.Text = "No se reconoce la huella.";
 			}));
 		}
 
@@ -254,9 +264,7 @@ namespace DGTIT.Checador
                     lblNombre.Text = "";
                     lblNombre.ForeColor = Color.Black;
                     fingerPrintImg.Image = null;
-                    lblChecadaFecha.Text = "";
-                    lblChecadaHora.Text = "";
-                    picChecada.Visible = false;
+                    lblMessage.Text = "";
                     picOK.Visible = false;
                     picX.Visible = false;
                 }));
