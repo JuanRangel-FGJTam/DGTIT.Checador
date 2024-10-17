@@ -41,6 +41,7 @@ namespace DGTIT.Checador
             txtSearch.Enabled = false;
             txtSearch.Visible = false;
             txtEmployeeNumber.Text = "";
+            btnEdit.Visible = false;
         }
 
         private void FormOnLoad(object sender, EventArgs e)
@@ -52,31 +53,25 @@ namespace DGTIT.Checador
             {
                 HeaderText = "Nu Empleado",
                 DataPropertyName = "NumEmpleado",
-                Width = 120
+                Width = 130
             });
             this.dataGridEmpleados.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "Nombre",
                 DataPropertyName = "Nombre",
-                Width = 180
+                Width = 220
             });
             this.dataGridEmpleados.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "Apellido Paterno",
                 DataPropertyName = "Paterno",
-                Width = 180
+                Width = 220
             });
             this.dataGridEmpleados.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "Apellido Materno",
                 DataPropertyName = "Materno",
-                Width = 180
-            });
-            this.dataGridEmpleados.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                HeaderText = "Curp",
-                DataPropertyName = "Curp",
-                Width = 180
+                Width = 220
             });
             this.dataGridEmpleados.DataSource = null;
             
@@ -94,8 +89,9 @@ namespace DGTIT.Checador
         {
 
             // * clear selection 
-            this.btnEdit.Text = "Editar empleado";
+            this.btnEdit.Text = "EDITAR EMPLEADO";
             this.btnEdit.Enabled = false;
+            this.btnEdit.Visible = false;
             this.selectedEmployeeNumber = 0;
             this.nombreEmpleado = "";
 
@@ -126,6 +122,7 @@ namespace DGTIT.Checador
             serachEmployeeNumber = Convert.ToInt32( txtEmployeeNumber.ValidateText() );
             ListarEmpleados();
         }
+        
         private void TextBoxSearchTextChanged(object sender, EventArgs e)
         {
             ListarEmpleados();
@@ -143,14 +140,16 @@ namespace DGTIT.Checador
                     string materno = row.Cells[3].Value.ToString();
 
                     nombreEmpleado = paterno + ' ' + materno + ' ' + nombre;
-                    this.btnEdit.Text = $"Editar: {nombreEmpleado}";
+                    this.btnEdit.Text = $"EDITAR: {nombreEmpleado}";
                     this.btnEdit.Enabled = true;
+                    this.btnEdit.Visible = true;
                 }
             }
             else
             {
-                this.btnEdit.Text = "Editar empleado";
+                this.btnEdit.Text = "EDITAR EMPLEADO";
                 this.btnEdit.Enabled = false;
+                this.btnEdit.Visible = false;
             }
 
         }

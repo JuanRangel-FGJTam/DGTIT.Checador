@@ -63,7 +63,9 @@ namespace DGTIT.Checador.Services {
                     created_at = DateTime.Now,
                     updated_at = DateTime.Now,
                     fingerprint = Array.Empty<byte>(),
-                    employee_number = employeeNumber
+                    employee_number = employeeNumber,
+                    status_id = 1,
+                    active = true
                 };
                 this.usuariosDBEntities.employees.Add(employeeChec);
                 this.usuariosDBEntities.SaveChanges();

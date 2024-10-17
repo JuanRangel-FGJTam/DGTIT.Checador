@@ -89,7 +89,7 @@
             // 
             this.tableLayoutPanel2.ColumnCount = 2;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 240F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 280F));
             this.tableLayoutPanel2.Controls.Add(this.flowLayout_filters, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnEdit, 1, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -108,7 +108,7 @@
             this.flowLayout_filters.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayout_filters.Location = new System.Drawing.Point(3, 3);
             this.flowLayout_filters.Name = "flowLayout_filters";
-            this.flowLayout_filters.Size = new System.Drawing.Size(630, 28);
+            this.flowLayout_filters.Size = new System.Drawing.Size(590, 28);
             this.flowLayout_filters.TabIndex = 0;
             // 
             // label4
@@ -133,13 +133,17 @@
             // btnEdit
             // 
             this.btnEdit.AutoSize = true;
+            this.btnEdit.BackColor = System.Drawing.Color.SteelBlue;
             this.btnEdit.Enabled = false;
-            this.btnEdit.Location = new System.Drawing.Point(639, 3);
+            this.btnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEdit.Font = new System.Drawing.Font("Microsoft Tai Le", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEdit.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnEdit.Location = new System.Drawing.Point(599, 3);
             this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(116, 25);
+            this.btnEdit.Size = new System.Drawing.Size(139, 28);
             this.btnEdit.TabIndex = 3;
-            this.btnEdit.Text = "Editar empleado";
-            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Text = "EDITAR EMPLEADO";
+            this.btnEdit.UseVisualStyleBackColor = false;
             // 
             // FrmEmpleados
             // 
