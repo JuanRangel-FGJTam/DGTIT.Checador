@@ -46,5 +46,17 @@ namespace DGTIT.Checador.Properties {
                 this["generalDirectionId"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public string playSoundOnFail {
+            get {
+                return ((string)(this["playSoundOnFail"]));
+            }
+            set {
+                this["playSoundOnFail"] = value;
+            }
+        }
     }
 }

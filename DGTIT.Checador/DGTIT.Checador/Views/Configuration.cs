@@ -18,6 +18,7 @@ namespace DGTIT.Checador.Views
     {
 
         private string name = string.Empty;
+        private bool playSoundOnFail = false;
         private List<long> selectedIds = new List<long>();
         private List<general_directions> generalDirections;
 
@@ -27,6 +28,7 @@ namespace DGTIT.Checador.Views
 
             this.name = (string) Properties.Settings.Default["name"];
             this.selectedIds = Properties.Settings.Default["generalDirectionId"].ToString().Split(',').Select( d => Convert.ToInt64(d)).ToList();
+            this.playSoundOnFail = Properties.Settings.Default["playSoundOnFail"].ToString() == "1";
             this.Load += new EventHandler(LoadedDone);
         }
 
@@ -53,8 +55,12 @@ namespace DGTIT.Checador.Views
             {
                 name = txtName.Text;
             });
-
             this.button1.Click += new EventHandler(OnActulizarClick);
+
+            this.chbPlayOnFail.Checked = this.playSoundOnFail;
+            this.chbPlayOnFail.CheckedChanged += new EventHandler((object sender3, EventArgs e3) => {
+                playSoundOnFail = chbPlayOnFail.Checked;
+            });
 
         }
 
@@ -72,6 +78,7 @@ namespace DGTIT.Checador.Views
             // * set the properties
             Properties.Settings.Default["name"] = this.name;
             Properties.Settings.Default["generalDirectionId"] = string.Join(",", listIds.ToArray());
+            Properties.Settings.Default["playSoundOnFail"] = this.playSoundOnFail?"1":"0";
             Properties.Settings.Default.Save();
             MessageBox.Show("Configuracion actualizada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();

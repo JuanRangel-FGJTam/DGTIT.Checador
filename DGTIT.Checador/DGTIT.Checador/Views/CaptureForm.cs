@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -25,6 +26,7 @@ namespace DGTIT.Checador
 	{
         private DPFP.Capture.Capture Capturer;
         private bool _allowCapture = false;
+        private readonly bool playSoundOnFail = false;
         public bool allowCapture
         {
             get => _allowCapture;
@@ -55,6 +57,8 @@ namespace DGTIT.Checador
             lblMessage.BorderStyle = BorderStyle.None;
             lblNombre.BorderStyle = BorderStyle.None;
             this.FormBorderStyle = FormBorderStyle.None;
+
+            this.playSoundOnFail = Properties.Settings.Default["playSoundOnFail"].ToString() == "1";
         }
 
         protected virtual void Init()
@@ -165,8 +169,10 @@ namespace DGTIT.Checador
         
         protected virtual void PlayFailSound() {
             try {
-                System.Media.SoundPlayer player = new System.Media.SoundPlayer(Resources.fail_sound);
-                player.Play();
+                if (playSoundOnFail) {
+                    System.Media.SoundPlayer player = new System.Media.SoundPlayer(Resources.fail_sound);
+                    player.Play();
+                }
             }
             catch (Exception) { }
         }
