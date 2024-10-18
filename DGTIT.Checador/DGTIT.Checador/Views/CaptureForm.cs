@@ -59,6 +59,8 @@ namespace DGTIT.Checador
             this.FormBorderStyle = FormBorderStyle.None;
 
             this.playSoundOnFail = Properties.Settings.Default["playSoundOnFail"].ToString() == "1";
+
+            this.lblStatus.ForeColor = Color.FromArgb(255,65, 94, 179);
         }
 
         protected virtual void Init()
@@ -364,5 +366,8 @@ namespace DGTIT.Checador
         }
         #endregion
 
+        private void lblStatus_Click(object sender, EventArgs e) {
+
+        }
     }
 }

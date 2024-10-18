@@ -35,23 +35,23 @@ namespace DGTIT.Checador
             this.lblHora = new System.Windows.Forms.Label();
             this.lblFecha = new System.Windows.Forms.Label();
             this.fingerPrint = new System.Windows.Forms.Panel();
-            this.lblVersion = new System.Windows.Forms.Label();
             this.picLock = new System.Windows.Forms.PictureBox();
+            this.lblVersion = new System.Windows.Forms.Label();
             this.paneluser = new System.Windows.Forms.Panel();
+            this.picUserFail = new System.Windows.Forms.PictureBox();
             this.picOK = new System.Windows.Forms.PictureBox();
             this.picX = new System.Windows.Forms.PictureBox();
             this.btnClose = new System.Windows.Forms.Button();
             this.fotoEmpleado = new System.Windows.Forms.PictureBox();
             this.fingerPrintImg = new System.Windows.Forms.PictureBox();
-            this.picUserFail = new System.Windows.Forms.PictureBox();
             this.fingerPrint.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLock)).BeginInit();
             this.paneluser.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picUserFail)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picOK)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fotoEmpleado)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fingerPrintImg)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picUserFail)).BeginInit();
             this.SuspendLayout();
             // 
             // lblNombre
@@ -72,7 +72,7 @@ namespace DGTIT.Checador
             this.lblMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblMessage.Font = new System.Drawing.Font("Century Gothic", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMessage.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lblMessage.Location = new System.Drawing.Point(729, 515);
+            this.lblMessage.Location = new System.Drawing.Point(729, 508);
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Size = new System.Drawing.Size(517, 70);
             this.lblMessage.TabIndex = 7;
@@ -82,15 +82,16 @@ namespace DGTIT.Checador
             // lblStatus
             // 
             this.lblStatus.BackColor = System.Drawing.Color.Transparent;
-            this.lblStatus.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblStatus.ForeColor = System.Drawing.Color.DimGray;
-            this.lblStatus.Location = new System.Drawing.Point(385, 674);
+            this.lblStatus.Font = new System.Drawing.Font("Century Gothic", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStatus.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.lblStatus.Location = new System.Drawing.Point(9, 659);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
-            this.lblStatus.Size = new System.Drawing.Size(530, 30);
+            this.lblStatus.Size = new System.Drawing.Size(754, 49);
             this.lblStatus.TabIndex = 9;
-            this.lblStatus.Text = "Dirección General de Recursos Humanos ";
-            this.lblStatus.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblStatus.Text = "DGA  |  Dirección de Recursos Humanos ";
+            this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblStatus.Click += new System.EventHandler(this.lblStatus_Click);
             // 
             // lblHora
             // 
@@ -99,9 +100,9 @@ namespace DGTIT.Checador
             this.lblHora.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblHora.Font = new System.Drawing.Font("Century Gothic", 72F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHora.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblHora.Location = new System.Drawing.Point(730, 313);
+            this.lblHora.Location = new System.Drawing.Point(737, 313);
             this.lblHora.Name = "lblHora";
-            this.lblHora.Size = new System.Drawing.Size(517, 163);
+            this.lblHora.Size = new System.Drawing.Size(496, 163);
             this.lblHora.TabIndex = 6;
             this.lblHora.Text = "12:00";
             this.lblHora.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -113,9 +114,9 @@ namespace DGTIT.Checador
             this.lblFecha.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblFecha.Font = new System.Drawing.Font("Century Gothic", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFecha.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblFecha.Location = new System.Drawing.Point(730, 118);
+            this.lblFecha.Location = new System.Drawing.Point(737, 118);
             this.lblFecha.Name = "lblFecha";
-            this.lblFecha.Size = new System.Drawing.Size(517, 157);
+            this.lblFecha.Size = new System.Drawing.Size(498, 155);
             this.lblFecha.TabIndex = 1;
             this.lblFecha.Text = "2024-01-01";
             this.lblFecha.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -125,24 +126,11 @@ namespace DGTIT.Checador
             this.fingerPrint.BackColor = System.Drawing.Color.Transparent;
             this.fingerPrint.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.fingerPrint.Controls.Add(this.picLock);
-            this.fingerPrint.Location = new System.Drawing.Point(566, 352);
+            this.fingerPrint.Location = new System.Drawing.Point(576, 352);
             this.fingerPrint.Margin = new System.Windows.Forms.Padding(0);
             this.fingerPrint.Name = "fingerPrint";
             this.fingerPrint.Size = new System.Drawing.Size(80, 80);
             this.fingerPrint.TabIndex = 14;
-            // 
-            // lblVersion
-            // 
-            this.lblVersion.BackColor = System.Drawing.Color.Transparent;
-            this.lblVersion.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVersion.ForeColor = System.Drawing.Color.DimGray;
-            this.lblVersion.Location = new System.Drawing.Point(968, 674);
-            this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
-            this.lblVersion.Size = new System.Drawing.Size(297, 30);
-            this.lblVersion.TabIndex = 13;
-            this.lblVersion.Text = "Creado por DGTIT v3";
-            this.lblVersion.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // picLock
             // 
@@ -155,18 +143,43 @@ namespace DGTIT.Checador
             this.picLock.TabIndex = 0;
             this.picLock.TabStop = false;
             // 
+            // lblVersion
+            // 
+            this.lblVersion.BackColor = System.Drawing.Color.Transparent;
+            this.lblVersion.Font = new System.Drawing.Font("Century Gothic", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVersion.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.lblVersion.Location = new System.Drawing.Point(884, 659);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
+            this.lblVersion.Size = new System.Drawing.Size(334, 49);
+            this.lblVersion.TabIndex = 13;
+            this.lblVersion.Text = "Creado por DGTIT v3";
+            this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // paneluser
             // 
-            this.paneluser.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("paneluser.BackgroundImage")));
+            this.paneluser.BackColor = System.Drawing.Color.Transparent;
             this.paneluser.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.paneluser.Controls.Add(this.picUserFail);
             this.paneluser.Controls.Add(this.picOK);
             this.paneluser.Controls.Add(this.picX);
-            this.paneluser.Location = new System.Drawing.Point(566, 510);
+            this.paneluser.Location = new System.Drawing.Point(576, 505);
             this.paneluser.Margin = new System.Windows.Forms.Padding(3, 25, 3, 25);
             this.paneluser.Name = "paneluser";
             this.paneluser.Size = new System.Drawing.Size(80, 80);
             this.paneluser.TabIndex = 11;
+            // 
+            // picUserFail
+            // 
+            this.picUserFail.BackColor = System.Drawing.Color.Transparent;
+            this.picUserFail.Image = global::DGTIT.Checador.Properties.Resources.user_fail;
+            this.picUserFail.Location = new System.Drawing.Point(0, 0);
+            this.picUserFail.Name = "picUserFail";
+            this.picUserFail.Size = new System.Drawing.Size(81, 80);
+            this.picUserFail.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picUserFail.TabIndex = 11;
+            this.picUserFail.TabStop = false;
+            this.picUserFail.Visible = false;
             // 
             // picOK
             // 
@@ -208,12 +221,13 @@ namespace DGTIT.Checador
             // 
             // fotoEmpleado
             // 
-            this.fotoEmpleado.BackColor = System.Drawing.Color.White;
+            this.fotoEmpleado.BackColor = System.Drawing.Color.Transparent;
+            this.fotoEmpleado.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("fotoEmpleado.BackgroundImage")));
             this.fotoEmpleado.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.fotoEmpleado.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.fotoEmpleado.Location = new System.Drawing.Point(75, 106);
+            this.fotoEmpleado.Location = new System.Drawing.Point(74, 106);
             this.fotoEmpleado.Name = "fotoEmpleado";
-            this.fotoEmpleado.Size = new System.Drawing.Size(365, 365);
+            this.fotoEmpleado.Size = new System.Drawing.Size(366, 365);
             this.fotoEmpleado.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.fotoEmpleado.TabIndex = 2;
             this.fotoEmpleado.TabStop = false;
@@ -222,30 +236,18 @@ namespace DGTIT.Checador
             // 
             this.fingerPrintImg.BackColor = System.Drawing.Color.Transparent;
             this.fingerPrintImg.BackgroundImage = global::DGTIT.Checador.Properties.Resources.fingerprint;
-            this.fingerPrintImg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.fingerPrintImg.Location = new System.Drawing.Point(505, 116);
+            this.fingerPrintImg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.fingerPrintImg.Location = new System.Drawing.Point(526, 116);
             this.fingerPrintImg.Name = "fingerPrintImg";
             this.fingerPrintImg.Size = new System.Drawing.Size(184, 208);
             this.fingerPrintImg.TabIndex = 0;
             this.fingerPrintImg.TabStop = false;
             // 
-            // picUserFail
-            // 
-            this.picUserFail.BackColor = System.Drawing.Color.Transparent;
-            this.picUserFail.Image = global::DGTIT.Checador.Properties.Resources.user_fail;
-            this.picUserFail.Location = new System.Drawing.Point(0, 0);
-            this.picUserFail.Name = "picUserFail";
-            this.picUserFail.Size = new System.Drawing.Size(81, 80);
-            this.picUserFail.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picUserFail.TabIndex = 11;
-            this.picUserFail.TabStop = false;
-            this.picUserFail.Visible = false;
-            // 
             // CaptureForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::DGTIT.Checador.Properties.Resources.fondo;
+            this.BackgroundImage = global::DGTIT.Checador.Properties.Resources.fondov2;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1280, 720);
             this.Controls.Add(this.fingerPrint);
@@ -272,11 +274,11 @@ namespace DGTIT.Checador
             this.fingerPrint.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picLock)).EndInit();
             this.paneluser.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picUserFail)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picOK)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fotoEmpleado)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fingerPrintImg)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picUserFail)).EndInit();
             this.ResumeLayout(false);
 
         }

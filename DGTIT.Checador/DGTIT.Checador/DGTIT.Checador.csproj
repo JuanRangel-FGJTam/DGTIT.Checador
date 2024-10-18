@@ -378,10 +378,16 @@
     <None Include="Resources\check.png" />
     <None Include="Resources\fail.png" />
     <None Include="Resources\Fingerprint-Free-Download-PNG.png" />
-    <None Include="Resources\fingerprint.png" />
     <None Include="Resources\user-fail.png" />
     <None Include="Resources\fail.wav" />
     <None Include="Resources\check.wav" />
+    <None Include="Resources\fingerprint1.png" />
+    <None Include="Resources\fingerprint2.png" />
+    <None Include="Resources\fondov2.png" />
+    <None Include="Resources\fgjtam.png" />
+    <None Include="Resources\fgjtam2.png" />
+    <None Include="Resources\fgjtam3.png" />
+    <None Include="Resources\fingerprint.png" />
     <Content Include="UsuariosModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>UsuariosModel.Context.cs</LastGenOutput>
