@@ -71,6 +71,15 @@ namespace DGTIT.Checador.Properties {
         }
         
         /// <summary>
+        ///   Busca un recurso adaptado de tipo System.IO.UnmanagedMemoryStream similar a System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream check_sound {
+            get {
+                return ResourceManager.GetStream("check_sound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap cross {
@@ -101,6 +110,25 @@ namespace DGTIT.Checador.Properties {
         }
         
         /// <summary>
+        ///   Busca un recurso adaptado de tipo System.IO.UnmanagedMemoryStream similar a System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream fail_sound {
+            get {
+                return ResourceManager.GetStream("fail_sound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap fingerprint {
+            get {
+                object obj = ResourceManager.GetObject("fingerprint", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap fingerprint_lock {
@@ -123,9 +151,9 @@ namespace DGTIT.Checador.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap loading_gif {
+        internal static System.Drawing.Bitmap user_fail {
             get {
-                object obj = ResourceManager.GetObject("loading-gif", resourceCulture);
+                object obj = ResourceManager.GetObject("user_fail", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -124,6 +124,11 @@
       <DependentUpon>procuraduria.tt</DependentUpon>
     </Compile>
     <Compile Include="Helpers\FingerPrint.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="User32.cs" />
     <Compile Include="Views\BusyDialog.cs">
       <SubType>Form</SubType>
@@ -320,14 +325,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="App.Config" />
     <Fakes Include="Fakes\DPFPDevNET.fakes" />
     <None Include="DemoDP4500_TemporaryKey.pfx" />
@@ -377,6 +377,11 @@
     <None Include="Resources\fingerprint-lock.png" />
     <None Include="Resources\check.png" />
     <None Include="Resources\fail.png" />
+    <None Include="Resources\Fingerprint-Free-Download-PNG.png" />
+    <None Include="Resources\fingerprint.png" />
+    <None Include="Resources\user-fail.png" />
+    <None Include="Resources\fail.wav" />
+    <None Include="Resources\check.wav" />
     <Content Include="UsuariosModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>UsuariosModel.Context.cs</LastGenOutput>

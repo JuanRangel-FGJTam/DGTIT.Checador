@@ -1,3 +1,4 @@
+using DGTIT.Checador.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -156,12 +157,18 @@ namespace DGTIT.Checador
         {
             try
             {
-                System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"c:\Timbre.wav");
+                System.Media.SoundPlayer player = new System.Media.SoundPlayer(Resources.check_sound);
                 player.Play();
             }
-            catch (Exception)
-            {
+            catch (Exception) { }
+        }
+        
+        protected virtual void PlayFailSound() {
+            try {
+                System.Media.SoundPlayer player = new System.Media.SoundPlayer(Resources.fail_sound);
+                player.Play();
             }
+            catch (Exception) { }
         }
 
         #region Form Events Handler
@@ -233,18 +240,27 @@ namespace DGTIT.Checador
 			this.Invoke(new Function(delegate () {
                 lblMessage.ForeColor = Color.RoyalBlue;
                 lblMessage.Text = "Entrada registrada " +  time.ToString("hh:mm:ss");
-				//picChecada.Visible = true; se comento 
 				picOK.Visible = true;
 
 			}));
-		}
-		
-		protected void SetAreaNoEncontrada( )
+            PlayBell();
+        }
+        protected void SetEmpledoBaja() {
+            this.Invoke(new Function(delegate () {
+                picUserFail.Visible = true;
+            }));
+
+            PlayFailSound();
+        }
+
+        protected void SetAreaNoEncontrada( )
 		{
 			this.Invoke(new Function(delegate () { 
 				picX.Visible = true;
 			}));
-		}
+
+            PlayFailSound();
+        }
 
 		protected void SetHuellaNoEncontrada()
 		{
@@ -252,7 +268,8 @@ namespace DGTIT.Checador
                 lblMessage.ForeColor = Color.DarkSalmon;
                 lblMessage.Text = "No se reconoce la huella.";
 			}));
-		}
+            PlayFailSound();
+        }
 
 		protected void LimpiarCampos()
 		{
@@ -267,6 +284,7 @@ namespace DGTIT.Checador
                     lblMessage.Text = "";
                     picOK.Visible = false;
                     picX.Visible = false;
+                    picUserFail.Visible = false;
                 }));
             }
             catch (Exception) { }

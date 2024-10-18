@@ -96,7 +96,7 @@ namespace DGTIT.Checador.Views
                     if (!emp.active)
                     {
                         SetNoRegistrada("Empleado en baja");
-                        SetAreaNoEncontrada();
+                        SetEmpledoBaja();
                         break;
                     }
 
@@ -129,7 +129,6 @@ namespace DGTIT.Checador.Views
 
                     // * display the employee is checked on the UI
                     SetChecada(cheeckTime);
-                    PlayBell();
 
                     break;
                 }
@@ -137,6 +136,7 @@ namespace DGTIT.Checador.Views
                 if (result.Verified == false) //error en huella
                 {
                     SetNoRegistrada("No se reconoce la huella");
+                    SetAreaNoEncontrada();
                 }
 
 
@@ -147,7 +147,7 @@ namespace DGTIT.Checador.Views
                     try
                     {
                         // sleep 3 seconds
-                        System.Threading.Thread.Sleep(3000);
+                        System.Threading.Thread.Sleep(2500);
                         
                         // check if the task was cancelled
                         if (ct.IsCancellationRequested)
