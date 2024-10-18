@@ -110,7 +110,7 @@ namespace DGTIT.Checador
             this.lblStatus.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
             this.lblStatus.Size = new System.Drawing.Size(530, 30);
             this.lblStatus.TabIndex = 9;
-            this.lblStatus.Text = "Dirección General de Recursos Humanos ";
+            this.lblStatus.Text = "Direcciï¿½n General de Recursos Humanos ";
             this.lblStatus.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // picX
@@ -170,10 +170,10 @@ namespace DGTIT.Checador
             this.btnClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClose.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnClose.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnClose.Location = new System.Drawing.Point(1254, 3);
+            this.btnClose.ForeColor = System.Drawing.Color.Transparent;
+            this.btnClose.Location = new System.Drawing.Point(1222, 30);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(22, 22);
+            this.btnClose.Size = new System.Drawing.Size(24, 24);
             this.btnClose.TabIndex = 7;
             this.btnClose.UseVisualStyleBackColor = false;
             // 
@@ -221,7 +221,7 @@ namespace DGTIT.Checador
             this.lblVersion.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
             this.lblVersion.Size = new System.Drawing.Size(297, 30);
             this.lblVersion.TabIndex = 13;
-            this.lblVersion.Text = "Creado por DGTIT v2.1";
+            this.lblVersion.Text = "Creado por DGTIT v3";
             this.lblVersion.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // CaptureForm

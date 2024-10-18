@@ -136,7 +136,7 @@ namespace DGTIT.Checador.Views
 
                 if (result.Verified == false) //error en huella
                 {
-                    SetNoRegistrada("No se reconoce la huella, favor de reintentar");
+                    SetNoRegistrada("No se reconoce la huella");
                 }
 
 

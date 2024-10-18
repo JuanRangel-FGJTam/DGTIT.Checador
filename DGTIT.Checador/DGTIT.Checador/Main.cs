@@ -16,7 +16,6 @@ namespace DGTIT.Checador
     public partial class Main : Form
     {
 
-        private Configuration ca;
         private Views.Checador checadorForm;
 
         bool ctrlKPressed = false; 
