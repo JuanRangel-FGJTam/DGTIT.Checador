@@ -54,6 +54,10 @@ namespace DGTIT.Checador.Views
         {
             base.Process(Sample);
 
+            cancelationSource = new CancellationTokenSource();
+            CancellationToken ct = cancelationSource.Token;
+
+
             // Process the sample and create a feature set for the enrollment purpose.
             DPFP.FeatureSet features = ExtractFeatures(Sample, DPFP.Processing.DataPurpose.Verification);
 
@@ -66,9 +70,36 @@ namespace DGTIT.Checador.Views
                 // prepare for validate each employees fingerprints
                 DPFP.Verification.Verification.Result result = new DPFP.Verification.Verification.Result();
                 DPFP.Template template = new DPFP.Template();
-                
+
+
                 // loop for each employee and validate the finger print
-                foreach (var emp in checadorService.GetEmployees())
+                IEnumerable<employee> employees = Array.Empty<employee>();
+                try {
+                    
+                    employees = checadorService.GetEmployees().ToArray();
+                    
+                }
+                catch (Exception) {
+
+                    // TODO: log the exception
+
+                    SetNoRegistrada("Error de conexión");
+                    SetAreaNoEncontrada();
+                    taskAfterCheck = Task.Run(() => {
+                        try {
+                            System.Threading.Thread.Sleep(2500);
+                            if (ct.IsCancellationRequested) { return; }
+                            LimpiarCampos();
+                            StartCapturing();
+                        }
+                        catch (OperationCanceledException) { }
+                    }, ct);
+                    return;
+                }
+
+
+                // * compare each employee
+                foreach (var emp in employees)
                 {
                     if (emp.fingerprint == null)
                     {
@@ -133,7 +164,8 @@ namespace DGTIT.Checador.Views
                     break;
                 }
 
-                if (result.Verified == false) //error en huella
+                // no match found
+                if (result.Verified == false)
                 {
                     SetNoRegistrada("No se reconoce la huella");
                     SetAreaNoEncontrada();
@@ -141,8 +173,6 @@ namespace DGTIT.Checador.Views
 
 
                 // * task for clear the UI and unlock the fingerPrint device after some delay
-                cancelationSource = new CancellationTokenSource();
-                CancellationToken ct = cancelationSource.Token;
                 taskAfterCheck = Task.Run(() => {
                     try
                     {
