@@ -28,18 +28,26 @@ namespace DGTIT.Checador.Services {
 
         public IEnumerable<employee> GetEmployees()
         {
-            //if (_cachedEmployees.Any() && _lastCached >= DateTime.Now.Subtract(TimeSpan.FromMinutes(10))) {
-            //    return this._cachedEmployees;
-            //}
 
-            // Update cache and timestamp
-            var _cachedEmployees = this.usuariosDBEntities.employees
-            .Where(item => item.fingerprint != null)
-            .ToList();
+            IEnumerable<employee> employees = Array.Empty<employee>();
 
-            // this._lastCached = DateTime.Now; // Set the new cache time
+            var taskEmployee = Task.Run(() => {
+                employees = this.usuariosDBEntities.employees
+                    .Where(item => item.fingerprint != null)
+                    .ToList();
+            });
 
-            return _cachedEmployees;
+            var taskSleep = Task.Run(() => {
+                Thread.Sleep(6000);
+            });
+
+            var index = Task.WaitAny(taskEmployee, taskSleep);
+
+            if (index == 1) {
+                throw new TimeoutException();
+            }
+            
+            return employees;
         }
 
         /// <summary>

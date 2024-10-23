@@ -38,6 +38,7 @@ namespace DGTIT.Checador
             this.picLock = new System.Windows.Forms.PictureBox();
             this.lblVersion = new System.Windows.Forms.Label();
             this.paneluser = new System.Windows.Forms.Panel();
+            this.picLoading = new System.Windows.Forms.PictureBox();
             this.picUserFail = new System.Windows.Forms.PictureBox();
             this.picOK = new System.Windows.Forms.PictureBox();
             this.picX = new System.Windows.Forms.PictureBox();
@@ -47,6 +48,7 @@ namespace DGTIT.Checador
             this.fingerPrint.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLock)).BeginInit();
             this.paneluser.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picUserFail)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picOK)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picX)).BeginInit();
@@ -160,6 +162,7 @@ namespace DGTIT.Checador
             // 
             this.paneluser.BackColor = System.Drawing.Color.Transparent;
             this.paneluser.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.paneluser.Controls.Add(this.picLoading);
             this.paneluser.Controls.Add(this.picUserFail);
             this.paneluser.Controls.Add(this.picOK);
             this.paneluser.Controls.Add(this.picX);
@@ -168,6 +171,18 @@ namespace DGTIT.Checador
             this.paneluser.Name = "paneluser";
             this.paneluser.Size = new System.Drawing.Size(80, 80);
             this.paneluser.TabIndex = 11;
+            // 
+            // picLoading
+            // 
+            this.picLoading.BackColor = System.Drawing.Color.Transparent;
+            this.picLoading.Image = global::DGTIT.Checador.Properties.Resources.loading;
+            this.picLoading.Location = new System.Drawing.Point(0, 0);
+            this.picLoading.Margin = new System.Windows.Forms.Padding(0);
+            this.picLoading.Name = "picLoading";
+            this.picLoading.Size = new System.Drawing.Size(81, 80);
+            this.picLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.picLoading.TabIndex = 12;
+            this.picLoading.TabStop = false;
             // 
             // picUserFail
             // 
@@ -274,6 +289,7 @@ namespace DGTIT.Checador
             this.fingerPrint.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picLock)).EndInit();
             this.paneluser.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picLoading)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picUserFail)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picOK)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picX)).EndInit();
@@ -299,5 +315,6 @@ namespace DGTIT.Checador
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Label lblVersion;
         public System.Windows.Forms.PictureBox picUserFail;
+        public System.Windows.Forms.PictureBox picLoading;
     }
 }

@@ -6,6 +6,7 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DGTIT.Checador.Services {
@@ -53,12 +54,30 @@ namespace DGTIT.Checador.Services {
 
         public Bitmap GetEmployeePhoto(int employeeNumber)
         {
-            var foto = (procuraduriaEntities
-                .EMPLEADO
-                .Where(u => u.NUMEMP == employeeNumber)
-                .Select(u => u.FOTO)
-                .SingleOrDefault()
-            );
+
+            byte[] foto = null;
+
+            try {
+                var taskFoto = Task.Run(() => {
+                    foto = (procuraduriaEntities
+                        .EMPLEADO
+                        .Where(u => u.NUMEMP == employeeNumber)
+                        .Select(u => u.FOTO)
+                        .SingleOrDefault()
+                    );
+                });
+
+                var taskSleep = Task.Run(() => Thread.Sleep(6000));
+
+                var indexTask = Task.WaitAny(taskFoto, taskSleep);
+
+                if(indexTask == 1) {
+                    throw new Exception("Timeoute");
+                }
+                
+            }
+            catch (Exception) {
+            }
 
             Bitmap bmp;
 

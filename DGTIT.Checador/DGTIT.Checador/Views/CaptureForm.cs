@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Input;
 using static DGTIT.Checador.User32;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
@@ -72,11 +73,11 @@ namespace DGTIT.Checador
                 if ( null != Capturer )
                     Capturer.EventHandler = this;					// Subscribe for capturing events.
                 else
-                    SetPrompt("No se pudo iniciar la operación de captura");
+                    SetPrompt("No se pudo iniciar la operaciï¿½n de captura");
             }
             catch
             {               
-                MessageBox.Show("No se pudo iniciar la operación de captura", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);            
+                MessageBox.Show("No se pudo iniciar la operaciï¿½n de captura", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);            
             }
 
             using (var gp = new GraphicsPath()) {
@@ -109,6 +110,7 @@ namespace DGTIT.Checador
             {
                 Capturer.StartCapture();
                 SetPrompt("Escanea tu huella usando el lector");
+                SetLoading(false);
             }
             catch
             {
@@ -298,6 +300,16 @@ namespace DGTIT.Checador
             catch (Exception) { }
 
 		}
+        
+        protected void SetLoading(bool visible) {
+            try {
+                Invoke(new Action(() => {
+                    picLoading.Visible = visible;
+                }));
+            }
+            catch (Exception) { }
+        }
+        
         #endregion
 
         #region FingerPrint EventsHandler

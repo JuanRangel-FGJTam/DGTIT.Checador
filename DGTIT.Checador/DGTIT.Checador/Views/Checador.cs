@@ -1,6 +1,7 @@
 ﻿using DGTIT.Checador.Services;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -54,6 +55,8 @@ namespace DGTIT.Checador.Views
         {
             base.Process(Sample);
 
+            SetLoading(true);
+
             cancelationSource = new CancellationTokenSource();
             CancellationToken ct = cancelationSource.Token;
 
@@ -75,26 +78,13 @@ namespace DGTIT.Checador.Views
                 // loop for each employee and validate the finger print
                 IEnumerable<employee> employees = Array.Empty<employee>();
                 try {
-
-                    var task = Task.Run(() => {
-                        employees = checadorService.GetEmployees().ToArray();
-                    });
-
-                    var taskSleep = Task.Run(() => {
-                        Thread.Sleep(10000);
-                    });
-
-                    var index = Task.WaitAny(task, taskSleep);
-
-                    if( index == 1) {
-                        throw new Exception("Sleep");
-                    }
-
-                    
+                    employees = checadorService.GetEmployees().ToArray();
                 }
                 catch (Exception) {
 
                     // TODO: log the exception
+                    
+                    SetLoading(false);
 
                     SetNoRegistrada("Error de conexión");
                     SetAreaNoEncontrada();
@@ -139,6 +129,7 @@ namespace DGTIT.Checador.Views
                     // * validete if the employee is active
                     if (!emp.active)
                     {
+                        SetLoading(false);
                         SetNoRegistrada("Empleado en baja");
                         SetEmpledoBaja();
                         break;
@@ -148,6 +139,7 @@ namespace DGTIT.Checador.Views
                     // * validete if the employee direction has assigned the area
                     if (emp.general_direction_id <= 0)
                     {
+                        SetLoading(false);
                         SetNoRegistrada("No cuenta con area registrada");
                         SetAreaNoEncontrada();
                         break;
@@ -156,6 +148,7 @@ namespace DGTIT.Checador.Views
                     // * validate if the employee area its the same area of the checador
                     if (!this.areasAvailables.Contains(emp.general_direction_id))
                     {
+                        SetLoading(false);
                         SetNoRegistrada("No pertenece a esta Area");
                         SetAreaNoEncontrada();
                         break;
@@ -164,14 +157,34 @@ namespace DGTIT.Checador.Views
                     // * get the employee number
                     var employeeNumber = Convert.ToInt32(emp.plantilla_id) - 100000;
 
+                    // * make the checkin record
+                    DateTime cheeckTime = default;
+                    try {
+                        cheeckTime = this.checadorService.CheckInEmployee(employeeNumber);
+                    }
+                    catch (Exception) {
+                        SetLoading(false);
+                        SetNoRegistrada("Error de conexión");
+                        SetAreaNoEncontrada();
+                        taskAfterCheck = Task.Run(() => {
+                            try {
+                                System.Threading.Thread.Sleep(2500);
+                                if (ct.IsCancellationRequested) { return; }
+                                LimpiarCampos();
+                                StartCapturing();
+                            }
+                            catch (OperationCanceledException) { }
+                        }, ct);
+                        
+                        return;
+                    }
+
                     // * display the photo and name of the employee
                     SetFotoEmpleado(fiscaliaService.GetEmployeePhoto(employeeNumber));
                     SetNombre(emp.name.ToString());
 
-                    // * make the checkin record
-                    var cheeckTime = this.checadorService.CheckInEmployee(employeeNumber);
-
                     // * display the employee is checked on the UI
+                    SetLoading(false);
                     SetChecada(cheeckTime);
 
                     break;
@@ -180,6 +193,7 @@ namespace DGTIT.Checador.Views
                 // no match found
                 if (result.Verified == false)
                 {
+                    SetLoading(false);
                     SetNoRegistrada("No se reconoce la huella");
                     SetAreaNoEncontrada();
                 }
