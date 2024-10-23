@@ -75,8 +75,21 @@ namespace DGTIT.Checador.Views
                 // loop for each employee and validate the finger print
                 IEnumerable<employee> employees = Array.Empty<employee>();
                 try {
-                    
-                    employees = checadorService.GetEmployees().ToArray();
+
+                    var task = Task.Run(() => {
+                        employees = checadorService.GetEmployees().ToArray();
+                    });
+
+                    var taskSleep = Task.Run(() => {
+                        Thread.Sleep(10000);
+                    });
+
+                    var index = Task.WaitAny(task, taskSleep);
+
+                    if( index == 1) {
+                        throw new Exception("Sleep");
+                    }
+
                     
                 }
                 catch (Exception) {

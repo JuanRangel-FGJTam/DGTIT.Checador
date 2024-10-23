@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.Remoting.Contexts;
 using System.Security.RightsManagement;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.TextFormatting;
 
@@ -16,8 +17,8 @@ namespace DGTIT.Checador.Services {
         private readonly UsuariosDBEntities usuariosDBEntities;
         private readonly procuraduriaEntities1 procuraduriaEntities;
 
-        private IEnumerable<employee> _cachedEmployees = Array.Empty<employee>();
-        private DateTime _lastCached = DateTime.Now;
+        //private IEnumerable<employee> _cachedEmployees = Array.Empty<employee>();
+        //private DateTime _lastCached = DateTime.Now;
 
         public ChecadorService( UsuariosDBEntities context, procuraduriaEntities1 procuraduriaContext)
         {
@@ -27,18 +28,18 @@ namespace DGTIT.Checador.Services {
 
         public IEnumerable<employee> GetEmployees()
         {
-            if (_cachedEmployees.Any() && _lastCached >= DateTime.Now.Subtract(TimeSpan.FromMinutes(10))) {
-                return this._cachedEmployees;
-            }
+            //if (_cachedEmployees.Any() && _lastCached >= DateTime.Now.Subtract(TimeSpan.FromMinutes(10))) {
+            //    return this._cachedEmployees;
+            //}
 
             // Update cache and timestamp
-            this._cachedEmployees = this.usuariosDBEntities.employees
+            var _cachedEmployees = this.usuariosDBEntities.employees
             .Where(item => item.fingerprint != null)
             .ToList();
 
-            this._lastCached = DateTime.Now; // Set the new cache time
+            // this._lastCached = DateTime.Now; // Set the new cache time
 
-            return this._cachedEmployees;
+            return _cachedEmployees;
         }
 
         /// <summary>
