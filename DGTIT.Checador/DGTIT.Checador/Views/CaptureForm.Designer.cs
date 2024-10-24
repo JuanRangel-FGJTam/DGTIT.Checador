@@ -150,12 +150,12 @@ namespace DGTIT.Checador
             this.lblVersion.BackColor = System.Drawing.Color.Transparent;
             this.lblVersion.Font = new System.Drawing.Font("Century Gothic", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblVersion.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.lblVersion.Location = new System.Drawing.Point(884, 659);
+            this.lblVersion.Location = new System.Drawing.Point(882, 659);
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
-            this.lblVersion.Size = new System.Drawing.Size(334, 49);
+            this.lblVersion.Size = new System.Drawing.Size(386, 49);
             this.lblVersion.TabIndex = 13;
-            this.lblVersion.Text = "Creado por DGTIT v3.2";
+            this.lblVersion.Text = "Creado por DGTIT v3.0.4";
             this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // paneluser
