@@ -123,13 +123,25 @@
     <Compile Include="AREA.cs">
       <DependentUpon>procuraduria.tt</DependentUpon>
     </Compile>
+    <Compile Include="client.cs">
+      <DependentUpon>UsuariosModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\FingerPrint.cs" />
+    <Compile Include="notification.cs">
+      <DependentUpon>UsuariosModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="User32.cs" />
+    <Compile Include="Views\AuthForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\AuthForm.Designer.cs">
+      <DependentUpon>AuthForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\BusyDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -148,12 +160,6 @@
     <Compile Include="Views\CaptureForm.Designer.cs">
       <DependentUpon>CaptureForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="CntrlDeAsistencia.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ControlDeAsistencia.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="department.cs">
       <DependentUpon>UsuariosModel.tt</DependentUpon>
     </Compile>
@@ -163,19 +169,7 @@
     <Compile Include="EMPLEADO.cs">
       <DependentUpon>procuraduria.tt</DependentUpon>
     </Compile>
-    <Compile Include="EmpleadoRegistro.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="employee.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="employees_respaldo.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="failed_jobs.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="file.cs">
       <DependentUpon>UsuariosModel.tt</DependentUpon>
     </Compile>
     <Compile Include="FrmCaptura.cs">
@@ -230,18 +224,6 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="menu.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="menu_user.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="migration.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="password_resets.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="procuraduria.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -271,9 +253,6 @@
     <Compile Include="type_justifies.cs">
       <DependentUpon>UsuariosModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="user.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="UsuariosModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -289,15 +268,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UsuariosModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="VwEmpleadoRegistro.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Vw_plazas_nomina.cs">
+    <Compile Include="working_days.cs">
       <DependentUpon>UsuariosModel.tt</DependentUpon>
     </Compile>
     <Compile Include="working_hours.cs">
       <DependentUpon>UsuariosModel.tt</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Views\AuthForm.resx">
+      <DependentUpon>AuthForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\BusyDialog.resx">
       <DependentUpon>BusyDialog.cs</DependentUpon>
     </EmbeddedResource>

@@ -236,10 +236,24 @@ namespace DGTIT.Checador.Views
 
         private void OnTimerTick(object sender, EventArgs e)
         {
-            var dateQuery = contexto.Database.SqlQuery<DateTime>("SELECT getdate()");
-            DateTime serverDate = dateQuery.AsEnumerable().First();
-            this.lblFecha.Text = serverDate.ToString("dd/MM/yyyy");
-            this.lblHora.Text = serverDate.ToString("hh:mm:ss");
+            try {
+                var dateQuery = contexto.Database.SqlQuery<DateTime>("SELECT getdate()");
+                DateTime serverDate = dateQuery.AsEnumerable().First();
+                this.lblFecha.Text = serverDate.ToString("dd/MM/yyyy");
+                this.lblHora.Text = serverDate.ToString("hh:mm:ss");
+
+            }catch(Exception err) {
+                SetNoRegistrada("Error de conexión");
+                SetAreaNoEncontrada();
+                taskAfterCheck = Task.Run(() => {
+                    try {
+                        System.Threading.Thread.Sleep(2500);
+                        LimpiarCampos();
+                        StartCapturing();
+                    }
+                    catch (OperationCanceledException) { }
+                });
+            }
         }
 
         protected override void CaptureFormClosing(object sender, FormClosingEventArgs e)

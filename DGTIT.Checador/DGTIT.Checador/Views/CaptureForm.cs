@@ -185,8 +185,8 @@ namespace DGTIT.Checador
         private void CaptureForm_Load(object sender, EventArgs e)
 		{
             // Set the form to full screen
-            this.WindowState = FormWindowState.Maximized;
-            ChangeScreenResolution(new Size(1280, 720));
+            // this.WindowState = FormWindowState.Maximized;
+            // ChangeScreenResolution(new Size(1280, 720));
 
             lblFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
             lblHora.Text = DateTime.Now.ToString("HH:mm");

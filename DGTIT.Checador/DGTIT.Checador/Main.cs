@@ -28,7 +28,8 @@ namespace DGTIT.Checador
             // * prepare the events
             this.btnRegistrar.Click += new EventHandler(BtnRegistrar_Click);
             this.btnVerificar.Click += new EventHandler(BtnVerificar_Click);
-            this.KeyDown += new KeyEventHandler(ShowConfiguracion);
+            
+            // this.KeyDown += new KeyEventHandler(ShowConfiguracion);
         }
 
         private void BtnRegistrar_Click(object sender, EventArgs e)
@@ -57,24 +58,35 @@ namespace DGTIT.Checador
         private void ShowConfiguracion(object sender, KeyEventArgs e)
         {
 
-            // Check if Ctrl is pressed along with K
-            if (e.Control && e.KeyCode == Keys.K)
-            {
-                ctrlKPressed = true; // Set flag that Ctrl + K was pressed
-            }
-            // Check if Ctrl is pressed along with O and Ctrl + K was already pressed
-            else if (ctrlKPressed && e.Control && e.KeyCode == Keys.O)
-            {
+            //// Check if Ctrl is pressed along with K
+            //if (e.Control && e.KeyCode == Keys.K)
+            //{
+            //    ctrlKPressed = true; // Set flag that Ctrl + K was pressed
+            //}
+            //// Check if Ctrl is pressed along with O and Ctrl + K was already pressed
+            //else if (ctrlKPressed && e.Control && e.KeyCode == Keys.O)
+            //{
+            //    var ca = new Configuration();
+            //    ca.ShowDialog(this);
+            //    ca = null;
+            //    ctrlKPressed = false; // Reset flag
+            //}
+            //else
+            //{
+            //    ctrlKPressed = false; // Reset if any other key is pressed
+            //}
+        }
+
+
+        private void BtnConfig_Click(object sender, EventArgs e) {
+            var validarPermisoWindow = new AuthForm();
+            if( DialogResult.Yes == validarPermisoWindow.ShowDialog()) {
                 var ca = new Configuration();
                 ca.ShowDialog(this);
-                ca = null;
-                ctrlKPressed = false; // Reset flag
-            }
-            else
-            {
-                ctrlKPressed = false; // Reset if any other key is pressed
             }
         }
+
+
 
     }
 }
