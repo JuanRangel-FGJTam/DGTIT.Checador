@@ -34,41 +34,45 @@
             this.txtName = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.checkListAreas = new System.Windows.Forms.CheckedListBox();
             this.chbPlayOnFail = new System.Windows.Forms.CheckBox();
+            this.checkListAreas = new System.Windows.Forms.CheckedListBox();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(18, 23);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(44, 13);
+            this.label1.Size = new System.Drawing.Size(62, 18);
             this.label1.TabIndex = 0;
             this.label1.Text = "Nombre";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(18, 86);
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(18, 90);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 13);
+            this.label2.Size = new System.Drawing.Size(38, 18);
             this.label2.TabIndex = 1;
             this.label2.Text = "Area";
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(68, 20);
+            this.txtName.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtName.Location = new System.Drawing.Point(89, 20);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(156, 20);
+            this.txtName.Size = new System.Drawing.Size(222, 24);
             this.txtName.TabIndex = 4;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(111, 345);
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(247, 385);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(125, 23);
+            this.button1.Size = new System.Drawing.Size(125, 32);
             this.button1.TabIndex = 8;
             this.button1.Text = "Actualizar";
             this.button1.UseVisualStyleBackColor = true;
@@ -82,34 +86,36 @@
             this.groupBox2.Controls.Add(this.txtName);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(337, 327);
+            this.groupBox2.Size = new System.Drawing.Size(587, 367);
             this.groupBox2.TabIndex = 10;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Generales";
             // 
-            // checkListAreas
-            // 
-            this.checkListAreas.FormattingEnabled = true;
-            this.checkListAreas.Location = new System.Drawing.Point(21, 103);
-            this.checkListAreas.Name = "checkListAreas";
-            this.checkListAreas.Size = new System.Drawing.Size(295, 214);
-            this.checkListAreas.TabIndex = 6;
-            // 
             // chbPlayOnFail
             // 
             this.chbPlayOnFail.AutoSize = true;
+            this.chbPlayOnFail.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chbPlayOnFail.Location = new System.Drawing.Point(21, 55);
             this.chbPlayOnFail.Name = "chbPlayOnFail";
-            this.chbPlayOnFail.Size = new System.Drawing.Size(252, 17);
+            this.chbPlayOnFail.Size = new System.Drawing.Size(339, 22);
             this.chbPlayOnFail.TabIndex = 7;
             this.chbPlayOnFail.Text = "Reproducir sonido en fallo de captura de huella.";
             this.chbPlayOnFail.UseVisualStyleBackColor = true;
+            // 
+            // checkListAreas
+            // 
+            this.checkListAreas.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkListAreas.FormattingEnabled = true;
+            this.checkListAreas.Location = new System.Drawing.Point(21, 115);
+            this.checkListAreas.Name = "checkListAreas";
+            this.checkListAreas.Size = new System.Drawing.Size(560, 251);
+            this.checkListAreas.TabIndex = 6;
             // 
             // Configuration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(361, 380);
+            this.ClientSize = new System.Drawing.Size(611, 420);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
