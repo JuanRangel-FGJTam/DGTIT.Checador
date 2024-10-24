@@ -5,23 +5,17 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="UsuariosDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-    <EntityType Name="CntrlDeAsistencia">
+        <EntityType Name="clients">
           <Key>
-            <PropertyRef Name="IdCntrlDeAsistencia" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Name="IdCntrlDeAsistencia" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="Fecha" Nullable="false" Type="datetime" />
-          <Property Name="NombreCompleto" Nullable="false" Type="nvarchar(max)" />
-          <Property Name="IdPlantilla" Nullable="false" Type="int" />
-          <Property Name="HoraChecada" MaxLength="5" Type="varchar" />
-        </EntityType>
-        <EntityType Name="ControlDeAsistencia">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="Fecha" Nullable="false" Type="datetime" />
-          <Property Name="Empleado" Nullable="false" MaxLength="200" Type="nvarchar" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="user" Type="varchar(max)" Nullable="false" />
+          <Property Name="password" Type="varchar(max)" Nullable="false" />
+          <Property Name="created_at" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="deleted_at" Type="datetime2" Precision="7" />
         </EntityType>
         <EntityType Name="departments">
           <Key>
@@ -43,20 +37,6 @@
           <Property Name="updated_at" Type="datetime2" Precision="7" />
           <Property Name="general_direction_id" Type="int" />
         </EntityType>
-        <EntityType Name="EmpleadoRegistro">
-          <Key>
-            <PropertyRef Name="IdEmpleadoRegistro" />
-          </Key>
-          <Property Name="IdEmpleadoRegistro" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="NombreCompleto" Nullable="false" MaxLength="500" Type="nvarchar" />
-          <Property Name="IdPlantilla" Type="int" />
-          <Property Name="DepartamentoNomina" MaxLength="500" Type="nvarchar" />
-          <Property Name="Huella" Nullable="false" Type="varbinary(max)" />
-          <Property Name="HORA1" MaxLength="5" Type="varchar" />
-          <Property Name="HORA2" MaxLength="5" Type="varchar" />
-          <Property Name="HORA3" MaxLength="5" Type="varchar" />
-          <Property Name="HORA4" MaxLength="5" Type="varchar" />
-        </EntityType>
         <EntityType Name="employees">
           <Key>
             <PropertyRef Name="id" />
@@ -76,48 +56,8 @@
           <Property Name="active" Type="bit" Nullable="false" />
           <Property Name="employee_number" Type="int" />
         </EntityType>
-        <EntityType Name="employees_respaldo">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="general_direction_id" Nullable="false" Type="bigint" />
-          <Property Name="direction_id" Nullable="false" Type="bigint" />
-          <Property Name="subdirectorate_id" Nullable="false" Type="bigint" />
-          <Property Name="department_id" Nullable="false" Type="bigint" />
-          <Property Name="plantilla_id" Type="int" />
-          <Property Name="name" Nullable="false" MaxLength="255" Type="varchar" />
-          <Property Name="photo" MaxLength="255" Type="varchar" />
-          <Property Name="fingerprint" Nullable="false" Type="varbinary(max)" />
-          <Property Name="created_at" Type="datetime" />
-          <Property Name="updated_at" Type="datetime" />
-          <Property Name="status_id" Type="int" />
-        </EntityType>
-        <EntityType Name="failed_jobs">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="uuid" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="connection" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="queue" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="payload" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="exception" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="failed_at" Type="datetime2" Precision="7" Nullable="false" />
-        </EntityType>
         <!--Errores durante la generación:
 advertencia 6002: La tabla o vista 'UsuariosDB.dbo.files' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
-        <EntityType Name="files">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="type_id" Type="int" />
-          <Property Name="name" Type="varchar" MaxLength="255" />
-          <Property Name="url" Type="varchar" MaxLength="255" />
-          <Property Name="updated_at" Type="datetime" />
-          <Property Name="created_at" Type="datetime" />
-        </EntityType>
         <EntityType Name="general_directions">
           <Key>
             <PropertyRef Name="id" />
@@ -175,46 +115,21 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.justifies' no tiene definida 
           <Property Name="created_at" Type="datetime2" Precision="7" />
           <Property Name="user_id" Type="bigint" />
         </EntityType>
-        <EntityType Name="menu_user">
+        <EntityType Name="notifications">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="menu_id" Type="bigint" Nullable="false" />
-          <Property Name="user_id" Type="bigint" Nullable="false" />
-          <Property Name="created_at" Type="datetime2" Precision="7" />
-          <Property Name="updated_at" Type="datetime2" Precision="7" />
-        </EntityType>
-        <EntityType Name="menus">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="url" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="route" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="created_at" Type="datetime2" Precision="7" />
-          <Property Name="updated_at" Type="datetime2" Precision="7" />
-        </EntityType>
-        <EntityType Name="migrations">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="migration" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="batch" Type="int" Nullable="false" />
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="type" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="notifiable_id" Type="bigint" Nullable="false" />
+          <Property Name="notifiable_type" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="data" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="read_at" Type="datetime2" Precision="7" />
+          <Property Name="created_at" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" Nullable="false" />
         </EntityType>
         <!--Errores durante la generación:
 advertencia 6002: La tabla o vista 'UsuariosDB.dbo.password_resets' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
-        <EntityType Name="password_resets">
-          <Key>
-            <PropertyRef Name="email" />
-            <PropertyRef Name="token" />
-          </Key>
-          <Property Name="email" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="token" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="created_at" Type="datetime2" Precision="7" />
-        </EntityType>
         <EntityType Name="records">
           <Key>
             <PropertyRef Name="id" />
@@ -251,24 +166,17 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.password_resets' no tiene def
           <Property Name="created_at" Type="datetime2" Precision="7" />
           <Property Name="updated_at" Type="datetime2" Precision="7" />
         </EntityType>
-        <EntityType Name="users">
+        <EntityType Name="working_days">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="general_direction_id" Type="bigint" />
-          <Property Name="direction_id" Type="bigint" />
-          <Property Name="subdirectorate_id" Type="bigint" />
-          <Property Name="department_id" Type="bigint" />
-          <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="email" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="email_verified_at" Type="datetime2" Precision="7" />
-          <Property Name="password" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="remember_token" Type="nvarchar" MaxLength="100" />
-          <Property Name="created_at" Type="datetime2" Precision="7" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="employee_id" Type="int" />
+          <Property Name="week" Type="bit" />
+          <Property Name="weekend" Type="bit" />
+          <Property Name="holidays" Type="int" />
           <Property Name="updated_at" Type="datetime2" Precision="7" />
-          <Property Name="level_id" Type="int" />
-          <Property Name="deleted_at" Type="datetime2" Precision="7" />
+          <Property Name="created_at" Type="datetime2" Precision="7" />
         </EntityType>
         <EntityType Name="working_hours">
           <Key>
@@ -285,55 +193,8 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.password_resets' no tiene def
         </EntityType>
         <!--Errores durante la generación:
 advertencia 6002: La tabla o vista 'UsuariosDB.dbo.Vw_plazas_nomina' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
-        <EntityType Name="Vw_plazas_nomina">
-          <Key>
-            <PropertyRef Name="id_tipo_nomina" />
-            <PropertyRef Name="id_plantilla" />
-            <PropertyRef Name="id_tipo_contrato_nomina" />
-            <PropertyRef Name="id_status_plaza" />
-            <PropertyRef Name="Id_Division_Nomina" />
-            <PropertyRef Name="txt_division_nomina" />
-            <PropertyRef Name="num_plaza" />
-            <PropertyRef Name="id_categoria" />
-          </Key>
-          <Property Name="id_tipo_nomina" Type="int" Nullable="false" />
-          <Property Name="id_plantilla" Type="int" Nullable="false" />
-          <Property Name="num_plaza" Type="int" Nullable="false" />
-          <Property Name="id_categoria" Type="smallint" Nullable="false" />
-          <Property Name="efiscal" Type="smallint" />
-          <Property Name="id_uejecutora" Type="smallint" />
-          <Property Name="id_tipo_contrato_nomina" Type="int" Nullable="false" />
-          <Property Name="fec_fin" Type="datetime" />
-          <Property Name="id_status_plaza" Type="int" Nullable="false" />
-          <Property Name="id_status_plantilla" Type="int" />
-          <Property Name="Fec_Asignacion" Type="datetime" />
-          <Property Name="Fec_Ingreso" Type="datetime" />
-          <Property Name="Id_Division_Nomina" Type="char" Nullable="false" />
-          <Property Name="txt_division_nomina" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="Id_Depto_Nomina" Type="int" />
-          <Property Name="txt_depto_nomina" Type="varchar(max)" />
-          <Property Name="Nombre" Type="varchar" MaxLength="452" />
-        </EntityType>
         <!--Errores durante la generación:
 advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
-        <EntityType Name="VwEmpleadoRegistro">
-          <Key>
-            <PropertyRef Name="idEmpleadoRegistro" />
-            <PropertyRef Name="NombreCompleto" />
-            <PropertyRef Name="Huella" />
-            <PropertyRef Name="QUEBRADO" />
-          </Key>
-          <Property Name="idEmpleadoRegistro" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="NombreCompleto" Type="nvarchar" MaxLength="500" Nullable="false" />
-          <Property Name="IdPlantilla" Type="int" />
-          <Property Name="DepartamentoNomina" Type="nvarchar" MaxLength="500" />
-          <Property Name="Huella" Type="varbinary(max)" Nullable="false" />
-          <Property Name="HORA1" Type="varchar" MaxLength="5" />
-          <Property Name="HORA2" Type="varchar" MaxLength="5" />
-          <Property Name="HORA3" Type="varchar" MaxLength="5" />
-          <Property Name="HORA4" Type="varchar" MaxLength="5" />
-          <Property Name="QUEBRADO" Type="int" Nullable="false" />
-        </EntityType>
         <Association Name="fk_employee_id">
           <End Role="employees" Type="Self.employees" Multiplicity="1" />
           <End Role="incidents" Type="Self.incidents" Multiplicity="*" />
@@ -370,66 +231,22 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="menu_user_menu_id_foreign">
-          <End Role="menus" Type="Self.menus" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="menu_user" Type="Self.menu_user" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="menus">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="menu_user">
-              <PropertyRef Name="menu_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="menu_user_user_id_foreign">
-          <End Role="users" Type="Self.users" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="menu_user" Type="Self.menu_user" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="users">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="menu_user">
-              <PropertyRef Name="user_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="UsuariosDBModelStoreContainer">
-        <EntitySet Name="CntrlDeAsistencia" EntityType="Self.CntrlDeAsistencia" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ControlDeAsistencia" EntityType="Self.ControlDeAsistencia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="clients" EntityType="Self.clients" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="departments" EntityType="Self.departments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="directions" EntityType="Self.directions" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="EmpleadoRegistro" EntityType="Self.EmpleadoRegistro" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="employees" EntityType="Self.employees" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="employees_respaldo" EntityType="Self.employees_respaldo" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="failed_jobs" EntityType="Self.failed_jobs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="general_directions" EntityType="Self.general_directions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="incident_states" EntityType="Self.incident_states" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="incident_types" EntityType="Self.incident_types" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="incidents" EntityType="Self.incidents" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="menu_user" EntityType="Self.menu_user" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="menus" EntityType="Self.menus" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="migrations" EntityType="Self.migrations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="notifications" EntityType="Self.notifications" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="records" EntityType="Self.records" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="subdirectorates" EntityType="Self.subdirectorates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="type_files" EntityType="Self.type_files" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="type_justifies" EntityType="Self.type_justifies" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="working_days" EntityType="Self.working_days" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="working_hours" EntityType="Self.working_hours" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="files" EntityType="Self.files" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [files].[id] AS [id], 
-    [files].[type_id] AS [type_id], 
-    [files].[name] AS [name], 
-    [files].[url] AS [url], 
-    [files].[updated_at] AS [updated_at], 
-    [files].[created_at] AS [created_at]
-    FROM [dbo].[files] AS [files]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="justifies" EntityType="Self.justifies" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [justifies].[id] AS [id], 
@@ -444,48 +261,6 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
     [justifies].[user_id] AS [user_id]
     FROM [dbo].[justifies] AS [justifies]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="password_resets" EntityType="Self.password_resets" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [password_resets].[email] AS [email], 
-    [password_resets].[token] AS [token], 
-    [password_resets].[created_at] AS [created_at]
-    FROM [dbo].[password_resets] AS [password_resets]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="Vw_plazas_nomina" EntityType="Self.Vw_plazas_nomina" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Vw_plazas_nomina].[id_tipo_nomina] AS [id_tipo_nomina], 
-    [Vw_plazas_nomina].[id_plantilla] AS [id_plantilla], 
-    [Vw_plazas_nomina].[num_plaza] AS [num_plaza], 
-    [Vw_plazas_nomina].[id_categoria] AS [id_categoria], 
-    [Vw_plazas_nomina].[efiscal] AS [efiscal], 
-    [Vw_plazas_nomina].[id_uejecutora] AS [id_uejecutora], 
-    [Vw_plazas_nomina].[id_tipo_contrato_nomina] AS [id_tipo_contrato_nomina], 
-    [Vw_plazas_nomina].[fec_fin] AS [fec_fin], 
-    [Vw_plazas_nomina].[id_status_plaza] AS [id_status_plaza], 
-    [Vw_plazas_nomina].[id_status_plantilla] AS [id_status_plantilla], 
-    [Vw_plazas_nomina].[Fec_Asignacion] AS [Fec_Asignacion], 
-    [Vw_plazas_nomina].[Fec_Ingreso] AS [Fec_Ingreso], 
-    [Vw_plazas_nomina].[Id_Division_Nomina] AS [Id_Division_Nomina], 
-    [Vw_plazas_nomina].[txt_division_nomina] AS [txt_division_nomina], 
-    [Vw_plazas_nomina].[Id_Depto_Nomina] AS [Id_Depto_Nomina], 
-    [Vw_plazas_nomina].[txt_depto_nomina] AS [txt_depto_nomina], 
-    [Vw_plazas_nomina].[Nombre] AS [Nombre]
-    FROM [dbo].[Vw_plazas_nomina] AS [Vw_plazas_nomina]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="VwEmpleadoRegistro" EntityType="Self.VwEmpleadoRegistro" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [VwEmpleadoRegistro].[idEmpleadoRegistro] AS [idEmpleadoRegistro], 
-    [VwEmpleadoRegistro].[NombreCompleto] AS [NombreCompleto], 
-    [VwEmpleadoRegistro].[IdPlantilla] AS [IdPlantilla], 
-    [VwEmpleadoRegistro].[DepartamentoNomina] AS [DepartamentoNomina], 
-    [VwEmpleadoRegistro].[Huella] AS [Huella], 
-    [VwEmpleadoRegistro].[HORA1] AS [HORA1], 
-    [VwEmpleadoRegistro].[HORA2] AS [HORA2], 
-    [VwEmpleadoRegistro].[HORA3] AS [HORA3], 
-    [VwEmpleadoRegistro].[HORA4] AS [HORA4], 
-    [VwEmpleadoRegistro].[QUEBRADO] AS [QUEBRADO]
-    FROM [dbo].[VwEmpleadoRegistro] AS [VwEmpleadoRegistro]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="fk_employee_id" Association="Self.fk_employee_id">
             <End Role="employees" EntitySet="employees" />
             <End Role="incidents" EntitySet="incidents" />
@@ -498,46 +273,25 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
             <End Role="incident_types" EntitySet="incident_types" />
             <End Role="incidents" EntitySet="incidents" />
           </AssociationSet>
-          <AssociationSet Name="menu_user_menu_id_foreign" Association="Self.menu_user_menu_id_foreign">
-            <End Role="menus" EntitySet="menus" />
-            <End Role="menu_user" EntitySet="menu_user" />
-          </AssociationSet>
-          <AssociationSet Name="menu_user_user_id_foreign" Association="Self.menu_user_user_id_foreign">
-            <End Role="users" EntitySet="users" />
-            <End Role="menu_user" EntitySet="menu_user" />
-          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="UsuariosDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="UsuariosDBEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="CntrlDeAsistencias" EntityType="UsuariosDBModel.CntrlDeAsistencia" />
-          <EntitySet Name="ControlDeAsistencias" EntityType="UsuariosDBModel.ControlDeAsistencia" />
           <EntitySet Name="departments" EntityType="UsuariosDBModel.department" />
           <EntitySet Name="directions" EntityType="UsuariosDBModel.direction" />
-          <EntitySet Name="EmpleadoRegistroes" EntityType="UsuariosDBModel.EmpleadoRegistro" />
           <EntitySet Name="employees" EntityType="UsuariosDBModel.employee" />
-          <EntitySet Name="employees_respaldo" EntityType="UsuariosDBModel.employees_respaldo" />
-          <EntitySet Name="failed_jobs" EntityType="UsuariosDBModel.failed_jobs" />
           <EntitySet Name="general_directions" EntityType="UsuariosDBModel.general_directions" />
           <EntitySet Name="incident_states" EntityType="UsuariosDBModel.incident_states" />
           <EntitySet Name="incident_types" EntityType="UsuariosDBModel.incident_types" />
           <EntitySet Name="incidents" EntityType="UsuariosDBModel.incident" />
-          <EntitySet Name="menu_user" EntityType="UsuariosDBModel.menu_user" />
-          <EntitySet Name="menus" EntityType="UsuariosDBModel.menu" />
-          <EntitySet Name="migrations" EntityType="UsuariosDBModel.migration" />
           <EntitySet Name="records" EntityType="UsuariosDBModel.record" />
           <EntitySet Name="subdirectorates" EntityType="UsuariosDBModel.subdirectorate" />
           <EntitySet Name="type_files" EntityType="UsuariosDBModel.type_files" />
           <EntitySet Name="type_justifies" EntityType="UsuariosDBModel.type_justifies" />
-          <EntitySet Name="users" EntityType="UsuariosDBModel.user" />
           <EntitySet Name="working_hours" EntityType="UsuariosDBModel.working_hours" />
-          <EntitySet Name="files" EntityType="UsuariosDBModel.file" />
           <EntitySet Name="justifies" EntityType="UsuariosDBModel.justify" />
-          <EntitySet Name="password_resets" EntityType="UsuariosDBModel.password_resets" />
-          <EntitySet Name="Vw_plazas_nomina" EntityType="UsuariosDBModel.Vw_plazas_nomina" />
-          <EntitySet Name="VwEmpleadoRegistroes" EntityType="UsuariosDBModel.VwEmpleadoRegistro" />
           <AssociationSet Name="fk_employee_id" Association="UsuariosDBModel.fk_employee_id">
             <End EntitySet="employees" Role="employee" />
             <End EntitySet="incidents" Role="incident" />
@@ -550,33 +304,10 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
             <End Role="incident_types" EntitySet="incident_types" />
             <End Role="incident" EntitySet="incidents" />
           </AssociationSet>
-          <AssociationSet Name="menu_user_menu_id_foreign" Association="UsuariosDBModel.menu_user_menu_id_foreign">
-            <End Role="menu" EntitySet="menus" />
-            <End Role="menu_user" EntitySet="menu_user" />
-          </AssociationSet>
-          <AssociationSet Name="menu_user_user_id_foreign" Association="UsuariosDBModel.menu_user_user_id_foreign">
-            <End Role="user" EntitySet="users" />
-            <End Role="menu_user" EntitySet="menu_user" />
-          </AssociationSet>
+          <EntitySet Name="notifications" EntityType="UsuariosDBModel.notification" />
+          <EntitySet Name="working_days" EntityType="UsuariosDBModel.working_days" />
+          <EntitySet Name="clients" EntityType="UsuariosDBModel.client" />
         </EntityContainer>
-        <EntityType Name="CntrlDeAsistencia">
-          <Key>
-            <PropertyRef Name="IdCntrlDeAsistencia" />
-          </Key>
-          <Property Name="IdCntrlDeAsistencia" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="NombreCompleto" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="IdPlantilla" Type="Int32" Nullable="false" />
-          <Property Name="HoraChecada" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="ControlDeAsistencia">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Empleado" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="department">
           <Key>
             <PropertyRef Name="id" />
@@ -597,20 +328,6 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <Property Name="updated_at" Type="DateTime" Precision="7" />
           <Property Name="general_direction_id" Type="Int32" />
         </EntityType>
-        <EntityType Name="EmpleadoRegistro">
-          <Key>
-            <PropertyRef Name="IdEmpleadoRegistro" />
-          </Key>
-          <Property Name="IdEmpleadoRegistro" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NombreCompleto" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="IdPlantilla" Type="Int32" />
-          <Property Name="DepartamentoNomina" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Huella" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
-          <Property Name="HORA1" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="HORA2" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="HORA3" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="HORA4" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="employee">
           <Key>
             <PropertyRef Name="id" />
@@ -630,35 +347,6 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <NavigationProperty Name="incidents" Relationship="UsuariosDBModel.fk_employee_id" FromRole="employee" ToRole="incident" />
           <Property Name="active" Type="Boolean" Nullable="false" />
           <Property Name="employee_number" Type="Int32" />
-        </EntityType>
-        <EntityType Name="employees_respaldo">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="general_direction_id" Type="Int64" Nullable="false" />
-          <Property Name="direction_id" Type="Int64" Nullable="false" />
-          <Property Name="subdirectorate_id" Type="Int64" Nullable="false" />
-          <Property Name="department_id" Type="Int64" Nullable="false" />
-          <Property Name="plantilla_id" Type="Int32" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="photo" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="fingerprint" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
-          <Property Name="created_at" Type="DateTime" Precision="3" />
-          <Property Name="updated_at" Type="DateTime" Precision="3" />
-          <Property Name="status_id" Type="Int32" />
-        </EntityType>
-        <EntityType Name="failed_jobs">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="uuid" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="connection" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="queue" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="payload" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="exception" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="failed_at" Type="DateTime" Nullable="false" Precision="7" />
         </EntityType>
         <EntityType Name="general_directions">
           <Key>
@@ -705,38 +393,6 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <NavigationProperty Name="incident_states" Relationship="UsuariosDBModel.fk_incident_state_id" FromRole="incident" ToRole="incident_states" />
           <NavigationProperty Name="incident_types" Relationship="UsuariosDBModel.fk_incident_type_id" FromRole="incident" ToRole="incident_types" />
         </EntityType>
-        <EntityType Name="menu_user">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="menu_id" Type="Int64" Nullable="false" />
-          <Property Name="user_id" Type="Int64" Nullable="false" />
-          <Property Name="created_at" Type="DateTime" Precision="7" />
-          <Property Name="updated_at" Type="DateTime" Precision="7" />
-          <NavigationProperty Name="menu" Relationship="UsuariosDBModel.menu_user_menu_id_foreign" FromRole="menu_user" ToRole="menu" />
-          <NavigationProperty Name="user" Relationship="UsuariosDBModel.menu_user_user_id_foreign" FromRole="menu_user" ToRole="user" />
-        </EntityType>
-        <EntityType Name="menu">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="url" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="route" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="created_at" Type="DateTime" Precision="7" />
-          <Property Name="updated_at" Type="DateTime" Precision="7" />
-          <NavigationProperty Name="menu_user" Relationship="UsuariosDBModel.menu_user_menu_id_foreign" FromRole="menu" ToRole="menu_user" />
-        </EntityType>
-        <EntityType Name="migration">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="migration1" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="batch" Type="Int32" Nullable="false" />
-        </EntityType>
         <EntityType Name="record">
           <Key>
             <PropertyRef Name="id" />
@@ -773,26 +429,6 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <Property Name="created_at" Type="DateTime" Precision="7" />
           <Property Name="updated_at" Type="DateTime" Precision="7" />
         </EntityType>
-        <EntityType Name="user">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="general_direction_id" Type="Int64" />
-          <Property Name="direction_id" Type="Int64" />
-          <Property Name="subdirectorate_id" Type="Int64" />
-          <Property Name="department_id" Type="Int64" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="email_verified_at" Type="DateTime" Precision="7" />
-          <Property Name="password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="remember_token" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="created_at" Type="DateTime" Precision="7" />
-          <Property Name="updated_at" Type="DateTime" Precision="7" />
-          <Property Name="level_id" Type="Int32" />
-          <NavigationProperty Name="menu_user" Relationship="UsuariosDBModel.menu_user_user_id_foreign" FromRole="user" ToRole="menu_user" />
-          <Property Name="deleted_at" Type="DateTime" Precision="7" />
-        </EntityType>
         <EntityType Name="working_hours">
           <Key>
             <PropertyRef Name="id" />
@@ -805,17 +441,6 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <Property Name="checkout" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
           <Property Name="created_at" Type="DateTime" Precision="7" />
           <Property Name="updated_at" Type="DateTime" Precision="7" />
-        </EntityType>
-        <EntityType Name="file">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="type_id" Type="Int32" />
-          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="url" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="updated_at" Type="DateTime" Precision="3" />
-          <Property Name="created_at" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="justify">
           <Key>
@@ -831,62 +456,6 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <Property Name="updated_at" Type="DateTime" Precision="7" />
           <Property Name="created_at" Type="DateTime" Precision="7" />
           <Property Name="user_id" Type="Int64" />
-        </EntityType>
-        <EntityType Name="password_resets">
-          <Key>
-            <PropertyRef Name="email" />
-            <PropertyRef Name="token" />
-          </Key>
-          <Property Name="email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="token" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="created_at" Type="DateTime" Precision="7" />
-        </EntityType>
-        <EntityType Name="Vw_plazas_nomina">
-          <Key>
-            <PropertyRef Name="id_tipo_nomina" />
-            <PropertyRef Name="id_plantilla" />
-            <PropertyRef Name="num_plaza" />
-            <PropertyRef Name="id_categoria" />
-            <PropertyRef Name="id_tipo_contrato_nomina" />
-            <PropertyRef Name="id_status_plaza" />
-            <PropertyRef Name="Id_Division_Nomina" />
-            <PropertyRef Name="txt_division_nomina" />
-          </Key>
-          <Property Name="id_tipo_nomina" Nullable="false" Type="Byte" />
-          <Property Name="id_plantilla" Nullable="false" Type="Int32" />
-          <Property Name="num_plaza" Nullable="false" Type="Int32" />
-          <Property Name="id_categoria" Nullable="false" Type="Int16" />
-          <Property Name="efiscal" Type="Int16" />
-          <Property Name="id_uejecutora" Type="Int16" />
-          <Property Name="id_tipo_contrato_nomina" Nullable="false" Type="Byte" />
-          <Property Name="fec_fin" Precision="3" Type="DateTime" />
-          <Property Name="id_status_plaza" Nullable="false" Type="Int16" />
-          <Property Name="id_status_plantilla" Type="Int16" />
-          <Property Name="Fec_Asignacion" Precision="3" Type="DateTime" />
-          <Property Name="Fec_Ingreso" Precision="3" Type="DateTime" />
-          <Property Name="Id_Division_Nomina" Nullable="false" Type="String" />
-          <Property Name="txt_division_nomina" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="Id_Depto_Nomina" Type="Int32" />
-          <Property Name="txt_depto_nomina" MaxLength="Max" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="Nombre" MaxLength="452" FixedLength="false" Unicode="false" Type="String" />
-        </EntityType>
-        <EntityType Name="VwEmpleadoRegistro">
-          <Key>
-            <PropertyRef Name="idEmpleadoRegistro" />
-            <PropertyRef Name="NombreCompleto" />
-            <PropertyRef Name="Huella" />
-            <PropertyRef Name="QUEBRADO" />
-          </Key>
-          <Property Name="idEmpleadoRegistro" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NombreCompleto" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="IdPlantilla" Type="Int32" />
-          <Property Name="DepartamentoNomina" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Huella" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
-          <Property Name="HORA1" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="HORA2" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="HORA3" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="HORA4" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="QUEBRADO" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="fk_employee_id">
           <End Type="UsuariosDBModel.employee" Multiplicity="1" Role="employee" />
@@ -924,60 +493,49 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="menu_user_menu_id_foreign">
-          <End Type="UsuariosDBModel.menu" Role="menu" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="UsuariosDBModel.menu_user" Role="menu_user" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="menu">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="menu_user">
-              <PropertyRef Name="menu_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="menu_user_user_id_foreign">
-          <End Type="UsuariosDBModel.user" Role="user" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="UsuariosDBModel.menu_user" Role="menu_user" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="menu_user">
-              <PropertyRef Name="user_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
+        <EntityType Name="notification">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="type" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="notifiable_id" Type="Int64" Nullable="false" />
+          <Property Name="notifiable_type" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="data" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="read_at" Type="DateTime" Precision="7" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="updated_at" Type="DateTime" Nullable="false" Precision="7" />
+        </EntityType>
+        <EntityType Name="working_days">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="employee_id" Type="Int32" />
+          <Property Name="week" Type="Boolean" />
+          <Property Name="weekend" Type="Boolean" />
+          <Property Name="holidays" Type="Int32" />
+          <Property Name="updated_at" Type="DateTime" Precision="7" />
+          <Property Name="created_at" Type="DateTime" Precision="7" />
+        </EntityType>
+        <EntityType Name="client">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="user" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="updated_at" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="deleted_at" Type="DateTime" Precision="7" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="UsuariosDBModelStoreContainer" CdmEntityContainer="UsuariosDBEntities">
-        <EntitySetMapping Name="CntrlDeAsistencias">
-            <EntityTypeMapping TypeName="UsuariosDBModel.CntrlDeAsistencia">
-              <MappingFragment StoreEntitySet="CntrlDeAsistencia">
-                <ScalarProperty Name="HoraChecada" ColumnName="HoraChecada" />
-                <ScalarProperty Name="IdPlantilla" ColumnName="IdPlantilla" />
-                <ScalarProperty Name="NombreCompleto" ColumnName="NombreCompleto" />
-                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
-                <ScalarProperty Name="IdCntrlDeAsistencia" ColumnName="IdCntrlDeAsistencia" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ControlDeAsistencias">
-            <EntityTypeMapping TypeName="UsuariosDBModel.ControlDeAsistencia">
-              <MappingFragment StoreEntitySet="ControlDeAsistencia">
-                <ScalarProperty Name="Empleado" ColumnName="Empleado" />
-                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="departments">
             <EntityTypeMapping TypeName="UsuariosDBModel.department">
               <MappingFragment StoreEntitySet="departments">
@@ -1000,21 +558,6 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="EmpleadoRegistroes">
-            <EntityTypeMapping TypeName="UsuariosDBModel.EmpleadoRegistro">
-              <MappingFragment StoreEntitySet="EmpleadoRegistro">
-                <ScalarProperty Name="HORA4" ColumnName="HORA4" />
-                <ScalarProperty Name="HORA3" ColumnName="HORA3" />
-                <ScalarProperty Name="HORA2" ColumnName="HORA2" />
-                <ScalarProperty Name="HORA1" ColumnName="HORA1" />
-                <ScalarProperty Name="Huella" ColumnName="Huella" />
-                <ScalarProperty Name="DepartamentoNomina" ColumnName="DepartamentoNomina" />
-                <ScalarProperty Name="IdPlantilla" ColumnName="IdPlantilla" />
-                <ScalarProperty Name="NombreCompleto" ColumnName="NombreCompleto" />
-                <ScalarProperty Name="IdEmpleadoRegistro" ColumnName="IdEmpleadoRegistro" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="employees">
             <EntityTypeMapping TypeName="UsuariosDBModel.employee">
               <MappingFragment StoreEntitySet="employees">
@@ -1031,37 +574,6 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
                 <ScalarProperty Name="subdirectorate_id" ColumnName="subdirectorate_id" />
                 <ScalarProperty Name="direction_id" ColumnName="direction_id" />
                 <ScalarProperty Name="general_direction_id" ColumnName="general_direction_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="employees_respaldo">
-            <EntityTypeMapping TypeName="UsuariosDBModel.employees_respaldo">
-              <MappingFragment StoreEntitySet="employees_respaldo">
-                <ScalarProperty Name="status_id" ColumnName="status_id" />
-                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
-                <ScalarProperty Name="created_at" ColumnName="created_at" />
-                <ScalarProperty Name="fingerprint" ColumnName="fingerprint" />
-                <ScalarProperty Name="photo" ColumnName="photo" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="plantilla_id" ColumnName="plantilla_id" />
-                <ScalarProperty Name="department_id" ColumnName="department_id" />
-                <ScalarProperty Name="subdirectorate_id" ColumnName="subdirectorate_id" />
-                <ScalarProperty Name="direction_id" ColumnName="direction_id" />
-                <ScalarProperty Name="general_direction_id" ColumnName="general_direction_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="failed_jobs">
-            <EntityTypeMapping TypeName="UsuariosDBModel.failed_jobs">
-              <MappingFragment StoreEntitySet="failed_jobs">
-                <ScalarProperty Name="failed_at" ColumnName="failed_at" />
-                <ScalarProperty Name="exception" ColumnName="exception" />
-                <ScalarProperty Name="payload" ColumnName="payload" />
-                <ScalarProperty Name="queue" ColumnName="queue" />
-                <ScalarProperty Name="connection" ColumnName="connection" />
-                <ScalarProperty Name="uuid" ColumnName="uuid" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1110,38 +622,6 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="menu_user">
-            <EntityTypeMapping TypeName="UsuariosDBModel.menu_user">
-              <MappingFragment StoreEntitySet="menu_user">
-                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
-                <ScalarProperty Name="created_at" ColumnName="created_at" />
-                <ScalarProperty Name="user_id" ColumnName="user_id" />
-                <ScalarProperty Name="menu_id" ColumnName="menu_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="menus">
-            <EntityTypeMapping TypeName="UsuariosDBModel.menu">
-              <MappingFragment StoreEntitySet="menus">
-                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
-                <ScalarProperty Name="created_at" ColumnName="created_at" />
-                <ScalarProperty Name="route" ColumnName="route" />
-                <ScalarProperty Name="url" ColumnName="url" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="migrations">
-            <EntityTypeMapping TypeName="UsuariosDBModel.migration">
-              <MappingFragment StoreEntitySet="migrations">
-                <ScalarProperty Name="batch" ColumnName="batch" />
-                <ScalarProperty Name="migration1" ColumnName="migration" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="records">
             <EntityTypeMapping TypeName="UsuariosDBModel.record">
               <MappingFragment StoreEntitySet="records">
@@ -1182,26 +662,6 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="users">
-            <EntityTypeMapping TypeName="UsuariosDBModel.user">
-              <MappingFragment StoreEntitySet="users">
-                <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
-                <ScalarProperty Name="level_id" ColumnName="level_id" />
-                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
-                <ScalarProperty Name="created_at" ColumnName="created_at" />
-                <ScalarProperty Name="remember_token" ColumnName="remember_token" />
-                <ScalarProperty Name="password" ColumnName="password" />
-                <ScalarProperty Name="email_verified_at" ColumnName="email_verified_at" />
-                <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="department_id" ColumnName="department_id" />
-                <ScalarProperty Name="subdirectorate_id" ColumnName="subdirectorate_id" />
-                <ScalarProperty Name="direction_id" ColumnName="direction_id" />
-                <ScalarProperty Name="general_direction_id" ColumnName="general_direction_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="working_hours">
             <EntityTypeMapping TypeName="UsuariosDBModel.working_hours">
               <MappingFragment StoreEntitySet="working_hours">
@@ -1212,18 +672,6 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
                 <ScalarProperty Name="toeat" ColumnName="toeat" />
                 <ScalarProperty Name="checkin" ColumnName="checkin" />
                 <ScalarProperty Name="employee_id_" ColumnName="employee_id " />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="files">
-            <EntityTypeMapping TypeName="UsuariosDBModel.file">
-              <MappingFragment StoreEntitySet="files">
-                <ScalarProperty Name="created_at" ColumnName="created_at" />
-                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
-                <ScalarProperty Name="url" ColumnName="url" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="type_id" ColumnName="type_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1244,51 +692,43 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="password_resets">
-            <EntityTypeMapping TypeName="UsuariosDBModel.password_resets">
-              <MappingFragment StoreEntitySet="password_resets">
+          <EntitySetMapping Name="notifications">
+            <EntityTypeMapping TypeName="UsuariosDBModel.notification">
+              <MappingFragment StoreEntitySet="notifications">
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
                 <ScalarProperty Name="created_at" ColumnName="created_at" />
-                <ScalarProperty Name="token" ColumnName="token" />
-                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="read_at" ColumnName="read_at" />
+                <ScalarProperty Name="data" ColumnName="data" />
+                <ScalarProperty Name="notifiable_type" ColumnName="notifiable_type" />
+                <ScalarProperty Name="notifiable_id" ColumnName="notifiable_id" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Vw_plazas_nomina">
-            <EntityTypeMapping TypeName="UsuariosDBModel.Vw_plazas_nomina">
-              <MappingFragment StoreEntitySet="Vw_plazas_nomina">
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="txt_depto_nomina" ColumnName="txt_depto_nomina" />
-                <ScalarProperty Name="Id_Depto_Nomina" ColumnName="Id_Depto_Nomina" />
-                <ScalarProperty Name="txt_division_nomina" ColumnName="txt_division_nomina" />
-                <ScalarProperty Name="Id_Division_Nomina" ColumnName="Id_Division_Nomina" />
-                <ScalarProperty Name="Fec_Ingreso" ColumnName="Fec_Ingreso" />
-                <ScalarProperty Name="Fec_Asignacion" ColumnName="Fec_Asignacion" />
-                <ScalarProperty Name="id_status_plantilla" ColumnName="id_status_plantilla" />
-                <ScalarProperty Name="id_status_plaza" ColumnName="id_status_plaza" />
-                <ScalarProperty Name="fec_fin" ColumnName="fec_fin" />
-                <ScalarProperty Name="id_tipo_contrato_nomina" ColumnName="id_tipo_contrato_nomina" />
-                <ScalarProperty Name="id_uejecutora" ColumnName="id_uejecutora" />
-                <ScalarProperty Name="efiscal" ColumnName="efiscal" />
-                <ScalarProperty Name="id_categoria" ColumnName="id_categoria" />
-                <ScalarProperty Name="num_plaza" ColumnName="num_plaza" />
-                <ScalarProperty Name="id_plantilla" ColumnName="id_plantilla" />
-                <ScalarProperty Name="id_tipo_nomina" ColumnName="id_tipo_nomina" />
+          <EntitySetMapping Name="working_days">
+            <EntityTypeMapping TypeName="UsuariosDBModel.working_days">
+              <MappingFragment StoreEntitySet="working_days">
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+                <ScalarProperty Name="holidays" ColumnName="holidays" />
+                <ScalarProperty Name="weekend" ColumnName="weekend" />
+                <ScalarProperty Name="week" ColumnName="week" />
+                <ScalarProperty Name="employee_id" ColumnName="employee_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="VwEmpleadoRegistroes">
-            <EntityTypeMapping TypeName="UsuariosDBModel.VwEmpleadoRegistro">
-              <MappingFragment StoreEntitySet="VwEmpleadoRegistro">
-                <ScalarProperty Name="QUEBRADO" ColumnName="QUEBRADO" />
-                <ScalarProperty Name="HORA4" ColumnName="HORA4" />
-                <ScalarProperty Name="HORA3" ColumnName="HORA3" />
-                <ScalarProperty Name="HORA2" ColumnName="HORA2" />
-                <ScalarProperty Name="HORA1" ColumnName="HORA1" />
-                <ScalarProperty Name="Huella" ColumnName="Huella" />
-                <ScalarProperty Name="DepartamentoNomina" ColumnName="DepartamentoNomina" />
-                <ScalarProperty Name="IdPlantilla" ColumnName="IdPlantilla" />
-                <ScalarProperty Name="NombreCompleto" ColumnName="NombreCompleto" />
-                <ScalarProperty Name="idEmpleadoRegistro" ColumnName="idEmpleadoRegistro" />
+          <EntitySetMapping Name="clients">
+            <EntityTypeMapping TypeName="UsuariosDBModel.client">
+              <MappingFragment StoreEntitySet="clients">
+                <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="user" ColumnName="user" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

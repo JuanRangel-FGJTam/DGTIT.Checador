@@ -12,10 +12,15 @@ namespace DGTIT.Checador
     using System;
     using System.Collections.Generic;
     
-    public partial class ControlDeAsistencia
+    public partial class notification
     {
-        public int Id { get; set; }
-        public System.DateTime Fecha { get; set; }
-        public string Empleado { get; set; }
+        public System.Guid id { get; set; }
+        public string type { get; set; }
+        public long notifiable_id { get; set; }
+        public string notifiable_type { get; set; }
+        public string data { get; set; }
+        public Nullable<System.DateTime> read_at { get; set; }
+        public System.DateTime created_at { get; set; }
+        public System.DateTime updated_at { get; set; }
     }
 }

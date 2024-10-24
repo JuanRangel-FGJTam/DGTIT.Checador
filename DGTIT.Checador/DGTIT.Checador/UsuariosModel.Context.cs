@@ -25,31 +25,21 @@ namespace DGTIT.Checador
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<CntrlDeAsistencia> CntrlDeAsistencias { get; set; }
-        public virtual DbSet<ControlDeAsistencia> ControlDeAsistencias { get; set; }
         public virtual DbSet<department> departments { get; set; }
         public virtual DbSet<direction> directions { get; set; }
-        public virtual DbSet<EmpleadoRegistro> EmpleadoRegistroes { get; set; }
         public virtual DbSet<employee> employees { get; set; }
-        public virtual DbSet<employees_respaldo> employees_respaldo { get; set; }
-        public virtual DbSet<failed_jobs> failed_jobs { get; set; }
         public virtual DbSet<general_directions> general_directions { get; set; }
         public virtual DbSet<incident_states> incident_states { get; set; }
         public virtual DbSet<incident_types> incident_types { get; set; }
         public virtual DbSet<incident> incidents { get; set; }
-        public virtual DbSet<menu_user> menu_user { get; set; }
-        public virtual DbSet<menu> menus { get; set; }
-        public virtual DbSet<migration> migrations { get; set; }
         public virtual DbSet<record> records { get; set; }
         public virtual DbSet<subdirectorate> subdirectorates { get; set; }
         public virtual DbSet<type_files> type_files { get; set; }
         public virtual DbSet<type_justifies> type_justifies { get; set; }
-        public virtual DbSet<user> users { get; set; }
         public virtual DbSet<working_hours> working_hours { get; set; }
-        public virtual DbSet<file> files { get; set; }
         public virtual DbSet<justify> justifies { get; set; }
-        public virtual DbSet<password_resets> password_resets { get; set; }
-        public virtual DbSet<Vw_plazas_nomina> Vw_plazas_nomina { get; set; }
-        public virtual DbSet<VwEmpleadoRegistro> VwEmpleadoRegistroes { get; set; }
+        public virtual DbSet<notification> notifications { get; set; }
+        public virtual DbSet<working_days> working_days { get; set; }
+        public virtual DbSet<client> clients { get; set; }
     }
 }

@@ -12,15 +12,14 @@ namespace DGTIT.Checador
     using System;
     using System.Collections.Generic;
     
-    public partial class menu_user
+    public partial class client
     {
-        public long id { get; set; }
-        public long menu_id { get; set; }
-        public long user_id { get; set; }
-        public Nullable<System.DateTime> created_at { get; set; }
-        public Nullable<System.DateTime> updated_at { get; set; }
-    
-        public virtual menu menu { get; set; }
-        public virtual user user { get; set; }
+        public int id { get; set; }
+        public string name { get; set; }
+        public string user { get; set; }
+        public string password { get; set; }
+        public System.DateTime created_at { get; set; }
+        public System.DateTime updated_at { get; set; }
+        public Nullable<System.DateTime> deleted_at { get; set; }
     }
 }

@@ -12,17 +12,14 @@ namespace DGTIT.Checador
     using System;
     using System.Collections.Generic;
     
-    public partial class VwEmpleadoRegistro
+    public partial class working_days
     {
-        public int idEmpleadoRegistro { get; set; }
-        public string NombreCompleto { get; set; }
-        public Nullable<int> IdPlantilla { get; set; }
-        public string DepartamentoNomina { get; set; }
-        public byte[] Huella { get; set; }
-        public string HORA1 { get; set; }
-        public string HORA2 { get; set; }
-        public string HORA3 { get; set; }
-        public string HORA4 { get; set; }
-        public int QUEBRADO { get; set; }
+        public int id { get; set; }
+        public Nullable<int> employee_id { get; set; }
+        public Nullable<bool> week { get; set; }
+        public Nullable<bool> weekend { get; set; }
+        public Nullable<int> holidays { get; set; }
+        public Nullable<System.DateTime> updated_at { get; set; }
+        public Nullable<System.DateTime> created_at { get; set; }
     }
 }
