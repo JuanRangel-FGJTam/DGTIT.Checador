@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +21,8 @@ namespace DGTIT.Checador.Views
         private readonly FiscaliaService fiscaliaService;
         private readonly List<long> areasAvailables = new List<long>();
         private System.Windows.Forms.Timer timer1;
-        
+        private System.Windows.Forms.Timer timerLogStatus;
+
         private DPFP.Verification.Verification Verificator;
 
         private Task taskAfterCheck;
@@ -49,6 +51,13 @@ namespace DGTIT.Checador.Views
             timer1.Interval = 1000;
             timer1.Tick += new EventHandler(OnTimerTick);
             timer1.Start();
+
+
+            timerLogStatus = new System.Windows.Forms.Timer();
+            timerLogStatus.Interval = TimeSpan.FromMinutes(10).Milliseconds;
+            timerLogStatus.Tick += new EventHandler(OnTimerLogTick);
+            timerLogStatus.Start();
+
         }
 
         protected override void Process(DPFP.Sample Sample)
@@ -265,5 +274,38 @@ namespace DGTIT.Checador.Views
             }
         }
 
+        private void OnTimerLogTick(object sender, EventArgs e) {
+            try {
+                var _ipAddress = GetIpAddress();
+                var _name = Properties.Settings.Default["name"].ToString();
+                contexto.Database.ExecuteSqlCommand($"INSERT INTO [dbo].[clientsStatusLog]([name],[address],[updated_at]) VALUES ('{_name}','{_ipAddress}', getdate())");
+            }
+            catch (Exception) { }
+        }
+
+        private string GetIpAddress() {
+            try {
+                // Get the hostname of the machine
+                string hostName = Dns.GetHostName();
+
+                // Get the IP addresses associated with the hostname
+                IPAddress[] addresses = Dns.GetHostAddresses(hostName);
+
+                // Filter out IPv6 addresses and display the first available IPv4 address
+                string ipAddress = addresses.FirstOrDefault(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)?.ToString();
+
+                // Display the IP address in the label
+                if (!string.IsNullOrEmpty(ipAddress)) {
+                    return ipAddress;
+                }
+                else {
+                    return "0.0.0.0";
+                }
+            }
+            catch (Exception ex) {
+                return "0.0.0.1";
+            }
+        }
     }
 }
+    

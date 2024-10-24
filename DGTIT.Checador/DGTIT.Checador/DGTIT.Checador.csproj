@@ -126,6 +126,9 @@
     <Compile Include="client.cs">
       <DependentUpon>UsuariosModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="clientsStatusLog.cs">
+      <DependentUpon>UsuariosModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\FingerPrint.cs" />
     <Compile Include="notification.cs">
       <DependentUpon>UsuariosModel.tt</DependentUpon>

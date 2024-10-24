@@ -41,5 +41,6 @@ namespace DGTIT.Checador
         public virtual DbSet<notification> notifications { get; set; }
         public virtual DbSet<working_days> working_days { get; set; }
         public virtual DbSet<client> clients { get; set; }
+        public virtual DbSet<clientsStatusLog> clientsStatusLogs { get; set; }
     }
 }

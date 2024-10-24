@@ -17,6 +17,15 @@
           <Property Name="updated_at" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="deleted_at" Type="datetime2" Precision="7" />
         </EntityType>
+        <EntityType Name="clientsStatusLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="address" Type="varchar(max)" Nullable="false" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
         <EntityType Name="departments">
           <Key>
             <PropertyRef Name="id" />
@@ -56,8 +65,6 @@
           <Property Name="active" Type="bit" Nullable="false" />
           <Property Name="employee_number" Type="int" />
         </EntityType>
-        <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'UsuariosDB.dbo.files' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="general_directions">
           <Key>
             <PropertyRef Name="id" />
@@ -128,8 +135,6 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.justifies' no tiene definida 
           <Property Name="created_at" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="updated_at" Type="datetime2" Precision="7" Nullable="false" />
         </EntityType>
-        <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'UsuariosDB.dbo.password_resets' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="records">
           <Key>
             <PropertyRef Name="id" />
@@ -191,10 +196,6 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.password_resets' no tiene def
           <Property Name="created_at" Type="datetime2" Precision="7" />
           <Property Name="updated_at" Type="datetime2" Precision="7" />
         </EntityType>
-        <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'UsuariosDB.dbo.Vw_plazas_nomina' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
-        <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <Association Name="fk_employee_id">
           <End Role="employees" Type="Self.employees" Multiplicity="1" />
           <End Role="incidents" Type="Self.incidents" Multiplicity="*" />
@@ -233,6 +234,7 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
         </Association>
         <EntityContainer Name="UsuariosDBModelStoreContainer">
           <EntitySet Name="clients" EntityType="Self.clients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="clientsStatusLog" EntityType="Self.clientsStatusLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="departments" EntityType="Self.departments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="directions" EntityType="Self.directions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="employees" EntityType="Self.employees" Schema="dbo" store:Type="Tables" />
@@ -307,6 +309,7 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <EntitySet Name="notifications" EntityType="UsuariosDBModel.notification" />
           <EntitySet Name="working_days" EntityType="UsuariosDBModel.working_days" />
           <EntitySet Name="clients" EntityType="UsuariosDBModel.client" />
+          <EntitySet Name="clientsStatusLogs" EntityType="UsuariosDBModel.clientsStatusLog" />
         </EntityContainer>
         <EntityType Name="department">
           <Key>
@@ -530,6 +533,15 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
           <Property Name="updated_at" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="deleted_at" Type="DateTime" Precision="7" />
         </EntityType>
+        <EntityType Name="clientsStatusLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="updated_at" Type="DateTime" Nullable="false" Precision="7" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -727,6 +739,16 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.VwEmpleadoRegistro' no tiene 
                 <ScalarProperty Name="created_at" ColumnName="created_at" />
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="user" ColumnName="user" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="clientsStatusLogs">
+            <EntityTypeMapping TypeName="UsuariosDBModel.clientsStatusLog">
+              <MappingFragment StoreEntitySet="clientsStatusLog">
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+                <ScalarProperty Name="address" ColumnName="address" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
