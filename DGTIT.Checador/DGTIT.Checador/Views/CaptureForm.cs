@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using static DGTIT.Checador.User32;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 
 namespace DGTIT.Checador
@@ -232,10 +231,13 @@ namespace DGTIT.Checador
 
 		protected void SetNoRegistrada(string NombreEmpleado)
 		{
-			this.Invoke(new Function(delegate () {
-				this.lblMessage.ForeColor= Color.PaleVioletRed;
-				this.lblMessage.Text = NombreEmpleado;
-			}));
+            try {
+			    this.Invoke(new Function(delegate () {
+				    this.lblMessage.ForeColor= Color.PaleVioletRed;
+				    this.lblMessage.Text = NombreEmpleado;
+			    }));
+            }
+            catch (Exception) { }
 		}
 
 		protected void SetFotoEmpleado(Bitmap bitmap)

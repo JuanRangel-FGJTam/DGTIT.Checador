@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Threading;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace DGTIT.Checador.Views
 {
@@ -27,6 +28,8 @@ namespace DGTIT.Checador.Views
 
         private Task taskAfterCheck;
         private CancellationTokenSource cancelationSource;
+
+        private bool _errorConexion = false;
 
 
         public Checador() : base()
@@ -54,7 +57,7 @@ namespace DGTIT.Checador.Views
 
 
             timerLogStatus = new System.Windows.Forms.Timer();
-            timerLogStatus.Interval = TimeSpan.FromMinutes(10).Milliseconds;
+            timerLogStatus.Interval = 60000;
             timerLogStatus.Tick += new EventHandler(OnTimerLogTick);
             timerLogStatus.Start();
 
@@ -69,165 +72,10 @@ namespace DGTIT.Checador.Views
             cancelationSource = new CancellationTokenSource();
             CancellationToken ct = cancelationSource.Token;
 
+            Task.Run(() => {
+                ValidateFingerPrint(Sample, ct);
+            }, ct);
 
-            // Process the sample and create a feature set for the enrollment purpose.
-            DPFP.FeatureSet features = ExtractFeatures(Sample, DPFP.Processing.DataPurpose.Verification);
-
-            // Check quality of the sample and start verification if it's good
-            if (features != null)
-            {
-                // * stop the service of the capturing the fingerprints
-                StopCapturing();
-
-                // prepare for validate each employees fingerprints
-                DPFP.Verification.Verification.Result result = new DPFP.Verification.Verification.Result();
-                DPFP.Template template = new DPFP.Template();
-
-
-                // loop for each employee and validate the finger print
-                IEnumerable<employee> employees = Array.Empty<employee>();
-                try {
-                    employees = checadorService.GetEmployees().ToArray();
-                }
-                catch (Exception) {
-
-                    // TODO: log the exception
-                    
-                    SetLoading(false);
-
-                    SetNoRegistrada("Error de conexión");
-                    SetAreaNoEncontrada();
-                    taskAfterCheck = Task.Run(() => {
-                        try {
-                            System.Threading.Thread.Sleep(2500);
-                            if (ct.IsCancellationRequested) { return; }
-                            LimpiarCampos();
-                            StartCapturing();
-                        }
-                        catch (OperationCanceledException) { }
-                    }, ct);
-                    return;
-                }
-
-
-                // * compare each employee
-                foreach (var emp in employees)
-                {
-                    if (emp.fingerprint == null)
-                    {
-                        continue;
-                    }
-
-                    // * validate the fingerprint of each employee
-                    using( Stream ms = new MemoryStream(emp.fingerprint) ){ 
-                        template = new DPFP.Template(ms);
-                    }
-                    try
-                    {
-                        Verificator.Verify(features, template, ref result);
-                    }
-                    catch(Exception){
-                        continue;
-                    }
-
-                    if (!result.Verified)
-                    {
-                        continue;
-                    }
-
-                    // * validete if the employee is active
-                    if (!emp.active)
-                    {
-                        SetLoading(false);
-                        SetNoRegistrada("Empleado en baja");
-                        SetEmpledoBaja();
-                        break;
-                    }
-
-
-                    // * validete if the employee direction has assigned the area
-                    if (emp.general_direction_id <= 0)
-                    {
-                        SetLoading(false);
-                        SetNoRegistrada("No cuenta con area registrada");
-                        SetAreaNoEncontrada();
-                        break;
-                    }
-
-                    // * validate if the employee area its the same area of the checador
-                    if (!this.areasAvailables.Contains(emp.general_direction_id))
-                    {
-                        SetLoading(false);
-                        SetNoRegistrada("No pertenece a esta Area");
-                        SetAreaNoEncontrada();
-                        break;
-                    }
-
-                    // * get the employee number
-                    var employeeNumber = Convert.ToInt32(emp.plantilla_id) - 100000;
-
-                    // * make the checkin record
-                    DateTime cheeckTime = default;
-                    try {
-                        cheeckTime = this.checadorService.CheckInEmployee(employeeNumber);
-                    }
-                    catch (Exception) {
-                        SetLoading(false);
-                        SetNoRegistrada("Error de conexión");
-                        SetAreaNoEncontrada();
-                        taskAfterCheck = Task.Run(() => {
-                            try {
-                                System.Threading.Thread.Sleep(2500);
-                                if (ct.IsCancellationRequested) { return; }
-                                LimpiarCampos();
-                                StartCapturing();
-                            }
-                            catch (OperationCanceledException) { }
-                        }, ct);
-                        
-                        return;
-                    }
-
-                    // * display the photo and name of the employee
-                    SetFotoEmpleado(fiscaliaService.GetEmployeePhoto(employeeNumber));
-                    SetNombre(emp.name.ToString());
-
-                    // * display the employee is checked on the UI
-                    SetLoading(false);
-                    SetChecada(cheeckTime);
-
-                    break;
-                }
-
-                // no match found
-                if (result.Verified == false)
-                {
-                    SetLoading(false);
-                    SetNoRegistrada("No se reconoce la huella");
-                    SetAreaNoEncontrada();
-                }
-
-
-                // * task for clear the UI and unlock the fingerPrint device after some delay
-                taskAfterCheck = Task.Run(() => {
-                    try
-                    {
-                        // sleep 3 seconds
-                        System.Threading.Thread.Sleep(2500);
-                        
-                        // check if the task was cancelled
-                        if (ct.IsCancellationRequested)
-                        {
-                            return;
-                        }
-
-                        // clear UI and restart eh capturing service
-                        LimpiarCampos();
-                        StartCapturing();
-                    }
-                    catch (OperationCanceledException) {}
-                }, ct);
-            }
         }
 
         public static void DelayAction(int millisecond, Action action)
@@ -246,22 +94,44 @@ namespace DGTIT.Checador.Views
         private void OnTimerTick(object sender, EventArgs e)
         {
             try {
-                var dateQuery = contexto.Database.SqlQuery<DateTime>("SELECT getdate()");
-                DateTime serverDate = dateQuery.AsEnumerable().First();
-                this.lblFecha.Text = serverDate.ToString("dd/MM/yyyy");
-                this.lblHora.Text = serverDate.ToString("hh:mm:ss");
 
-            }catch(Exception err) {
-                SetNoRegistrada("Error de conexión");
-                SetAreaNoEncontrada();
-                taskAfterCheck = Task.Run(() => {
-                    try {
-                        System.Threading.Thread.Sleep(2500);
-                        LimpiarCampos();
-                        StartCapturing();
-                    }
-                    catch (OperationCanceledException) { }
+                DateTime? serverDate = null;
+
+                // get the date
+                var task1 = Task.Run(() => {
+                    serverDate = contexto.Database.SqlQuery<DateTime>("SELECT getdate()").First();
                 });
+
+                var task2 = Task.Run(() => {
+                    System.Threading.Thread.Sleep(2000);
+                });
+
+                var taskCompleteIndex = Task.WaitAny(task1, task2);
+
+                if(taskCompleteIndex == 1) {
+                    throw new TimeoutException();
+                }
+
+                this.lblFecha.Text = serverDate.Value.ToString("dd/MM/yyyy");
+                this.lblHora.Text = serverDate.Value.ToString("hh:mm:ss");
+
+                if(_errorConexion) {
+                    try {
+                        Invoke(new Function(delegate () {
+                            LimpiarCampos();
+                            StartCapturing();
+                        }));
+                    } catch (Exception) { };
+                    _errorConexion = false;
+                }
+            }
+            catch (Exception) {
+                if (!_errorConexion) {
+                    SetNoRegistrada("Error de conexión");
+                    SetAreaNoEncontrada();
+                }
+                _errorConexion = true;
+                StopCapturing();
             }
         }
 
@@ -302,8 +172,143 @@ namespace DGTIT.Checador.Views
                     return "0.0.0.0";
                 }
             }
-            catch (Exception ex) {
+            catch (Exception) {
                 return "0.0.0.1";
+            }
+        }
+    
+        
+        private void ValidateFingerPrint(DPFP.Sample Sample, CancellationToken ct) {
+            
+            // Process the sample and create a feature set for the enrollment purpose.
+            DPFP.FeatureSet features = ExtractFeatures(Sample, DPFP.Processing.DataPurpose.Verification);
+
+            // Check quality of the sample and start verification if it's good
+            if (features != null) {
+                // * stop the service of the capturing the fingerprints
+                StopCapturing();
+
+                // prepare for validate each employees fingerprints
+                DPFP.Verification.Verification.Result result = new DPFP.Verification.Verification.Result();
+                DPFP.Template template = new DPFP.Template();
+
+
+                // loop for each employee and validate the finger print
+                IEnumerable<employee> employees = Array.Empty<employee>();
+                try {
+                    employees = checadorService.GetEmployees().ToArray();
+                }
+                catch (Exception) {
+
+                    // TODO: log the exception
+
+                    SetLoading(false);
+
+                    SetNoRegistrada("Error de conexión");
+                    SetAreaNoEncontrada();
+                    return;
+                }
+
+
+                // * compare each employee
+                foreach (var emp in employees) {
+                    if (emp.fingerprint == null) {
+                        continue;
+                    }
+
+                    // * validate the fingerprint of each employee
+                    using (Stream ms = new MemoryStream(emp.fingerprint)) {
+                        template = new DPFP.Template(ms);
+                    }
+
+                    try {
+                        Verificator.Verify(features, template, ref result);
+                    }
+                    catch (Exception) {
+                        continue;
+                    }
+
+                    if (!result.Verified) {
+                        continue;
+                    }
+
+                    // * validete if the employee is active
+                    if (!emp.active) {
+                        SetLoading(false);
+                        SetNoRegistrada("Empleado en baja");
+                        SetEmpledoBaja();
+                        break;
+                    }
+
+
+                    // * validete if the employee direction has assigned the area
+                    if (emp.general_direction_id <= 0) {
+                        SetLoading(false);
+                        SetNoRegistrada("No cuenta con area registrada");
+                        SetAreaNoEncontrada();
+                        break;
+                    }
+
+                    // * validate if the employee area its the same area of the checador
+                    if (!this.areasAvailables.Contains(emp.general_direction_id)) {
+                        SetLoading(false);
+                        SetNoRegistrada("No pertenece a esta Area");
+                        SetAreaNoEncontrada();
+                        break;
+                    }
+
+                    // * get the employee number
+                    var employeeNumber = Convert.ToInt32(emp.plantilla_id) - 100000;
+
+                    // * make the checkin record
+                    DateTime cheeckTime = default;
+                    try {
+                        cheeckTime = this.checadorService.CheckInEmployee(employeeNumber);
+                    }
+                    catch (Exception) {
+                        SetLoading(false);
+
+                        SetNoRegistrada("Error de conexión");
+                        SetAreaNoEncontrada();
+                        return;
+                    }
+
+                    // * display the photo and name of the employee
+                    SetFotoEmpleado(fiscaliaService.GetEmployeePhoto(employeeNumber));
+                    SetNombre(emp.name.ToString());
+
+                    // * display the employee is checked on the UI
+                    SetLoading(false);
+                    SetChecada(cheeckTime);
+
+                    break;
+                }
+
+                // no match found
+                if (result.Verified == false) {
+                    SetLoading(false);
+                    SetNoRegistrada("No se reconoce la huella");
+                    SetAreaNoEncontrada();
+                }
+
+
+                // * task for clear the UI and unlock the fingerPrint device after some delay
+                taskAfterCheck = Task.Run(() => {
+                    try {
+                        // sleep 3 seconds
+                        System.Threading.Thread.Sleep(2500);
+
+                        // check if the task was cancelled
+                        if (ct.IsCancellationRequested) {
+                            return;
+                        }
+
+                        // clear UI and restart eh capturing service
+                        LimpiarCampos();
+                        StartCapturing();
+                    }
+                    catch (OperationCanceledException) { }
+                }, ct);
             }
         }
     }
