@@ -44,10 +44,13 @@ namespace DGTIT.Checador
             this.checadorService = new ChecadorService(contexto, procu);
             this.fiscaliaService = new FiscaliaService(procu, contexto);
 
-
             // * initialize the models
             this.currentEmployee = checadorService.GetEmployee(employeeNumber);
             this.workingHours = checadorService.GetWorkinHours(employeeNumber);
+
+            if( currentEmployee.fingerprint != null && currentEmployee.fingerprint.Any()) {
+                DisableEdition();
+            }
             
         }
         
@@ -337,5 +340,21 @@ namespace DGTIT.Checador
             }));
         }
         #endregion
+    
+        
+        private void DisableEdition() {
+
+            this.txtNombre.Enabled = false;
+            this.txtEntrada.Enabled = false;
+            this.txtComida.Enabled = false;
+            this.txtRegreso.Enabled = false;
+            this.txtSalida.Enabled = false;
+            this.cb_check.Enabled = false;
+            this.cboDirGral.Enabled = false;
+            this.cboDireccion.Enabled = false;
+            this.cboSubdireccion.Enabled = false;
+            this.cboDepartamento.Enabled = false;
+
+        }
     }
 }
