@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Diagnostics.Tracing;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -42,11 +43,15 @@ namespace DGTIT.Checador
                 _allowCapture = value;
             }
         }
-        
+
+        private EventLog eventLog;
 
         public CaptureForm()
 		{
 			InitializeComponent();
+
+            this.eventLog = new EventLog();
+            eventLog.Source = "Checador3";
 
             lblNombre.Text = "";
             lblMessage.Text = "";
@@ -70,7 +75,7 @@ namespace DGTIT.Checador
             }
             catch(Exception err)
             {
-                MakeReport(err.Message, EventLevel.Error);
+                MakeReport(err.Message, err);
                 MessageBox.Show("No se pudo iniciar la operacion de captura", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -103,7 +108,7 @@ namespace DGTIT.Checador
                 SetLoading(false);
             }
             catch (Exception err) {
-                MakeReport("No se puede iniciar la captura.", EventLevel.Warning);
+                MakeReport("No se puede iniciar la captura.", err);
                 SetNoRegistrada("No se puede iniciar la captura");
             }
             
@@ -118,15 +123,38 @@ namespace DGTIT.Checador
             try {
                 Capturer.StopCapture();
             }
-            catch {
-                MakeReport("No se puede terminar la captura.", EventLevel.Warning);
+            catch(Exception err){
+                MakeReport("No se puede terminar la captura.", err);
             }
 		}
         
         protected void MakeReport(string message, EventLevel eventLevel = EventLevel.Informational)
         {
-            // TODO: make some log
-            Console.WriteLine($"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} {eventLevel.ToString()}] " + message );
+            Console.WriteLine($"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} {eventLevel}] " + message );
+
+            var eventType = EventLogEntryType.Information;
+            switch (eventLevel) {
+                case EventLevel.Warning:
+                    eventType = EventLogEntryType.Warning;
+                    break;
+
+                case EventLevel.Error:
+                    eventType = EventLogEntryType.Error;
+                    break;
+            }
+
+            try {
+                eventLog.WriteEntry(message, eventType);
+            }
+            catch { }
+        }
+
+        protected void MakeReport(string message, Exception err) {
+            Console.WriteLine($"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} {EventLevel.Error}] " + message);
+            try {
+                eventLog.WriteEntry(message + $"[{err.StackTrace}]", EventLogEntryType.Error);
+            }
+            catch { }
         }
 
         protected virtual void PlayBell()

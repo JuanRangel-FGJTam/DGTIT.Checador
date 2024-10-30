@@ -123,12 +123,12 @@ namespace DGTIT.Checador.Views
                     MakeReport("Se recupero la conexion al tratar de obtener la fecha del servidor", EventLevel.Informational);
                 }
             }
-            catch (Exception) {
+            catch (Exception err) {
                 if (!_errorConexion) {
                     StopCapturing();
                     SetNoRegistrada("Error de conexión");
                     SetAreaNoEncontrada();
-                    MakeReport("Se perdio la conexion al tratar de obtener la fecha del servidor", EventLevel.Warning);
+                    MakeReport("Se perdio la conexion al tratar de obtener la fecha del servidor", err);
                 }
                 _errorConexion = true;
             }
@@ -150,7 +150,7 @@ namespace DGTIT.Checador.Views
                 contexto.Database.ExecuteSqlCommand($"INSERT INTO [dbo].[clientsStatusLog]([name],[address],[updated_at]) VALUES ('{_name}','{_ipAddress}', getdate())");
             }
             catch (Exception err) {
-                MakeReport(err.Message, EventLevel.Error);
+                MakeReport(err.Message, err);
             }
         }
 
@@ -174,7 +174,7 @@ namespace DGTIT.Checador.Views
                 }
             }
             catch (Exception err) {
-                MakeReport(err.Message, EventLevel.Error);
+                MakeReport(err.Message, err);
                 return "0.0.0.1";
             }
         }
@@ -200,7 +200,7 @@ namespace DGTIT.Checador.Views
                     employees = checadorService.GetEmployees().ToArray();
                 }
                 catch (Exception err) {
-                    MakeReport(err.Message, EventLevel.Error);
+                    MakeReport("No se pudo obtener el listado de empleados: " + err.Message, err);
                     SetLoading(false);
                     SetNoRegistrada("Error de conexión");
                     SetAreaNoEncontrada();
@@ -228,11 +228,14 @@ namespace DGTIT.Checador.Views
                         continue;
                     }
 
+                    MakeReport($"Empledo No {emp.employee_number} encontrado", EventLevel.Informational);
+
                     // * validete if the employee is active
                     if (!emp.active) {
                         SetLoading(false);
                         SetNoRegistrada("Empleado en baja");
                         SetEmpledoBaja();
+                        MakeReport($"Empledo No {emp.employee_number} en baja", EventLevel.Informational);
                         break;
                     }
 
@@ -242,6 +245,7 @@ namespace DGTIT.Checador.Views
                         SetLoading(false);
                         SetNoRegistrada("No cuenta con area registrada");
                         SetAreaNoEncontrada();
+                        MakeReport($"Empledo No {emp.employee_number} no cuenta con area registrada", EventLevel.Informational);
                         break;
                     }
 
@@ -250,6 +254,7 @@ namespace DGTIT.Checador.Views
                         SetLoading(false);
                         SetNoRegistrada("No pertenece a esta Area");
                         SetAreaNoEncontrada();
+                        MakeReport($"Empledo No {emp.employee_number} no pertenece a esta Area", EventLevel.Informational);
                         break;
                     }
 
@@ -261,11 +266,11 @@ namespace DGTIT.Checador.Views
                     try {
                         cheeckTime = this.checadorService.CheckInEmployee(employeeNumber);
                     }
-                    catch (Exception) {
+                    catch (Exception err) {
                         SetLoading(false);
-
                         SetNoRegistrada("Error de conexión");
                         SetAreaNoEncontrada();
+                        MakeReport(err.Message, err);
                         return;
                     }
 
@@ -284,9 +289,9 @@ namespace DGTIT.Checador.Views
                 if (result.Verified == false) {
                     SetLoading(false);
                     SetNoRegistrada("No se reconoce la huella");
+                    MakeReport("No se encotnro coincidencia de la huella", EventLevel.Informational);
                     SetAreaNoEncontrada();
                 }
-
 
                 // * task for clear the UI and unlock the fingerPrint device after some delay
                 taskAfterCheck = Task.Run(() => {
