@@ -7,7 +7,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,7 +30,7 @@ namespace DGTIT.Checador.Views
 
         private Task taskAfterCheck;
         private CancellationTokenSource cancelationSource;
-
+        
         private bool _errorConexion = false;
 
 
@@ -50,8 +49,7 @@ namespace DGTIT.Checador.Views
             base.Init();
             base.Text = "Verificación de Huella Digital";
             Verificator = new DPFP.Verification.Verification();
-            
-            
+
             timer1 = new System.Windows.Forms.Timer();
             timer1.Interval = 1000;
             timer1.Tick += new EventHandler(OnTimerTick);
@@ -105,7 +103,7 @@ namespace DGTIT.Checador.Views
                 });
 
                 var task2 = Task.Run(() => {
-                    System.Threading.Thread.Sleep(2000);
+                    System.Threading.Thread.Sleep(500);
                 });
 
                 var taskCompleteIndex = Task.WaitAny(task1, task2);
@@ -114,26 +112,25 @@ namespace DGTIT.Checador.Views
                     throw new TimeoutException();
                 }
 
-                this.lblFecha.Text = serverDate.Value.ToString("dd/MM/yyyy");
-                this.lblHora.Text = serverDate.Value.ToString("hh:mm:ss");
 
+                // * update the date and hour on the UI
+                SetDateTimeServer(serverDate);
+                
                 if(_errorConexion) {
-                    try {
-                        Invoke(new Function(delegate () {
-                            LimpiarCampos();
-                            StartCapturing();
-                        }));
-                    } catch (Exception) { };
+                    LimpiarCampos();
+                    StartCapturing();
                     _errorConexion = false;
+                    MakeReport("Se recupero la conexion al tratar de obtener la fecha del servidor", EventLevel.Informational);
                 }
             }
             catch (Exception) {
                 if (!_errorConexion) {
+                    StopCapturing();
                     SetNoRegistrada("Error de conexión");
                     SetAreaNoEncontrada();
+                    MakeReport("Se perdio la conexion al tratar de obtener la fecha del servidor", EventLevel.Warning);
                 }
                 _errorConexion = true;
-                StopCapturing();
             }
         }
 
@@ -181,7 +178,6 @@ namespace DGTIT.Checador.Views
                 return "0.0.0.1";
             }
         }
-    
         
         private void ValidateFingerPrint(DPFP.Sample Sample, CancellationToken ct) {
             

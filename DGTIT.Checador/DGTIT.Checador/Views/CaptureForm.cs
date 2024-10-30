@@ -307,6 +307,15 @@ namespace DGTIT.Checador
             }
         }
         
+        protected void SetDateTimeServer(DateTime? serverDate) {
+            // * update the date and hour on the UI
+            if (lblFecha.IsHandleCreated) {
+                Invoke(new Action(() => { this.lblFecha.Text = serverDate.Value.ToString("dd/MM/yyyy"); }));
+            }
+            if (lblHora.IsHandleCreated) {
+                Invoke(new Action(() => { this.lblHora.Text = serverDate.Value.ToString("hh:mm:ss"); }));
+            }
+        }
         #endregion
 
         #region FingerPrint EventsHandler
