@@ -55,6 +55,7 @@ namespace DGTIT.Checador
             lblMessage.BorderStyle = BorderStyle.None;
             lblNombre.BorderStyle = BorderStyle.None;
             this.FormBorderStyle = FormBorderStyle.None;
+            this.btnClose.Enabled = false;
 
             this.playSoundOnFail = Properties.Settings.Default["playSoundOnFail"].ToString() == "1";
 
@@ -65,13 +66,7 @@ namespace DGTIT.Checador
 		{
             try {
                 Capturer = new DPFP.Capture.Capture();  // Create a capture operation.
-
-                if ( null != Capturer) {
-                    Capturer.EventHandler = this;  // Subscribe for capturing events.
-                }
-                else {
-                    throw new Exception("Can't initialize the object Capture");
-                }
+                Capturer.EventHandler = this;  // Subscribe for capturing events.
             }
             catch(Exception err)
             {
@@ -100,16 +95,16 @@ namespace DGTIT.Checador
 		{
             this.allowCapture = true;
             
-            if (null == Capturer) {
+            if (Capturer == null){
                 return;
             }
-
             try {
                 Capturer.StartCapture();
                 SetLoading(false);
             }
-            catch {
+            catch (Exception err) {
                 MakeReport("No se puede iniciar la captura.", EventLevel.Warning);
+                SetNoRegistrada("No se puede iniciar la captura");
             }
             
 		}
@@ -117,11 +112,9 @@ namespace DGTIT.Checador
 		protected void StopCapturing()
 		{
             this.allowCapture = false;
-
-            if (null == Capturer) {
+            if (Capturer == null) {
                 return;
             }
-
             try {
                 Capturer.StopCapture();
             }
@@ -172,10 +165,17 @@ namespace DGTIT.Checador
             Task.Run(() =>
             {
                 Thread.Sleep(2000);
+
                 StartCapturing();
+
+                if (btnClose.IsHandleCreated) {
+                    Invoke(new Action(() => {
+                        this.btnClose.Enabled = true;
+                    }));
+                }
+
             });
 
-            btnClose.Enabled = true;
             btnClose.Click += new EventHandler((object s, EventArgs ee) =>
             {
                 this.Close();
@@ -184,7 +184,9 @@ namespace DGTIT.Checador
 
 		protected virtual void CaptureFormClosing(object sender, FormClosingEventArgs e)
 		{
-            StopCapturing();
+            Task.Run(() => {
+                Capturer.Dispose();
+            });
 		}
 		#endregion
 
