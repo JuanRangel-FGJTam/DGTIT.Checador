@@ -1,8 +1,8 @@
-using DGTIT.Checador.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.Tracing;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
+using DGTIT.Checador.Properties;
 using static DGTIT.Checador.User32;
 
 
@@ -32,15 +33,12 @@ namespace DGTIT.Checador
             get => _allowCapture;
             set
             {
-                try
-                {
+                if (picLock.IsHandleCreated) {
                     Invoke(new Action(() =>
                     {
-
                         picLock.Visible = !value;
                     }));
                 }
-                catch (Exception) { }
                 _allowCapture = value;
             }
         }
@@ -65,25 +63,27 @@ namespace DGTIT.Checador
 
         protected virtual void Init()
 		{
-            try
+            try {
+                Capturer = new DPFP.Capture.Capture();  // Create a capture operation.
+
+                if ( null != Capturer) {
+                    Capturer.EventHandler = this;  // Subscribe for capturing events.
+                }
+                else {
+                    throw new Exception("Can't initialize the object Capture");
+                }
+            }
+            catch(Exception err)
             {
-                Capturer = new DPFP.Capture.Capture();				// Create a capture operation.
-
-                if ( null != Capturer )
-                    Capturer.EventHandler = this;					// Subscribe for capturing events.
-                else
-                    SetPrompt("No se pudo iniciar la operaci�n de captura");
-            }
-            catch
-            {               
-                MessageBox.Show("No se pudo iniciar la operaci�n de captura", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);            
+                MakeReport(err.Message, EventLevel.Error);
+                MessageBox.Show("No se pudo iniciar la operacion de captura", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+            // * make rounded the employee photo and the fingerprint image
             using (var gp = new GraphicsPath()) {
                 gp.AddEllipse(new Rectangle(0, 0, fotoEmpleado.Width - 1, fotoEmpleado.Height - 1 ));
                 fotoEmpleado.Region = new Region(gp);
             }
-
             using (var gp = new GraphicsPath()) {
                 gp.AddEllipse(new Rectangle(0, 0, fingerPrintImg.Width - 1, fingerPrintImg.Height - 1));
                 fingerPrintImg.Region = new Region(gp);
@@ -100,20 +100,16 @@ namespace DGTIT.Checador
 		{
             this.allowCapture = true;
             
-            if (null == Capturer)
-            {
+            if (null == Capturer) {
                 return;
             }
 
-            try
-            {
+            try {
                 Capturer.StartCapture();
-                SetPrompt("Escanea tu huella usando el lector");
                 SetLoading(false);
             }
-            catch
-            {
-                SetPrompt("No se puede iniciar la captura");
+            catch {
+                MakeReport("No se puede iniciar la captura.", EventLevel.Warning);
             }
             
 		}
@@ -122,42 +118,22 @@ namespace DGTIT.Checador
 		{
             this.allowCapture = false;
 
-            if (null == Capturer)
-            {
+            if (null == Capturer) {
                 return;
             }
 
-            try
-            {
+            try {
                 Capturer.StopCapture();
             }
-            catch
-            {
-                SetPrompt("No se puede terminar la captura");
+            catch {
+                MakeReport("No se puede terminar la captura.", EventLevel.Warning);
             }
 		}
-
-        protected void SetPrompt(string prompt)
-        {
-            try
-            {
-                this.Invoke(new Function(delegate () {
-                    // MessageBox.Show(prompt, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }));
-            }
-            catch (Exception) { }
-        }
         
-        protected void MakeReport(string message)
+        protected void MakeReport(string message, EventLevel eventLevel = EventLevel.Informational)
         {
-            try {                  
-                this.Invoke(new Function(delegate () {
-                    //StatusText.AppendText(message + "\r\n");
-                    //lblNombre.Text = message + "\r\n";
-                }));
-            }
-            catch (Exception){
-            }
+            // TODO: make some log
+            Console.WriteLine($"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} {eventLevel.ToString()}] " + message );
         }
 
         protected virtual void PlayBell()
@@ -177,15 +153,15 @@ namespace DGTIT.Checador
                     player.Play();
                 }
             }
-            catch (Exception) { }
+            catch (Exception) {}
         }
 
         #region Form Events Handler
         private void CaptureForm_Load(object sender, EventArgs e)
 		{
             // Set the form to full screen
-            this.WindowState = FormWindowState.Maximized;
-            ChangeScreenResolution(new Size(1280, 720));
+            //this.WindowState = FormWindowState.Maximized;
+            //ChangeScreenResolution(new Size(1280, 720));
 
             lblFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
             lblHora.Text = DateTime.Now.ToString("HH:mm");
@@ -216,70 +192,88 @@ namespace DGTIT.Checador
         
         private void DrawPicture(Bitmap bitmap)
 		{
-			this.Invoke(new Function(delegate() {
-				fingerPrintImg.Image = new Bitmap(bitmap, fingerPrintImg.Size);	// fit the image into the picture box
-			}));
+            if (fingerPrintImg.IsHandleCreated) {
+                Invoke(new Action(() => {
+                    fingerPrintImg.Image = new Bitmap(bitmap, fingerPrintImg.Size);
+			    }));
+            }
 		}
 
 		protected void SetNombre(string NombreEmpleado)
         {
-			this.Invoke(new Function(delegate () {
-				this.lblNombre.ForeColor = Color.Black;
-				this.lblNombre.Text = NombreEmpleado;
-			}));
+            if (lblNombre.IsHandleCreated) {
+                Invoke(new Action(() => {
+				    this.lblNombre.ForeColor = Color.Black;
+				    this.lblNombre.Text = NombreEmpleado;
+                }));
+            }
         }
 
 		protected void SetNoRegistrada(string NombreEmpleado)
 		{
-            try {
-			    this.Invoke(new Function(delegate () {
+            if (lblMessage.IsHandleCreated) {
+                Invoke(new Action(() => {
 				    this.lblMessage.ForeColor= Color.PaleVioletRed;
 				    this.lblMessage.Text = NombreEmpleado;
-			    }));
+                }));
             }
-            catch (Exception) { }
 		}
 
 		protected void SetFotoEmpleado(Bitmap bitmap)
 		{
-			this.Invoke(new Function(delegate () {
-				fotoEmpleado.Image = new Bitmap(bitmap, fotoEmpleado.Size);   // fit the image into the picture box
-			}));
+            if (fotoEmpleado.IsHandleCreated) {
+                Invoke(new Action(() => {
+				    fotoEmpleado.Image = new Bitmap(bitmap, fotoEmpleado.Size);   // fit the image into the picture box
+                }));
+			}
 		}
 
 		protected void SetChecada(DateTime time)
 		{
-			this.Invoke(new Function(delegate () {
-                lblMessage.ForeColor = Color.RoyalBlue;
-                lblMessage.Text = "Entrada registrada " +  time.ToString("hh:mm:ss");
-				picOK.Visible = true;
+            if (lblMessage.IsHandleCreated) {
+                Invoke(new Action(() => {
+                    lblMessage.ForeColor = Color.RoyalBlue;
+                    lblMessage.Text = "Entrada registrada " + time.ToString("hh:mm:ss");
+                }));
+            }
 
-			}));
+            if (picOK.IsHandleCreated) {
+                Invoke(new Action(() => {
+                    picOK.Visible = true;
+                }));
+            }
+
             PlayBell();
         }
-        protected void SetEmpledoBaja() {
-            this.Invoke(new Function(delegate () {
-                picUserFail.Visible = true;
-            }));
 
+        protected void SetEmpledoBaja() {
+            if (picUserFail.IsHandleCreated) {
+                Invoke(new Action(() => {
+                    picUserFail.Visible = true;
+                }));
+            }
             PlayFailSound();
         }
 
         protected void SetAreaNoEncontrada( )
 		{
-			this.Invoke(new Function(delegate () { 
-				picX.Visible = true;
-			}));
-
+            if(picX.IsHandleCreated) {
+                Invoke(new Action(() =>
+                {
+                    picX.Visible = true;
+                }));
+            }
             PlayFailSound();
         }
 
 		protected void SetHuellaNoEncontrada()
 		{
-			this.Invoke(new Function(delegate () {
-                lblMessage.ForeColor = Color.DarkSalmon;
-                lblMessage.Text = "No se reconoce la huella.";
-			}));
+            if (lblMessage.IsHandleCreated) {
+			    Invoke(new Action( () => {
+                    lblMessage.ForeColor = Color.DarkSalmon;
+                    lblMessage.Text = "No se reconoce la huella.";
+			    }));
+            }
             PlayFailSound();
         }
 
@@ -304,12 +298,11 @@ namespace DGTIT.Checador
 		}
         
         protected void SetLoading(bool visible) {
-            try {
+            if (picLoading.IsHandleCreated) {
                 Invoke(new Action(() => {
                     picLoading.Visible = visible;
                 }));
             }
-            catch (Exception) { }
         }
         
         #endregion
@@ -330,18 +323,17 @@ namespace DGTIT.Checador
         public void OnComplete(object Capture, string ReaderSerialNumber, DPFP.Sample Sample)
         {
             MakeReport("La muestra ha sido capturada");
-            SetPrompt("Escanea tu misma huella otra vez");
             Process(Sample);
         }
 
         public void OnFingerGone(object Capture, string ReaderSerialNumber)
         {
-            MakeReport("La huella fue removida del lector");
+            //
         }
 
         public void OnFingerTouch(object Capture, string ReaderSerialNumber)
         {
-            MakeReport("El lector fue tocado");
+            // 
         }
 
         public void OnReaderConnect(object Capture, string ReaderSerialNumber)
@@ -356,10 +348,7 @@ namespace DGTIT.Checador
 
         public void OnSampleQuality(object Capture, string ReaderSerialNumber, DPFP.Capture.CaptureFeedback CaptureFeedback)
         {
-            if (CaptureFeedback == DPFP.Capture.CaptureFeedback.Good)
-                MakeReport("La calidad de la muestra es BUENA");
-            else
-                MakeReport("La calidad de la muestra es MALA");
+            // 
         }
         #endregion
 
@@ -380,8 +369,5 @@ namespace DGTIT.Checador
         }
         #endregion
 
-        private void lblStatus_Click(object sender, EventArgs e) {
-
-        }
     }
 }

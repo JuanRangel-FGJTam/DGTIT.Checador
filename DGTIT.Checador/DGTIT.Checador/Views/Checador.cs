@@ -1,16 +1,19 @@
-﻿using DGTIT.Checador.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+using System.Diagnostics.Tracing;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Threading;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+using DGTIT.Checador.Services;
 
 namespace DGTIT.Checador.Views
 {
@@ -32,13 +35,12 @@ namespace DGTIT.Checador.Views
         private bool _errorConexion = false;
 
 
-        public Checador() : base()
-        {
+        public Checador() : base() {
             contexto = new UsuariosDBEntities();
             procu = new procuraduriaEntities1();
             checadorService = new ChecadorService(contexto, procu);
             fiscaliaService = new FiscaliaService(procu, contexto);
-
+            
             // * read the area id
             this.areasAvailables = Properties.Settings.Default["generalDirectionId"].ToString().Split(',').Select(i => Convert.ToInt64(i)).ToList();   
         }
@@ -150,7 +152,9 @@ namespace DGTIT.Checador.Views
                 var _name = Properties.Settings.Default["name"].ToString();
                 contexto.Database.ExecuteSqlCommand($"INSERT INTO [dbo].[clientsStatusLog]([name],[address],[updated_at]) VALUES ('{_name}','{_ipAddress}', getdate())");
             }
-            catch (Exception) { }
+            catch (Exception err) {
+                MakeReport(err.Message, EventLevel.Error);
+            }
         }
 
         private string GetIpAddress() {
@@ -172,7 +176,8 @@ namespace DGTIT.Checador.Views
                     return "0.0.0.0";
                 }
             }
-            catch (Exception) {
+            catch (Exception err) {
+                MakeReport(err.Message, EventLevel.Error);
                 return "0.0.0.1";
             }
         }
@@ -198,12 +203,9 @@ namespace DGTIT.Checador.Views
                 try {
                     employees = checadorService.GetEmployees().ToArray();
                 }
-                catch (Exception) {
-
-                    // TODO: log the exception
-
+                catch (Exception err) {
+                    MakeReport(err.Message, EventLevel.Error);
                     SetLoading(false);
-
                     SetNoRegistrada("Error de conexión");
                     SetAreaNoEncontrada();
                     return;
@@ -220,13 +222,11 @@ namespace DGTIT.Checador.Views
                     using (Stream ms = new MemoryStream(emp.fingerprint)) {
                         template = new DPFP.Template(ms);
                     }
-
-                    try {
-                        Verificator.Verify(features, template, ref result);
-                    }
-                    catch (Exception) {
+                    if(template.Bytes == null) {
                         continue;
                     }
+
+                    Verificator.Verify(features, template, ref result);
 
                     if (!result.Verified) {
                         continue;

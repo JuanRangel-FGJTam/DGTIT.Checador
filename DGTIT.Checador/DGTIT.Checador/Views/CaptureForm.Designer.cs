@@ -93,7 +93,6 @@ namespace DGTIT.Checador
             this.lblStatus.TabIndex = 9;
             this.lblStatus.Text = "DGA  |  Dirección de Recursos Humanos ";
             this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblStatus.Click += new System.EventHandler(this.lblStatus_Click);
             // 
             // lblHora
             // 
@@ -276,6 +275,7 @@ namespace DGTIT.Checador
             this.Controls.Add(this.lblHora);
             this.Controls.Add(this.fotoEmpleado);
             this.Controls.Add(this.fingerPrintImg);
+            this.Cursor = System.Windows.Forms.Cursors.Hand;
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
