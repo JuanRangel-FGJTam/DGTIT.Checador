@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.Tracing;
@@ -23,16 +24,13 @@ namespace DGTIT.Checador.Views
         private readonly ChecadorService checadorService;
         private readonly FiscaliaService fiscaliaService;
         private readonly List<long> areasAvailables = new List<long>();
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer timerDateTime;
         private System.Windows.Forms.Timer timerLogStatus;
 
         private DPFP.Verification.Verification Verificator;
-
         private Task taskAfterCheck;
         private CancellationTokenSource cancelationSource;
-        
-        private bool _errorConexion = false;
-
+        private bool errorConexion = false;
 
         public Checador() : base() {
             contexto = new UsuariosDBEntities();
@@ -50,17 +48,16 @@ namespace DGTIT.Checador.Views
             base.Text = "Verificación de Huella Digital";
             Verificator = new DPFP.Verification.Verification();
 
-            timer1 = new System.Windows.Forms.Timer();
-            timer1.Interval = 1000;
-            timer1.Tick += new EventHandler(OnTimerTick);
-            timer1.Start();
-
+            // * initialize backgrounds
+            timerDateTime = new System.Windows.Forms.Timer();
+            timerDateTime.Interval = (int) TimeSpan.FromSeconds(1).TotalMilliseconds;
+            timerDateTime.Tick += new EventHandler(OnTimerTick);
+            timerDateTime.Start();
 
             timerLogStatus = new System.Windows.Forms.Timer();
-            timerLogStatus.Interval = 60000;
+            timerLogStatus.Interval = (int) TimeSpan.FromMinutes(1).TotalMilliseconds;
             timerLogStatus.Tick += new EventHandler(OnTimerLogTick);
             timerLogStatus.Start();
-
         }
 
         protected override void Process(DPFP.Sample Sample)
@@ -91,71 +88,18 @@ namespace DGTIT.Checador.Views
             timer.Start();
         }
 
-        private void OnTimerTick(object sender, EventArgs e)
-        {
-            try {
-
-                DateTime? serverDate = null;
-
-                // get the date
-                var task1 = Task.Run(() => {
-                    serverDate = contexto.Database.SqlQuery<DateTime>("SELECT getdate()").First();
-                });
-
-                var task2 = Task.Run(() => {
-                    System.Threading.Thread.Sleep(500);
-                });
-
-                var taskCompleteIndex = Task.WaitAny(task1, task2);
-
-                if(taskCompleteIndex == 1) {
-                    throw new TimeoutException();
-                }
-
-
-                // * update the date and hour on the UI
-                SetDateTimeServer(serverDate);
-                
-                if(_errorConexion) {
-                    LimpiarCampos();
-                    StartCapturing();
-                    _errorConexion = false;
-                    MakeReport("Se recupero la conexion al tratar de obtener la fecha del servidor", EventLevel.Informational);
-                }
-            }
-            catch (Exception err) {
-                if (!_errorConexion) {
-                    StopCapturing();
-                    SetNoRegistrada("Error de conexión");
-                    SetAreaNoEncontrada();
-                    MakeReport("Se perdio la conexion al tratar de obtener la fecha del servidor", err);
-                }
-                _errorConexion = true;
-            }
-        }
-
-        protected override void CaptureFormClosing(object sender, FormClosingEventArgs e)
-        {
-            base.CaptureFormClosing(sender, e);
-            if( cancelationSource != null)
-            {
+        protected override void OnFormClosing(FormClosingEventArgs e) {
+            if (cancelationSource != null) {
                 cancelationSource.Cancel();
             }
-        }
 
-        private void OnTimerLogTick(object sender, EventArgs e) {
-            try {
-                var _ipAddress = GetIpAddress();
-                var _name = Properties.Settings.Default["name"].ToString();
-                contexto.Database.ExecuteSqlCommand($"INSERT INTO [dbo].[clientsStatusLog]([name],[address],[updated_at]) VALUES ('{_name}','{_ipAddress}', getdate())");
-            }
-            catch (Exception err) {
-                MakeReport(err.Message, err);
-            }
+            // Call the base method to proceed with closing
+            base.OnFormClosing(e);
         }
 
         private string GetIpAddress() {
             try {
+
                 // Get the hostname of the machine
                 string hostName = Dns.GetHostName();
 
@@ -312,6 +256,66 @@ namespace DGTIT.Checador.Views
                 }, ct);
             }
         }
+
+        #region background workers
+        private void OnTimerTick(object sender, EventArgs e) {
+            try {
+
+                DateTime? serverDate = null;
+
+                // get the date
+                var task1 = Task.Run(() => {
+                    serverDate = contexto.Database.SqlQuery<DateTime>("SELECT getdate()").First();
+                });
+
+                var task2 = Task.Run(() => {
+                    System.Threading.Thread.Sleep(TimeSpan.FromSeconds(2));
+                });
+
+                var taskCompleteIndex = Task.WaitAny(task1, task2);
+
+                if (taskCompleteIndex == 1) {
+                    throw new TimeoutException();
+                }
+
+                // * update the date and hour on the UI
+                SetDateTimeServer(serverDate);
+
+                // * clear data if before was without connection
+                if (errorConexion) {
+                    LimpiarCampos();
+                    StartCapturing();
+                    errorConexion = false;
+                    MakeReport("Se recupero la conexion al tratar de obtener la fecha del servidor", EventLevel.Informational);
+                }
+            }
+            catch (Exception err) {
+                if (!errorConexion){
+                    StopCapturing();
+                    SetLostConnection();
+                    MakeReport("Se perdio la conexion al tratar de obtener la fecha del servidor", err);
+                }
+                errorConexion = true;
+            }
+        }
+
+        private void OnTimerLogTick(object sender, EventArgs e) {
+
+            if(errorConexion) {
+                return;
+            }
+
+            try {
+                var _ipAddress = GetIpAddress();
+                var _name = Properties.Settings.Default["name"].ToString();
+                contexto.Database.ExecuteSqlCommand($"INSERT INTO [dbo].[clientsStatusLog]([name],[address],[updated_at]) VALUES ('{_name}','{_ipAddress}', getdate())");
+            }
+            catch (Exception err) {
+                MakeReport(err.Message, err);
+            }
+        }
+        #endregion
+
     }
 }
     

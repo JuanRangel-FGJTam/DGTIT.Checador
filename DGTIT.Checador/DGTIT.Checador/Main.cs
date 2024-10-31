@@ -77,7 +77,6 @@ namespace DGTIT.Checador
             //}
         }
 
-
         private void BtnConfig_Click(object sender, EventArgs e) {
             var validarPermisoWindow = new AuthForm();
             if( DialogResult.Yes == validarPermisoWindow.ShowDialog()) {
@@ -85,7 +84,6 @@ namespace DGTIT.Checador
                 ca.ShowDialog(this);
             }
         }
-
 
 
     }

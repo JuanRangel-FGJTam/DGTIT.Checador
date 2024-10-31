@@ -38,6 +38,7 @@ namespace DGTIT.Checador
             this.picLock = new System.Windows.Forms.PictureBox();
             this.lblVersion = new System.Windows.Forms.Label();
             this.paneluser = new System.Windows.Forms.Panel();
+            this.picLostConnection = new System.Windows.Forms.PictureBox();
             this.picLoading = new System.Windows.Forms.PictureBox();
             this.picUserFail = new System.Windows.Forms.PictureBox();
             this.picOK = new System.Windows.Forms.PictureBox();
@@ -48,6 +49,7 @@ namespace DGTIT.Checador
             this.fingerPrint.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLock)).BeginInit();
             this.paneluser.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picLostConnection)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picUserFail)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picOK)).BeginInit();
@@ -161,6 +163,7 @@ namespace DGTIT.Checador
             // 
             this.paneluser.BackColor = System.Drawing.Color.Transparent;
             this.paneluser.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.paneluser.Controls.Add(this.picLostConnection);
             this.paneluser.Controls.Add(this.picLoading);
             this.paneluser.Controls.Add(this.picUserFail);
             this.paneluser.Controls.Add(this.picOK);
@@ -170,6 +173,18 @@ namespace DGTIT.Checador
             this.paneluser.Name = "paneluser";
             this.paneluser.Size = new System.Drawing.Size(80, 80);
             this.paneluser.TabIndex = 11;
+            // 
+            // picLostConnection
+            // 
+            this.picLostConnection.BackColor = System.Drawing.Color.Transparent;
+            this.picLostConnection.Image = ((System.Drawing.Image)(resources.GetObject("picLostConnection.Image")));
+            this.picLostConnection.Location = new System.Drawing.Point(0, 0);
+            this.picLostConnection.Name = "picLostConnection";
+            this.picLostConnection.Padding = new System.Windows.Forms.Padding(4);
+            this.picLostConnection.Size = new System.Drawing.Size(81, 80);
+            this.picLostConnection.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.picLostConnection.TabIndex = 13;
+            this.picLostConnection.TabStop = false;
             // 
             // picLoading
             // 
@@ -284,11 +299,11 @@ namespace DGTIT.Checador
             this.MinimumSize = new System.Drawing.Size(1280, 720);
             this.Name = "CaptureForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CaptureFormClosing);
             this.Load += new System.EventHandler(this.CaptureForm_Load);
             this.fingerPrint.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picLock)).EndInit();
             this.paneluser.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picLostConnection)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLoading)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picUserFail)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picOK)).EndInit();
@@ -316,5 +331,6 @@ namespace DGTIT.Checador
         private System.Windows.Forms.Label lblVersion;
         public System.Windows.Forms.PictureBox picUserFail;
         public System.Windows.Forms.PictureBox picLoading;
+        public System.Windows.Forms.PictureBox picLostConnection;
     }
 }

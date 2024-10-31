@@ -29,7 +29,10 @@ namespace DGTIT.Checador
         private DPFP.Capture.Capture Capturer;
         private bool _allowCapture = false;
         private readonly bool playSoundOnFail = false;
-        public bool allowCapture
+        private EventLog eventLog;
+        private CancellationTokenSource cancellationTokenSource;
+
+        public bool AllowCapture
         {
             get => _allowCapture;
             set
@@ -44,41 +47,107 @@ namespace DGTIT.Checador
             }
         }
 
-        private EventLog eventLog;
-
         public CaptureForm()
 		{
 			InitializeComponent();
 
+            // * prepare the event log
             this.eventLog = new EventLog();
-            eventLog.Source = "Checador3";
+            this.eventLog.Source = "Checador3";    
 
-            lblNombre.Text = "";
-            lblMessage.Text = "";
-            lblFecha.BorderStyle = BorderStyle.None;
-            lblHora.BorderStyle = BorderStyle.None;
-            lblMessage.BorderStyle = BorderStyle.None;
-            lblNombre.BorderStyle = BorderStyle.None;
-            this.FormBorderStyle = FormBorderStyle.None;
-            this.btnClose.Enabled = false;
-
-            this.playSoundOnFail = Properties.Settings.Default["playSoundOnFail"].ToString() == "1";
-
+            // * prepare the UI elements
+            this.lblNombre.Text = "";
+            this.lblMessage.Text = "";
+            this.lblFecha.BorderStyle = BorderStyle.None;
+            this.lblHora.BorderStyle = BorderStyle.None;
+            this.lblMessage.BorderStyle = BorderStyle.None;
+            this.lblNombre.BorderStyle = BorderStyle.None;
+            this.btnClose.Enabled = true;
             this.lblStatus.ForeColor = Color.FromArgb(255,65, 94, 179);
+
+            // * load settings
+            this.playSoundOnFail = Properties.Settings.Default["playSoundOnFail"].ToString() == "1";
+            
+            // * attach event handlers
+            btnClose.Click += new EventHandler((object s, EventArgs ee) => {
+                this.Close();
+            });
+
+            // * initialize the  capturer object
+            if (Capturer == null) {
+                Capturer = new DPFP.Capture.Capture();
+            }
+
         }
 
-        protected virtual void Init()
-		{
-            try {
-                Capturer = new DPFP.Capture.Capture();  // Create a capture operation.
-                Capturer.EventHandler = this;  // Subscribe for capturing events.
-            }
-            catch(Exception err)
-            {
-                MakeReport(err.Message, err);
-                MessageBox.Show("No se pudo iniciar la operacion de captura", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        private void CaptureForm_Load(object sender, EventArgs e) {
+            ToogleFullScreen(true);
+            LimpiarCampos();
+            lblFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
+            Init();
+
+            cancellationTokenSource = new CancellationTokenSource();
+            var token = cancellationTokenSource.Token;
+
+            // * delay the start of capturing the fingerprints
+            Task.Run(() => {
+                try {
+                    // * what 2 secconds or until cancellation
+                    if(!token.WaitHandle.WaitOne(TimeSpan.FromSeconds(2))) {
+                        Capturer.StartCapture();
+                        SetLoading(false);
+                        // * enable exit button
+                        if (btnClose.IsHandleCreated) {
+                            Invoke(new Action(() => {
+                                this.btnClose.Enabled = true;
+                            }));
+                        }
+                    }
+                }
+                catch(OperationCanceledException){
+                    MakeReport("Starting capture process was stop by cancellation token");
+                }
+            }, token);
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e) {
+
+            Console.WriteLine("Capture form closing");
+
+            if (cancellationTokenSource != null) {
+                cancellationTokenSource.Cancel();
+                cancellationTokenSource.Dispose();
             }
 
+            Capturer.Dispose();
+
+            // Call the base method to proceed with closing
+            base.OnFormClosing(e);
+        }
+
+        private void ToogleFullScreen(bool fullScreen) {
+            if (fullScreen) {
+                // Set the form to full screen
+                this.WindowState = FormWindowState.Maximized;
+                this.FormBorderStyle = FormBorderStyle.None;
+                ChangeScreenResolution(new Size(1280, 720));
+            }
+            else {
+                this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            }
+        }
+
+        #region Update UI methods
+        protected virtual void Init()
+		{
+            // Create a capture operation
+            if (Capturer == null) {
+                Capturer = new DPFP.Capture.Capture();  
+            }
+
+            // Subscribe for capturing events
+            Capturer.EventHandler = this;  
+            
             // * make rounded the employee photo and the fingerprint image
             using (var gp = new GraphicsPath()) {
                 gp.AddEllipse(new Rectangle(0, 0, fotoEmpleado.Width - 1, fotoEmpleado.Height - 1 ));
@@ -98,35 +167,16 @@ namespace DGTIT.Checador
 
 		protected void StartCapturing()
 		{
-            this.allowCapture = true;
-            
-            if (Capturer == null){
-                return;
-            }
-            try {
-                Capturer.StartCapture();
-                SetLoading(false);
-            }
-            catch (Exception err) {
-                MakeReport("No se puede iniciar la captura.", err);
-                SetNoRegistrada("No se puede iniciar la captura");
-            }
-            
-		}
+            AllowCapture = true;
+            SetLoading(false);
+            MakeReport("Iniciando captura de huella", EventLevel.Informational);
+        }
 
 		protected void StopCapturing()
 		{
-            this.allowCapture = false;
-            if (Capturer == null) {
-                return;
-            }
-            try {
-                Capturer.StopCapture();
-            }
-            catch(Exception err){
-                MakeReport("No se puede terminar la captura.", err);
-            }
-		}
+            this.AllowCapture = false;
+            MakeReport("Deteniendo captura de huella", EventLevel.Informational );
+        }
         
         protected void MakeReport(string message, EventLevel eventLevel = EventLevel.Informational)
         {
@@ -177,49 +227,6 @@ namespace DGTIT.Checador
             catch (Exception) {}
         }
 
-        #region Form Events Handler
-        private void CaptureForm_Load(object sender, EventArgs e)
-		{
-            // Set the form to full screen
-            //this.WindowState = FormWindowState.Maximized;
-            //ChangeScreenResolution(new Size(1280, 720));
-
-            lblFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
-            lblHora.Text = DateTime.Now.ToString("HH:mm");
-
-            Init();
-
-            // * delay the start of capturing the fingerprints
-            Task.Run(() =>
-            {
-                Thread.Sleep(2000);
-
-                StartCapturing();
-
-                if (btnClose.IsHandleCreated) {
-                    Invoke(new Action(() => {
-                        this.btnClose.Enabled = true;
-                    }));
-                }
-
-            });
-
-            btnClose.Click += new EventHandler((object s, EventArgs ee) =>
-            {
-                this.Close();
-            });
-        }
-
-		protected virtual void CaptureFormClosing(object sender, FormClosingEventArgs e)
-		{
-            Task.Run(() => {
-                Capturer.Dispose();
-            });
-		}
-		#endregion
-
-        #region Update UI methods
-        
         private void DrawPicture(Bitmap bitmap)
 		{
             if (fingerPrintImg.IsHandleCreated) {
@@ -321,6 +328,7 @@ namespace DGTIT.Checador
                     picOK.Visible = false;
                     picX.Visible = false;
                     picUserFail.Visible = false;
+                    picLostConnection.Visible = false;
                 }));
             }
             catch (Exception) { }
@@ -344,6 +352,22 @@ namespace DGTIT.Checador
                 Invoke(new Action(() => { this.lblHora.Text = serverDate.Value.ToString("hh:mm:ss"); }));
             }
         }
+
+        protected void SetLostConnection() {
+            if (picLostConnection.IsHandleCreated) {
+                Invoke(new Action(() => {
+                    this.picLostConnection.Visible = true;
+                }));
+            }
+            
+            if (lblMessage.IsHandleCreated) {
+                Invoke(new Action(() => {
+                    this.lblMessage.ForeColor = Color.PaleVioletRed;
+                    this.lblMessage.Text = "Sin conexion";
+                }));
+            }
+        }
+
         #endregion
 
         #region FingerPrint EventsHandler
@@ -361,8 +385,10 @@ namespace DGTIT.Checador
 
         public void OnComplete(object Capture, string ReaderSerialNumber, DPFP.Sample Sample)
         {
-            MakeReport("La muestra ha sido capturada");
-            Process(Sample);
+            if(AllowCapture) {
+                MakeReport("La muestra ha sido capturada");
+                Process(Sample);
+            }
         }
 
         public void OnFingerGone(object Capture, string ReaderSerialNumber)
@@ -377,12 +403,16 @@ namespace DGTIT.Checador
 
         public void OnReaderConnect(object Capture, string ReaderSerialNumber)
         {
+            AllowCapture = true;
             MakeReport("El Lector de huellas ha sido conectado");
+            SetNoRegistrada("");
         }
 
         public void OnReaderDisconnect(object Capture, string ReaderSerialNumber)
         {
+            AllowCapture = false;
             MakeReport("El Lector de huellas ha sido desconectado");
+            SetNoRegistrada("Dispositivo desconectado");
         }
 
         public void OnSampleQuality(object Capture, string ReaderSerialNumber, DPFP.Capture.CaptureFeedback CaptureFeedback)
@@ -390,7 +420,6 @@ namespace DGTIT.Checador
             // 
         }
         #endregion
-
 
         #region change resolution settings
         private void ChangeScreenResolution(Size size)
