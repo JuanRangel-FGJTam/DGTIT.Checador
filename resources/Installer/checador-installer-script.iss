@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Checador"
-#define MyAppVersion "3.0.5.1"
+#define MyAppVersion "3.0.6.2"
 #define MyAppPublisher "DGTIT"
 #define MyAppURL "https://www.fgjtam.gob.mx/"
 #define MyAppExeName "Checador.exe"
