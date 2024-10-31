@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Checador"
-#define MyAppVersion "2.0"
+#define MyAppVersion "3.0.5.1"
 #define MyAppPublisher "DGTIT"
 #define MyAppURL "https://www.fgjtam.gob.mx/"
 #define MyAppExeName "Checador.exe"
@@ -31,7 +31,7 @@ DisableProgramGroupPage=yes
 ;PrivilegesRequired=lowest
 OutputDir="{#ProyectPath}\resources\Installer"
 OutputBaseFilename={#OutpuFileName}
-SetupIconFile="{#ProyectPath}\resources\Icons\icon.ico"
+SetupIconFile="{#ProyectPath}\resources\Images\icon.ico"
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -46,6 +46,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "{#ProyectPath}\DGTIT.Checador\DGTIT.Checador\bin\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#ProyectPath}\DGTIT.Checador\DGTIT.Checador\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "resources\dgtitEventlog.ps1"; DestDir: "{app}\resources\"; Flags: ignoreversion recursesubdirs
+
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]
@@ -61,4 +63,5 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-
+Filename: "schtasks.exe"; Parameters: "/create /tn ""ChecadorV3"" /tr ""{app}\{#MyAppExeName} --ch"" /sc onlogon /rl highest /f"; Flags: runhidden
+Filename: "powershell"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\resources\dgtitEventlog.ps1""";
