@@ -418,6 +418,7 @@
     <None Include="Resources\fingerprint.png" />
     <None Include="Resources\loading2.gif" />
     <None Include="Resources\loading.gif" />
+    <None Include="Resources\lost-connection.png" />
     <Content Include="UsuariosModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>UsuariosModel.Context.cs</LastGenOutput>

@@ -156,7 +156,7 @@ namespace DGTIT.Checador
             this.lblVersion.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
             this.lblVersion.Size = new System.Drawing.Size(386, 49);
             this.lblVersion.TabIndex = 13;
-            this.lblVersion.Text = "Creado por DGTIT v3.0.5";
+            this.lblVersion.Text = "Creado por DGTIT v3.0.6";
             this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // paneluser
