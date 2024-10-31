@@ -120,6 +120,7 @@ namespace DGTIT.Checador
             }
 
             Capturer.Dispose();
+            Capturer = null;
 
             // Call the base method to proceed with closing
             base.OnFormClosing(e);
@@ -404,14 +405,20 @@ namespace DGTIT.Checador
         public void OnReaderConnect(object Capture, string ReaderSerialNumber)
         {
             AllowCapture = true;
-            MakeReport("El Lector de huellas ha sido conectado");
+            try {
+                MakeReport("El Lector de huellas ha sido conectado");
+            }
+            catch { }
             SetNoRegistrada("");
         }
 
         public void OnReaderDisconnect(object Capture, string ReaderSerialNumber)
         {
             AllowCapture = false;
-            MakeReport("El Lector de huellas ha sido desconectado");
+            try {
+                MakeReport("El Lector de huellas ha sido desconectado");
+            }
+            catch{ }
             SetNoRegistrada("Dispositivo desconectado");
         }
 
