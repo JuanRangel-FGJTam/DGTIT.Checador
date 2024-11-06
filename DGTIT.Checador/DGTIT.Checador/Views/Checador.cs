@@ -8,11 +8,14 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using DGTIT.Checador.Data;
 using DGTIT.Checador.Services;
 
 namespace DGTIT.Checador.Views
@@ -24,22 +27,28 @@ namespace DGTIT.Checador.Views
         private readonly ChecadorService checadorService;
         private readonly FiscaliaService fiscaliaService;
         private readonly List<long> areasAvailables = new List<long>();
-        private System.Windows.Forms.Timer timerDateTime;
+        
+        // private System.Windows.Forms.Timer timerDisplayDateTime;
         private System.Windows.Forms.Timer timerLogStatus;
+        private System.Windows.Forms.Timer timerSyncDateTime;
 
         private DPFP.Verification.Verification Verificator;
         private Task taskAfterCheck;
         private CancellationTokenSource cancelationSource;
         private bool errorConexion = false;
+        private InternalClock internalClock;
 
+        
         public Checador() : base() {
             contexto = new UsuariosDBEntities();
             procu = new procuraduriaEntities1();
+
             checadorService = new ChecadorService(contexto, procu);
             fiscaliaService = new FiscaliaService(procu, contexto);
             
             // * read the area id
-            this.areasAvailables = Properties.Settings.Default["generalDirectionId"].ToString().Split(',').Select(i => Convert.ToInt64(i)).ToList();   
+            this.areasAvailables = Properties.Settings.Default["generalDirectionId"].ToString().Split(',').Select(i => Convert.ToInt64(i)).ToList();
+
         }
 
         protected override void Init()
@@ -48,16 +57,30 @@ namespace DGTIT.Checador.Views
             base.Text = "Verificación de Huella Digital";
             Verificator = new DPFP.Verification.Verification();
 
+            // * initialize internal clock
+            internalClock = new InternalClock(DateTime.Now, CurrentEventLog);
+            internalClock.OnTimeChange = (currentTime) => SetDateTimeServer(currentTime);
+            internalClock.StartClock();
+
             // * initialize backgrounds
-            timerDateTime = new System.Windows.Forms.Timer();
-            timerDateTime.Interval = (int) TimeSpan.FromSeconds(1).TotalMilliseconds;
-            timerDateTime.Tick += new EventHandler(OnTimerTick);
-            timerDateTime.Start();
+            //timerDisplayDateTime = new System.Windows.Forms.Timer();
+            //timerDisplayDateTime.Interval = (int) TimeSpan.FromSeconds(1).TotalMilliseconds;
+            //timerDisplayDateTime.Tick += new EventHandler(OnTimerTick);
+            //timerDisplayDateTime.Start();
 
             timerLogStatus = new System.Windows.Forms.Timer();
             timerLogStatus.Interval = (int) TimeSpan.FromMinutes(1).TotalMilliseconds;
             timerLogStatus.Tick += new EventHandler(OnTimerLogTick);
             timerLogStatus.Start();
+
+            timerSyncDateTime = new System.Windows.Forms.Timer();
+            timerSyncDateTime.Interval = (int)TimeSpan.FromMinutes(1).TotalMilliseconds;
+            timerSyncDateTime.Tick += new EventHandler(OnTimerSyncClock);
+            timerSyncDateTime.Start();
+
+            // * force to fetch the time at the begining
+            OnTimerSyncClock(null, null);
+
         }
 
         protected override void Process(DPFP.Sample Sample)
@@ -71,6 +94,25 @@ namespace DGTIT.Checador.Views
 
             Task.Run(() => {
                 ValidateFingerPrint(Sample, ct);
+
+                // * task for clear the UI and unlock the fingerPrint device after some delay
+                taskAfterCheck = Task.Run(() => {
+                    try {
+                        // sleep 3 seconds
+                        System.Threading.Thread.Sleep(2500);
+
+                        // check if the task was cancelled
+                        if (ct.IsCancellationRequested) {
+                            return;
+                        }
+
+                        // clear UI and restart eh capturing service
+                        LimpiarCampos();
+                        StartCapturing();
+                    }
+                    catch (OperationCanceledException) { }
+                }, ct);
+
             }, ct);
 
         }
@@ -92,6 +134,8 @@ namespace DGTIT.Checador.Views
             if (cancelationSource != null) {
                 cancelationSource.Cancel();
             }
+
+            internalClock.StopClock();
 
             // Call the base method to proceed with closing
             base.OnFormClosing(e);
@@ -237,27 +281,13 @@ namespace DGTIT.Checador.Views
                     SetAreaNoEncontrada();
                 }
 
-                // * task for clear the UI and unlock the fingerPrint device after some delay
-                taskAfterCheck = Task.Run(() => {
-                    try {
-                        // sleep 3 seconds
-                        System.Threading.Thread.Sleep(2500);
-
-                        // check if the task was cancelled
-                        if (ct.IsCancellationRequested) {
-                            return;
-                        }
-
-                        // clear UI and restart eh capturing service
-                        LimpiarCampos();
-                        StartCapturing();
-                    }
-                    catch (OperationCanceledException) { }
-                }, ct);
             }
         }
 
+
         #region background workers
+        
+        [Obsolete("Not used anymore")]
         private void OnTimerTick(object sender, EventArgs e) {
             try {
 
@@ -301,10 +331,6 @@ namespace DGTIT.Checador.Views
 
         private void OnTimerLogTick(object sender, EventArgs e) {
 
-            if(errorConexion) {
-                return;
-            }
-
             try {
                 var _ipAddress = GetIpAddress();
                 var _name = Properties.Settings.Default["name"].ToString();
@@ -314,6 +340,42 @@ namespace DGTIT.Checador.Views
                 MakeReport(err.Message, err);
             }
         }
+
+        private void OnTimerSyncClock(object sender, EventArgs e) {
+            try {
+
+                MakeReport("Obteniendo hora del servidor.", EventLevel.Informational);
+
+                // get the date from the server
+
+                var task1 = Task.Run<DateTime?>(() => contexto.Database.SqlQuery<DateTime>("SELECT getdate()").First() );
+
+                var task2 = Task.Run(() => System.Threading.Thread.Sleep(3000));
+
+                var taskIndex = Task.WaitAny(task1, task2);
+                if (taskIndex == 1) {
+                    throw new TimeoutException("Timeout at get the server date");
+                }
+
+                DateTime? serverDate = task1.Result;
+
+                if(serverDate == null) {
+                    throw new Exception("La fecha no se pudo recuperar del servidor.");
+                }
+
+                if(internalClock == null) {
+                    throw new Exception("El error interno no esta inicializado.");
+                }
+
+                internalClock.SyncClock(serverDate.Value);
+
+                MakeReport("Reloj interno sincronizado.", EventLevel.Informational);
+            }
+            catch (Exception err) {
+                MakeReport("Error al obtener la fecha del servidor", err);
+            }
+        }
+
         #endregion
 
     }

@@ -31,6 +31,7 @@ namespace DGTIT.Checador
         private readonly bool playSoundOnFail = false;
         private EventLog eventLog;
         private CancellationTokenSource cancellationTokenSource;
+        public EventLog CurrentEventLog { get => this.eventLog; }
 
         public bool AllowCapture
         {
@@ -83,7 +84,7 @@ namespace DGTIT.Checador
         private void CaptureForm_Load(object sender, EventArgs e) {
             ToogleFullScreen(true);
             LimpiarCampos();
-            lblFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
+            lblFecha.Text = "Cargando...";
             Init();
 
             cancellationTokenSource = new CancellationTokenSource();
@@ -201,9 +202,9 @@ namespace DGTIT.Checador
         }
 
         protected void MakeReport(string message, Exception err) {
-            Console.WriteLine($"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} {EventLevel.Error}] " + message);
+            Console.WriteLine($"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} {EventLevel.Error}] " + message );
             try {
-                eventLog.WriteEntry(message + $"[{err.StackTrace}]", EventLogEntryType.Error);
+                eventLog.WriteEntry( $"{message}: {err.Message} [{err.StackTrace}]", EventLogEntryType.Error);
             }
             catch { }
         }

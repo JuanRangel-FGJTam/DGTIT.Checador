@@ -175,6 +175,7 @@
     <Compile Include="clientsStatusLog.cs">
       <DependentUpon>UsuariosModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\InternalClock.cs" />
     <Compile Include="Helpers\FingerPrint.cs" />
     <Compile Include="notification.cs">
       <DependentUpon>UsuariosModel.tt</DependentUpon>
