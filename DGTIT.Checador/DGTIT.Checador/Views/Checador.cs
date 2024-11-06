@@ -27,6 +27,7 @@ namespace DGTIT.Checador.Views
         private readonly ChecadorService checadorService;
         private readonly FiscaliaService fiscaliaService;
         private readonly List<long> areasAvailables = new List<long>();
+        private readonly int intervalSyncClock = 600;
         
         // private System.Windows.Forms.Timer timerDisplayDateTime;
         private System.Windows.Forms.Timer timerLogStatus;
@@ -48,7 +49,7 @@ namespace DGTIT.Checador.Views
             
             // * read the area id
             this.areasAvailables = Properties.Settings.Default["generalDirectionId"].ToString().Split(',').Select(i => Convert.ToInt64(i)).ToList();
-
+            this.intervalSyncClock = Convert.ToInt32(Properties.Settings.Default["intervalSyncClock"]);
         }
 
         protected override void Init()
@@ -74,7 +75,7 @@ namespace DGTIT.Checador.Views
             timerLogStatus.Start();
 
             timerSyncDateTime = new System.Windows.Forms.Timer();
-            timerSyncDateTime.Interval = (int)TimeSpan.FromMinutes(1).TotalMilliseconds;
+            timerSyncDateTime.Interval = (int)TimeSpan.FromSeconds(this.intervalSyncClock).TotalMilliseconds;
             timerSyncDateTime.Tick += new EventHandler(OnTimerSyncClock);
             timerSyncDateTime.Start();
 

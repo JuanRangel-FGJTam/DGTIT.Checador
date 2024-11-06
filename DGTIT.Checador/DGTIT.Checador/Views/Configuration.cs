@@ -21,6 +21,7 @@ namespace DGTIT.Checador.Views
         private bool playSoundOnFail = false;
         private List<long> selectedIds = new List<long>();
         private List<general_directions> generalDirections;
+        private int intervalSyncClock;
 
         public Configuration()
         {
@@ -29,6 +30,7 @@ namespace DGTIT.Checador.Views
             this.name = (string) Properties.Settings.Default["name"];
             this.selectedIds = Properties.Settings.Default["generalDirectionId"].ToString().Split(',').Select( d => Convert.ToInt64(d)).ToList();
             this.playSoundOnFail = Properties.Settings.Default["playSoundOnFail"].ToString() == "1";
+            this.intervalSyncClock = Convert.ToInt32(Properties.Settings.Default["intervalSyncClock"]);
             this.Load += new EventHandler(LoadedDone);
         }
 
@@ -62,6 +64,9 @@ namespace DGTIT.Checador.Views
                 playSoundOnFail = chbPlayOnFail.Checked;
             });
 
+
+            this.tb_intervalClock.Value = this.intervalSyncClock;
+
         }
 
 
@@ -79,6 +84,8 @@ namespace DGTIT.Checador.Views
             Properties.Settings.Default["name"] = this.name;
             Properties.Settings.Default["generalDirectionId"] = string.Join(",", listIds.ToArray());
             Properties.Settings.Default["playSoundOnFail"] = this.playSoundOnFail?"1":"0";
+            Properties.Settings.Default["intervalSyncClock"] = ((int)this.tb_intervalClock.Value).ToString();
+
             Properties.Settings.Default.Save();
             MessageBox.Show("Configuracion actualizada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();

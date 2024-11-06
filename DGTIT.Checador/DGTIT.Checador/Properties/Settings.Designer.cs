@@ -58,5 +58,17 @@ namespace DGTIT.Checador.Properties {
                 this["playSoundOnFail"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("600")]
+        public string intervalSyncClock {
+            get {
+                return ((string)(this["intervalSyncClock"]));
+            }
+            set {
+                this["intervalSyncClock"] = value;
+            }
+        }
     }
 }
