@@ -38,8 +38,11 @@
             this.label3 = new System.Windows.Forms.Label();
             this.chbPlayOnFail = new System.Windows.Forms.CheckBox();
             this.checkListAreas = new System.Windows.Forms.CheckedListBox();
+            this.tb_connectionTimeout = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tb_intervalClock)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tb_connectionTimeout)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -56,7 +59,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(18, 175);
+            this.label2.Location = new System.Drawing.Point(18, 260);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(38, 18);
             this.label2.TabIndex = 1;
@@ -73,7 +76,7 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(247, 479);
+            this.button1.Location = new System.Drawing.Point(247, 565);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(125, 32);
             this.button1.TabIndex = 8;
@@ -82,6 +85,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.tb_connectionTimeout);
+            this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.tb_intervalClock);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.chbPlayOnFail);
@@ -91,7 +96,7 @@
             this.groupBox2.Controls.Add(this.txtName);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(587, 461);
+            this.groupBox2.Size = new System.Drawing.Size(587, 547);
             this.groupBox2.TabIndex = 10;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Generales";
@@ -133,7 +138,7 @@
             // 
             this.chbPlayOnFail.AutoSize = true;
             this.chbPlayOnFail.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chbPlayOnFail.Location = new System.Drawing.Point(21, 131);
+            this.chbPlayOnFail.Location = new System.Drawing.Point(21, 216);
             this.chbPlayOnFail.Name = "chbPlayOnFail";
             this.chbPlayOnFail.Size = new System.Drawing.Size(339, 22);
             this.chbPlayOnFail.TabIndex = 7;
@@ -144,16 +149,44 @@
             // 
             this.checkListAreas.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkListAreas.FormattingEnabled = true;
-            this.checkListAreas.Location = new System.Drawing.Point(21, 200);
+            this.checkListAreas.Location = new System.Drawing.Point(21, 285);
             this.checkListAreas.Name = "checkListAreas";
-            this.checkListAreas.Size = new System.Drawing.Size(560, 251);
+            this.checkListAreas.Size = new System.Drawing.Size(546, 251);
             this.checkListAreas.TabIndex = 6;
+            // 
+            // tb_connectionTimeout
+            // 
+            this.tb_connectionTimeout.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tb_connectionTimeout.Location = new System.Drawing.Point(21, 162);
+            this.tb_connectionTimeout.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.tb_connectionTimeout.Name = "tb_connectionTimeout";
+            this.tb_connectionTimeout.Size = new System.Drawing.Size(118, 24);
+            this.tb_connectionTimeout.TabIndex = 11;
+            this.tb_connectionTimeout.Value = new decimal(new int[] {
+            12,
+            0,
+            0,
+            0});
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(18, 140);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(495, 18);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Tiempo de espera de la conexión para obtener los empleados (Segundos)";
             // 
             // Configuration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(611, 523);
+            this.ClientSize = new System.Drawing.Size(611, 609);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -167,6 +200,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tb_intervalClock)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tb_connectionTimeout)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -182,5 +216,7 @@
         private System.Windows.Forms.CheckBox chbPlayOnFail;
         private System.Windows.Forms.NumericUpDown tb_intervalClock;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.NumericUpDown tb_connectionTimeout;
+        private System.Windows.Forms.Label label4;
     }
 }

@@ -16,19 +16,20 @@ namespace DGTIT.Checador.Services {
     {
         private readonly UsuariosDBEntities usuariosDBEntities;
         private readonly procuraduriaEntities1 procuraduriaEntities;
+        private readonly int employeesConnectionTimeout = 0;
 
         //private IEnumerable<employee> _cachedEmployees = Array.Empty<employee>();
         //private DateTime _lastCached = DateTime.Now;
 
         public ChecadorService( UsuariosDBEntities context, procuraduriaEntities1 procuraduriaContext)
         {
+            this.employeesConnectionTimeout = Convert.ToInt32(Properties.Settings.Default["employeesTimeout"]);
             this.usuariosDBEntities = context;
             this.procuraduriaEntities = procuraduriaContext;
         }
 
         public IEnumerable<employee> GetEmployees()
         {
-
             IEnumerable<employee> employees = Array.Empty<employee>();
 
             var taskEmployee = Task.Run(() => {
@@ -37,16 +38,7 @@ namespace DGTIT.Checador.Services {
                     .ToList();
             });
 
-            var taskSleep = Task.Run(() => {
-                Thread.Sleep(6000);
-            });
-
-            var index = Task.WaitAny(taskEmployee, taskSleep);
-
-            if (index == 1) {
-                throw new TimeoutException();
-            }
-            
+            taskEmployee.Wait();
             return employees;
         }
 

@@ -14,5 +14,8 @@
     <Setting Name="intervalSyncClock" Type="System.String" Scope="User">
       <Value Profile="(Default)">600</Value>
     </Setting>
+    <Setting Name="employeesTimeout" Type="System.String" Scope="User">
+      <Value Profile="(Default)">12</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

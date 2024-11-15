@@ -42,6 +42,7 @@ namespace DGTIT.Checador.Views
         
         public Checador() : base() {
             contexto = new UsuariosDBEntities();
+            contexto.Database.CommandTimeout = Convert.ToInt32(Properties.Settings.Default["employeesTimeout"]);
             procu = new procuraduriaEntities1();
 
             checadorService = new ChecadorService(contexto, procu);

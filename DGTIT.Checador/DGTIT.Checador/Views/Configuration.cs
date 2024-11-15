@@ -22,6 +22,7 @@ namespace DGTIT.Checador.Views
         private List<long> selectedIds = new List<long>();
         private List<general_directions> generalDirections;
         private int intervalSyncClock;
+        private int employeesTimeout;
 
         public Configuration()
         {
@@ -31,6 +32,7 @@ namespace DGTIT.Checador.Views
             this.selectedIds = Properties.Settings.Default["generalDirectionId"].ToString().Split(',').Select( d => Convert.ToInt64(d)).ToList();
             this.playSoundOnFail = Properties.Settings.Default["playSoundOnFail"].ToString() == "1";
             this.intervalSyncClock = Convert.ToInt32(Properties.Settings.Default["intervalSyncClock"]);
+            this.employeesTimeout = Convert.ToInt32(Properties.Settings.Default["employeesTimeout"]);
             this.Load += new EventHandler(LoadedDone);
         }
 
@@ -64,9 +66,9 @@ namespace DGTIT.Checador.Views
                 playSoundOnFail = chbPlayOnFail.Checked;
             });
 
-
             this.tb_intervalClock.Value = this.intervalSyncClock;
 
+            this.tb_connectionTimeout.Value = this.employeesTimeout;
         }
 
 
@@ -85,6 +87,7 @@ namespace DGTIT.Checador.Views
             Properties.Settings.Default["generalDirectionId"] = string.Join(",", listIds.ToArray());
             Properties.Settings.Default["playSoundOnFail"] = this.playSoundOnFail?"1":"0";
             Properties.Settings.Default["intervalSyncClock"] = ((int)this.tb_intervalClock.Value).ToString();
+            Properties.Settings.Default["employeesTimeout"] = ((int)this.tb_connectionTimeout.Value).ToString();
 
             Properties.Settings.Default.Save();
             MessageBox.Show("Configuracion actualizada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);

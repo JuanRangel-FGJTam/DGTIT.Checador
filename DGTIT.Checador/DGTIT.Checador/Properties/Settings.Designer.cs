@@ -70,5 +70,17 @@ namespace DGTIT.Checador.Properties {
                 this["intervalSyncClock"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("12")]
+        public string employeesTimeout {
+            get {
+                return ((string)(this["employeesTimeout"]));
+            }
+            set {
+                this["employeesTimeout"] = value;
+            }
+        }
     }
 }
