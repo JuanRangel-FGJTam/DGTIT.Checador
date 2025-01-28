@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ChecadorService.Data.Repositories;
 using ChecadorService.Models;
+using ChecadorService.Utils;
 using log4net;
 using Microsoft.Extensions.Logging;
 
@@ -27,7 +28,15 @@ namespace ChecadorService.Services {
         {
             try
             {
-                IEnumerable<Record> records = await this.recordRepository.FindAll();
+                var records = new List<Record>();
+                var generalDirectionIds = CustomApplicationSettings.GetGeneralDirections();
+                foreach(var gd in generalDirectionIds.Split(';'))
+                {
+                    if(int.TryParse(gd, out int parsedInt))
+                    {
+                        records.AddRange(await this.recordRepository.FindByGeneralDirection(parsedInt));
+                    }
+                }
                 return records;
             }
             catch(Exception err)

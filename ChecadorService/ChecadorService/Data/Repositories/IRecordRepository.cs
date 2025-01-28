@@ -9,6 +9,8 @@ namespace ChecadorService.Data.Repositories {
     internal interface IRecordRepository {
         Task<IEnumerable<Record>> FindAll();
 
+        Task<IEnumerable<Record>> FindByGeneralDirection(int generalDirectionId);
+
         Task<Record> FindById(int recordId);
 
         Task DeleteById(int recordId);
