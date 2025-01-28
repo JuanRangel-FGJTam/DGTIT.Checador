@@ -33,9 +33,22 @@ namespace ChecadorService.Data.Repositories {
             await Task.CompletedTask;
             throw new NotImplementedException();
         }
-        public async Task DeleteById(int recordId) {
-            await Task.CompletedTask;
-            throw new NotImplementedException();
+        public async Task DeleteById(int recordId)
+        {
+            var records = new List<Record>();
+            var connectionString = ConfigurationManager.ConnectionStrings["UsuariosDBLocal"].ToString() ?? throw new ArgumentNullException("UsuariosDBLocal", "The local connection string is missing.");
+            using (var sqlConnection = new SqlConnection(connectionString)) {
+                await sqlConnection.OpenAsync();
+                var query = "Delete From [dbo].[records] Where id = @recordId";
+                var command = new SqlCommand(query, sqlConnection);
+                command.Parameters.AddWithValue("@recordId", recordId);
+                using (var reader = command.ExecuteReader()) {
+                    while (reader.Read()) {
+                        records.Add(Record.FromDataReader(reader));
+                    }
+                }
+                sqlConnection.Close();
+            }
         }
 
     }

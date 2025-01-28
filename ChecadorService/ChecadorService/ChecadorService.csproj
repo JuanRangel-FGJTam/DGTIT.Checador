@@ -123,7 +123,7 @@
     <Compile Include="Data\Repositories\SQLRecordRepository.cs" />
     <Compile Include="Jobs\DataSyncJob.cs" />
     <Compile Include="Jobs\LogTimeJob.cs" />
-    <Compile Include="Jobs\UploadRecords.cs" />
+    <Compile Include="Jobs\UploadRecordsJob.cs" />
     <Compile Include="Models\Record.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
