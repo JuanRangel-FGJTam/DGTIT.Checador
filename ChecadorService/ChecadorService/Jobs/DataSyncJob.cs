@@ -1,15 +1,14 @@
-﻿using ChecadorService.Services;
-using log4net;
-using Microsoft.Win32;
-using Quartz;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Win32;
+using log4net;
+using Quartz;
+using ChecadorService.Models;
+using ChecadorService.Services;
 
 namespace ChecadorService.Jobs {
     internal class DataSyncJob : IJob {
@@ -29,15 +28,37 @@ namespace ChecadorService.Jobs {
 
             // * server employees
             logger.Info("Getting the server employees.");
-            var employees = await EmployeeService1.GetServerEmployees();
-
+            IEnumerable<Employee> employees = Array.Empty<Employee>();
+            try
+            {
+                employees = await EmployeeService1.GetServerEmployees();
+            }
+            catch(Exception err)
+            {
+                logger.Error("Fail at getting the employees from the server.", err);
+                return;
+            }
+            
             // * local employees
-            var localEmployees = await EmployeeService1.GetLocalEmployees(includeDeleted: true);
+            IEnumerable<Employee> localEmployees = Array.Empty<Employee>();
+            try {
+                localEmployees = await EmployeeService1.GetLocalEmployees(includeDeleted: true);
+            }
+            catch (Exception err) {
+                logger.Error("Fail at getting the local employees from the DB.", err);
+                return;
+            }
 
             // * update
             logger.Info("Update the local employees");
-            var updated = await EmployeeService1.UpdateLocalEmployees(employees, localEmployees);
-            
+            try {
+                var updated = await EmployeeService1.UpdateLocalEmployees(employees, localEmployees);
+            }
+            catch (Exception err) {
+                logger.Error("Fail at update the employees.", err);
+                return;
+            }
+
             logger.Info("Finished job sync employees.");
         }
     }

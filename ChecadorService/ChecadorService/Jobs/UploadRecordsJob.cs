@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using log4net;
 using Quartz;
 using ChecadorService.Services;
+using ChecadorService.Models;
 
 namespace ChecadorService.Jobs {
     internal class UploadRecordsJob : IJob {
@@ -22,13 +23,23 @@ namespace ChecadorService.Jobs {
         {
             logger.Info("Beggining update the records job");
 
-            var localRecords = await recordService.GetLocalRecords();
-            logger.Info($"{localRecords.Count()} records to upload.");
+            IEnumerable<Record> localRecords = Array.Empty<Record>();
+            try {
+                localRecords = await recordService.GetLocalRecords();
+                logger.Info($"{localRecords.Count()} records to upload.");
+            }catch(Exception err) {
+                logger.Error("Fail at retrive the local records", err);
+                return;
+            }
 
             if(localRecords.Any())
             {
-                var uploaded = await recordService.SendRecord2Server(localRecords);
-                logger.Info($"{uploaded.Count()} records to uploaded.");
+                try {
+                    var uploaded = await recordService.SendRecord2Server(localRecords);
+                    logger.Info($"{uploaded.Count()} records to uploaded.");
+                }catch(Exception err) {
+                    logger.Error("Fail at uploading the records to the server.", err);
+                }
             }
             logger.Info("Finished update the records job");
         }
