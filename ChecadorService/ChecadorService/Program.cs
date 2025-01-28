@@ -4,17 +4,20 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
-using Topshelf;
-using log4net.Config;
-using Autofac;
-using ChecadorService.Services;
-using Autofac.Extras.Quartz;
 using System.Runtime.CompilerServices;
 using System.Collections.Specialized;
 using System.Configuration;
-using ChecadorService.Jobs;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
+using Topshelf;
 using Topshelf.Autofac;
+using log4net.Config;
+using Autofac;
+using Autofac.Extras.Quartz;
+using ChecadorService.Services;
+using ChecadorService.Jobs;
+using ChecadorService.Data.Repositories;
+using log4net;
 
 namespace ChecadorService {
     internal static class Program {
@@ -27,6 +30,10 @@ namespace ChecadorService {
             ContainerBuilder containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterType<ChecadorWService>().AsSelf().InstancePerLifetimeScope();
             containerBuilder.RegisterType<EmployeeService>().AsSelf().InstancePerDependency();
+            containerBuilder.RegisterType<SQLRecordRepository>().As<IRecordRepository>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<RecordServerRepo>().As<IRecordServerRepository>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<RecordService>().As<IRecordService>().InstancePerLifetimeScope();
+
             containerBuilder.RegisterModule(new QuartzAutofacFactoryModule {
                 ConfigurationProvider = context => 
                     (NameValueCollection)ConfigurationManager.GetSection("quartz")

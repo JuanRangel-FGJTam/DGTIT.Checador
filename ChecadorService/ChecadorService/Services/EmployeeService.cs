@@ -12,13 +12,20 @@ using Quartz;
 using ChecadorService.Models;
 using ChecadorService.Utils;
 using System.Data;
+using ChecadorService.Data.Repositories;
 
 namespace ChecadorService.Services {
     internal class EmployeeService {
 
+        private readonly ILog logger;
+
+        public EmployeeService() {
+            this.logger = this.logger = LogManager.GetLogger(typeof(EmployeeService));
+        }
+
         public async Task<IEnumerable<Employee>> GetServerEmployees()
         {
-            Console.WriteLine("Attempt to get the employees from the server.");
+            logger.Debug("Attempt to get the employees from the server.");
 
             var response = new List<Employee>();
             try
@@ -82,7 +89,7 @@ namespace ChecadorService.Services {
                             }
                             catch(Exception err)
                             {
-                                Console.WriteLine($"Error: Can't parse the employee from the reader, employeeData:[{reader.ToString()}]", err);
+                                logger.Error($"Error: Can't parse the employee from the reader, employeeData:[{reader.ToString()}]", err);
                             }
                         }
                     }
@@ -91,7 +98,7 @@ namespace ChecadorService.Services {
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: Can't get the employees from the server: {ex.Message}\n{ex.StackTrace}");
+                logger.Error($"Error: Can't get the employees from the server: {ex.Message}", ex);
             }
 
             return response;
@@ -99,7 +106,6 @@ namespace ChecadorService.Services {
 
         public async Task<IEnumerable<Employee>> GetLocalEmployees(bool includeDeleted = false )
         {
-            Console.WriteLine("Get the local employees.");
             var response = new List<Employee>();
 
             // * general directions used to filter the employees we want to retrieve from the server.
@@ -143,7 +149,7 @@ namespace ChecadorService.Services {
                             response.Add(Employee.FromDataReaderLocal(reader));
                         }
                         catch (Exception err) {
-                            Console.WriteLine($"Error: Can't parse the employee from the reader, employeeData:[{reader.ToString()}]", err);
+                            logger.Error($"Error: Can't parse the employee from the reader, employeeData:[{reader.ToString()}]", err);
                         }
                     }
                 }
@@ -193,7 +199,7 @@ namespace ChecadorService.Services {
         /// <exception cref="ArgumentNullException"></exception>
         public async Task UpdateLocalEmployee(int employeeId, Employee employee)
         {
-            Console.WriteLine($"Updated loca employee with number: '{employee.EmployeeNumber}'.");
+            logger.Info($"Updated loca employee with number: '{employee.EmployeeNumber}'.");
             
             // * get the connection string
             string serverConnectionString = ConfigurationManager.ConnectionStrings["UsuariosDBLocal"].ConnectionString;
@@ -243,7 +249,7 @@ namespace ChecadorService.Services {
         /// <exception cref="ArgumentNullException"></exception>
         public async Task<int> CreateLocalEmployee(Employee employee)
         {
-            Console.WriteLine($"Create loca employee record with number: '{employee.EmployeeNumber}'.");
+            logger.Info($"Create loca employee record with number: '{employee.EmployeeNumber}'.");
 
             // * get the connection string
             string serverConnectionString = ConfigurationManager.ConnectionStrings["UsuariosDBLocal"].ConnectionString;
@@ -315,7 +321,7 @@ namespace ChecadorService.Services {
         /// <exception cref="ArgumentNullException"></exception>
         private async Task DeleteLocalEmployees(IEnumerable<int> empoyeesId)
         {
-            Console.WriteLine($"Deleting local employees records.");
+            logger.Info("Deleting local employees records.");
             // * get the connection string
             string serverConnectionString = ConfigurationManager.ConnectionStrings["UsuariosDBLocal"].ConnectionString;
             if (String.IsNullOrEmpty(serverConnectionString))
@@ -333,7 +339,7 @@ namespace ChecadorService.Services {
                     command.Parameters.AddWithValue("@employeeIds", string.Join(";", empoyeesId));
                     // Execute the query
                     var records = await command.ExecuteNonQueryAsync();
-                    Console.WriteLine($"Deleted {records} employees.");
+                    logger.Info($"Deleted {records} employees.");
                 }
                 sqlConnection.Close();
             }
