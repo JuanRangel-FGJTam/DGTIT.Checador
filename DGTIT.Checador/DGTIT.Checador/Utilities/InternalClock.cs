@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Timers;
 
 
-namespace DGTIT.Checador.Data {
+namespace DGTIT.Checador.Utilities {
     internal class InternalClock {
 
         private readonly System.Windows.Forms.Timer _timer;

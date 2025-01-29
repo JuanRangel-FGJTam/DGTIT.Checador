@@ -15,8 +15,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
-using DGTIT.Checador.Data;
+using DGTIT.Checador.Utilities;
 using DGTIT.Checador.Services;
+using DPFP;
+using DGTIT.Checador.Core.Entities;
+using DGTIT.Checador.Data.Repositories;
 
 namespace DGTIT.Checador.Views
 {
@@ -28,7 +31,9 @@ namespace DGTIT.Checador.Views
         private readonly FiscaliaService fiscaliaService;
         private readonly List<long> areasAvailables = new List<long>();
         private readonly int intervalSyncClock = 600;
-        
+
+        private EmployeeFingerprintMatcher employeeFingerprintM;
+
         // private System.Windows.Forms.Timer timerDisplayDateTime;
         private System.Windows.Forms.Timer timerLogStatus;
         private System.Windows.Forms.Timer timerSyncDateTime;
@@ -41,16 +46,28 @@ namespace DGTIT.Checador.Views
 
         
         public Checador() : base() {
+            // * read configurations
+
+            // this.areasAvailables = Properties.Settings.Default["generalDirectionId"].ToString().Split(',').Select(i => Convert.ToInt64(i)).ToList();
+            this.areasAvailables = CustomApplicationSettings.GetGeneralDirections().Split(';').Select( i => Convert.ToInt64(i)).ToList();
+
+            this.intervalSyncClock = Convert.ToInt32(Properties.Settings.Default["intervalSyncClock"]);
+
+            // TODO: Remove this
             contexto = new UsuariosDBEntities();
             contexto.Database.CommandTimeout = Convert.ToInt32(Properties.Settings.Default["employeesTimeout"]);
             procu = new procuraduriaEntities1();
+            // TODO: Remove this
 
-            checadorService = new ChecadorService(contexto, procu);
+            // * initialized repos
+            var employeeRepo = new SQLClientEmployeeRepository();
+            var recordRepo = new SQLClientRecordRepository();
+
+            // * initialized services
+            checadorService = new ChecadorService(employeeRepo, recordRepo);
             fiscaliaService = new FiscaliaService(procu, contexto);
-            
-            // * read the area id
-            this.areasAvailables = Properties.Settings.Default["generalDirectionId"].ToString().Split(',').Select(i => Convert.ToInt64(i)).ToList();
-            this.intervalSyncClock = Convert.ToInt32(Properties.Settings.Default["intervalSyncClock"]);
+
+            employeeFingerprintM = new EmployeeFingerprintMatcher(this.areasAvailables.Select(item => (int) item));
         }
 
         protected override void Init()
@@ -169,178 +186,100 @@ namespace DGTIT.Checador.Views
             }
         }
         
-        private void ValidateFingerPrint(DPFP.Sample Sample, CancellationToken ct) {
+        private async void ValidateFingerPrint(DPFP.Sample Sample, CancellationToken ct) {
             
             // Process the sample and create a feature set for the enrollment purpose.
             DPFP.FeatureSet features = ExtractFeatures(Sample, DPFP.Processing.DataPurpose.Verification);
+            if (features == null)
+            {
+                return;
+            }
 
-            // Check quality of the sample and start verification if it's good
-            if (features != null) {
-                // * stop the service of the capturing the fingerprints
-                StopCapturing();
+            // get the employees
+            IEnumerable<Employee> employees = Array.Empty<Employee>();
+            try
+            {
+                employees = await this.checadorService.GetEmployees();
+            }
+            catch (Exception err)
+            {
+                MakeReport("No se pudo obtener el listado de empleados: " + err.Message, err);
+                SetLoading(false);
+                SetNoRegistrada("Error de conexión");
+                SetAreaNoEncontrada();
+                return;
+            }
 
-                // prepare for validate each employees fingerprints
-                DPFP.Verification.Verification.Result result = new DPFP.Verification.Verification.Result();
-                DPFP.Template template = new DPFP.Template();
+            // * stop the service of the capturing the fingerprints
+            StopCapturing();
 
+            var matchingResults = this.employeeFingerprintM.GetMarchingEmployee(employees, features);
 
-                // loop for each employee and validate the finger print
-                IEnumerable<employee> employees = Array.Empty<employee>();
-                try {
-                    employees = checadorService.GetEmployees().ToArray();
+            if(matchingResults.IsSuccess)
+            {
+                // * make the checkin record
+                DateTime cheeckTime = DateTime.Now;
+                try
+                {
+                    cheeckTime = await this.checadorService.CheckInEmployee(matchingResults.Data.EmployeeNumber);
                 }
-                catch (Exception err) {
-                    MakeReport("No se pudo obtener el listado de empleados: " + err.Message, err);
+                catch (Exception err)
+                {
                     SetLoading(false);
                     SetNoRegistrada("Error de conexión");
                     SetAreaNoEncontrada();
+                    MakeReport(err.Message, err);
                     return;
                 }
 
+                // * display the photo and name of the employee
+                SetFotoEmpleado(fiscaliaService.GetEmployeePhoto(matchingResults.Data.EmployeeNumber));
+                SetNombre(matchingResults.Data.Name);
+                SetChecada(cheeckTime);
+                SetLoading(false);
 
-                // * compare each employee
-                foreach (var emp in employees) {
-                    if (emp.fingerprint == null) {
-                        continue;
-                    }
-
-                    // * validate the fingerprint of each employee
-                    using (Stream ms = new MemoryStream(emp.fingerprint)) {
-                        template = new DPFP.Template(ms);
-                    }
-                    if(template.Bytes == null) {
-                        continue;
-                    }
-
-                    Verificator.Verify(features, template, ref result);
-
-                    if (!result.Verified) {
-                        continue;
-                    }
-
-                    MakeReport($"Empledo No {emp.employee_number} encontrado", EventLevel.Informational);
-
-                    // * validete if the employee is active
-                    if (!emp.active) {
-                        SetLoading(false);
+            }
+            else
+            {
+                switch (matchingResults.Status)
+                {
+                    case Models.MatchingStatus.INACTIVE:
                         SetNoRegistrada("Empleado en baja");
                         SetEmpledoBaja();
-                        MakeReport($"Empledo No {emp.employee_number} en baja", EventLevel.Informational);
+                        MakeReport($"Empledo No {matchingResults.Data.EmployeeNumber} en baja", EventLevel.Informational);
                         break;
-                    }
 
-
-                    // * validete if the employee direction has assigned the area
-                    if (emp.general_direction_id <= 0) {
-                        SetLoading(false);
-                        SetNoRegistrada("No cuenta con area registrada");
-                        SetAreaNoEncontrada();
-                        MakeReport($"Empledo No {emp.employee_number} no cuenta con area registrada", EventLevel.Informational);
-                        break;
-                    }
-
-                    // * validate if the employee area its the same area of the checador
-                    if (!this.areasAvailables.Contains(emp.general_direction_id)) {
-                        SetLoading(false);
+                    case Models.MatchingStatus.BAD_AREA:
                         SetNoRegistrada("No pertenece a esta Area");
                         SetAreaNoEncontrada();
-                        MakeReport($"Empledo No {emp.employee_number} no pertenece a esta Area", EventLevel.Informational);
+                        MakeReport($"Empledo No {matchingResults.Data.EmployeeNumber} no pertenece a esta Area", EventLevel.Informational);
                         break;
-                    }
 
-                    // * get the employee number
-                    var employeeNumber = Convert.ToInt32(emp.plantilla_id) - 100000;
-
-                    // * make the checkin record
-                    DateTime cheeckTime = default;
-                    try {
-                        cheeckTime = this.checadorService.CheckInEmployee(employeeNumber);
-                    }
-                    catch (Exception err) {
-                        SetLoading(false);
-                        SetNoRegistrada("Error de conexión");
+                    default:
+                        SetNoRegistrada("No se reconoce la huella");
                         SetAreaNoEncontrada();
-                        MakeReport(err.Message, err);
-                        return;
-                    }
-
-                    // * display the photo and name of the employee
-                    SetFotoEmpleado(fiscaliaService.GetEmployeePhoto(employeeNumber));
-                    SetNombre(emp.name.ToString());
-
-                    // * display the employee is checked on the UI
-                    SetLoading(false);
-                    SetChecada(cheeckTime);
-
-                    break;
+                        MakeReport("No se encotnro coincidencia de la huella", EventLevel.Informational);
+                        break;
                 }
-
-                // no match found
-                if (result.Verified == false) {
-                    SetLoading(false);
-                    SetNoRegistrada("No se reconoce la huella");
-                    MakeReport("No se encotnro coincidencia de la huella", EventLevel.Informational);
-                    SetAreaNoEncontrada();
-                }
-
+                SetLoading(false);
             }
-        }
 
+            StartCapturing();
+        }
 
         #region background workers
-        
-        [Obsolete("Not used anymore")]
-        private void OnTimerTick(object sender, EventArgs e) {
-            try {
-
-                DateTime? serverDate = null;
-
-                // get the date
-                var task1 = Task.Run(() => {
-                    serverDate = contexto.Database.SqlQuery<DateTime>("SELECT getdate()").First();
-                });
-
-                var task2 = Task.Run(() => {
-                    System.Threading.Thread.Sleep(TimeSpan.FromSeconds(2));
-                });
-
-                var taskCompleteIndex = Task.WaitAny(task1, task2);
-
-                if (taskCompleteIndex == 1) {
-                    throw new TimeoutException();
-                }
-
-                // * update the date and hour on the UI
-                SetDateTimeServer(serverDate);
-
-                // * clear data if before was without connection
-                if (errorConexion) {
-                    LimpiarCampos();
-                    StartCapturing();
-                    errorConexion = false;
-                    MakeReport("Se recupero la conexion al tratar de obtener la fecha del servidor", EventLevel.Informational);
-                }
-            }
-            catch (Exception err) {
-                if (!errorConexion){
-                    StopCapturing();
-                    SetLostConnection();
-                    MakeReport("Se perdio la conexion al tratar de obtener la fecha del servidor", err);
-                }
-                errorConexion = true;
-            }
-        }
-
         private void OnTimerLogTick(object sender, EventArgs e) {
+            
+            // TODO: Moved this logic to a service
 
-            try {
-                var _ipAddress = GetIpAddress();
-                var _name = Properties.Settings.Default["name"].ToString();
-                contexto.Database.ExecuteSqlCommand($"INSERT INTO [dbo].[clientsStatusLog]([name],[address],[updated_at]) VALUES ('{_name}','{_ipAddress}', getdate())");
-            }
-            catch (Exception err) {
-                MakeReport(err.Message, err);
-            }
+            //try {
+            //    var _ipAddress = GetIpAddress();
+            //    var _name = Properties.Settings.Default["name"].ToString();
+            //    contexto.Database.ExecuteSqlCommand($"INSERT INTO [dbo].[clientsStatusLog]([name],[address],[updated_at]) VALUES ('{_name}','{_ipAddress}', getdate())");
+            //}
+            //catch (Exception err) {
+            //    MakeReport(err.Message, err);
+            //}
         }
 
         private void OnTimerSyncClock(object sender, EventArgs e) {
@@ -377,9 +316,8 @@ namespace DGTIT.Checador.Views
                 MakeReport("Error al obtener la fecha del servidor", err);
             }
         }
-
         #endregion
 
     }
 }
-    
+        
