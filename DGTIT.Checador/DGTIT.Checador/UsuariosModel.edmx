@@ -107,21 +107,6 @@
         </EntityType>
         <!--Errores durante la generación:
 advertencia 6002: La tabla o vista 'UsuariosDB.dbo.justifies' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
-        <EntityType Name="justifies">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="employee_id" Type="int" />
-          <Property Name="type_justify_id" Type="int" />
-          <Property Name="date_start" Type="date" />
-          <Property Name="date_finish" Type="date" />
-          <Property Name="file" Type="varchar" MaxLength="255" />
-          <Property Name="details" Type="varchar" MaxLength="255" />
-          <Property Name="updated_at" Type="datetime2" Precision="7" />
-          <Property Name="created_at" Type="datetime2" Precision="7" />
-          <Property Name="user_id" Type="bigint" />
-        </EntityType>
         <EntityType Name="notifications">
           <Key>
             <PropertyRef Name="id" />
@@ -155,22 +140,6 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.justifies' no tiene definida 
           <Property Name="updated_at" Type="datetime2" Precision="7" />
           <Property Name="direction_id" Type="int" />
         </EntityType>
-        <EntityType Name="type_files">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="name" Type="varchar" MaxLength="100" />
-        </EntityType>
-        <EntityType Name="type_justifies">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="created_at" Type="datetime2" Precision="7" />
-          <Property Name="updated_at" Type="datetime2" Precision="7" />
-        </EntityType>
         <EntityType Name="working_days">
           <Key>
             <PropertyRef Name="id" />
@@ -182,19 +151,6 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.justifies' no tiene definida 
           <Property Name="holidays" Type="int" />
           <Property Name="updated_at" Type="datetime2" Precision="7" />
           <Property Name="created_at" Type="datetime2" Precision="7" />
-        </EntityType>
-        <EntityType Name="working_hours">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="employee_id " Type="int" Nullable="false" />
-          <Property Name="checkin" Type="varchar" MaxLength="5" />
-          <Property Name="toeat" Type="varchar" MaxLength="5" />
-          <Property Name="toarrive" Type="varchar" MaxLength="5" />
-          <Property Name="checkout" Type="varchar" MaxLength="5" />
-          <Property Name="created_at" Type="datetime2" Precision="7" />
-          <Property Name="updated_at" Type="datetime2" Precision="7" />
         </EntityType>
         <Association Name="fk_employee_id">
           <End Role="employees" Type="Self.employees" Multiplicity="1" />
@@ -245,24 +201,7 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.justifies' no tiene definida 
           <EntitySet Name="notifications" EntityType="Self.notifications" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="records" EntityType="Self.records" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="subdirectorates" EntityType="Self.subdirectorates" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="type_files" EntityType="Self.type_files" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="type_justifies" EntityType="Self.type_justifies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="working_days" EntityType="Self.working_days" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="working_hours" EntityType="Self.working_hours" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="justifies" EntityType="Self.justifies" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [justifies].[id] AS [id], 
-    [justifies].[employee_id] AS [employee_id], 
-    [justifies].[type_justify_id] AS [type_justify_id], 
-    [justifies].[date_start] AS [date_start], 
-    [justifies].[date_finish] AS [date_finish], 
-    [justifies].[file] AS [file], 
-    [justifies].[details] AS [details], 
-    [justifies].[updated_at] AS [updated_at], 
-    [justifies].[created_at] AS [created_at], 
-    [justifies].[user_id] AS [user_id]
-    FROM [dbo].[justifies] AS [justifies]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="fk_employee_id" Association="Self.fk_employee_id">
             <End Role="employees" EntitySet="employees" />
             <End Role="incidents" EntitySet="incidents" />
@@ -290,10 +229,6 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.justifies' no tiene definida 
           <EntitySet Name="incidents" EntityType="UsuariosDBModel.incident" />
           <EntitySet Name="records" EntityType="UsuariosDBModel.record" />
           <EntitySet Name="subdirectorates" EntityType="UsuariosDBModel.subdirectorate" />
-          <EntitySet Name="type_files" EntityType="UsuariosDBModel.type_files" />
-          <EntitySet Name="type_justifies" EntityType="UsuariosDBModel.type_justifies" />
-          <EntitySet Name="working_hours" EntityType="UsuariosDBModel.working_hours" />
-          <EntitySet Name="justifies" EntityType="UsuariosDBModel.justify" />
           <AssociationSet Name="fk_employee_id" Association="UsuariosDBModel.fk_employee_id">
             <End EntitySet="employees" Role="employee" />
             <End EntitySet="incidents" Role="incident" />
@@ -415,50 +350,6 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.justifies' no tiene definida 
           <Property Name="created_at" Type="DateTime" Precision="7" />
           <Property Name="updated_at" Type="DateTime" Precision="7" />
           <Property Name="direction_id" Type="Int32" />
-        </EntityType>
-        <EntityType Name="type_files">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="type_justifies">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="created_at" Type="DateTime" Precision="7" />
-          <Property Name="updated_at" Type="DateTime" Precision="7" />
-        </EntityType>
-        <EntityType Name="working_hours">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="employee_id_" Type="Int32" Nullable="false" />
-          <Property Name="checkin" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="toeat" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="toarrive" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="checkout" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="created_at" Type="DateTime" Precision="7" />
-          <Property Name="updated_at" Type="DateTime" Precision="7" />
-        </EntityType>
-        <EntityType Name="justify">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="employee_id" Type="Int32" />
-          <Property Name="type_justify_id" Type="Int32" />
-          <Property Name="date_start" Type="DateTime" Precision="0" />
-          <Property Name="date_finish" Type="DateTime" Precision="0" />
-          <Property Name="file" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="details" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="updated_at" Type="DateTime" Precision="7" />
-          <Property Name="created_at" Type="DateTime" Precision="7" />
-          <Property Name="user_id" Type="Int64" />
         </EntityType>
         <Association Name="fk_employee_id">
           <End Type="UsuariosDBModel.employee" Multiplicity="1" Role="employee" />
@@ -652,54 +543,6 @@ advertencia 6002: La tabla o vista 'UsuariosDB.dbo.justifies' no tiene definida 
                 <ScalarProperty Name="updated_at" ColumnName="updated_at" />
                 <ScalarProperty Name="created_at" ColumnName="created_at" />
                 <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="type_files">
-            <EntityTypeMapping TypeName="UsuariosDBModel.type_files">
-              <MappingFragment StoreEntitySet="type_files">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="type_justifies">
-            <EntityTypeMapping TypeName="UsuariosDBModel.type_justifies">
-              <MappingFragment StoreEntitySet="type_justifies">
-                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
-                <ScalarProperty Name="created_at" ColumnName="created_at" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="working_hours">
-            <EntityTypeMapping TypeName="UsuariosDBModel.working_hours">
-              <MappingFragment StoreEntitySet="working_hours">
-                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
-                <ScalarProperty Name="created_at" ColumnName="created_at" />
-                <ScalarProperty Name="checkout" ColumnName="checkout" />
-                <ScalarProperty Name="toarrive" ColumnName="toarrive" />
-                <ScalarProperty Name="toeat" ColumnName="toeat" />
-                <ScalarProperty Name="checkin" ColumnName="checkin" />
-                <ScalarProperty Name="employee_id_" ColumnName="employee_id " />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="justifies">
-            <EntityTypeMapping TypeName="UsuariosDBModel.justify">
-              <MappingFragment StoreEntitySet="justifies">
-                <ScalarProperty Name="user_id" ColumnName="user_id" />
-                <ScalarProperty Name="created_at" ColumnName="created_at" />
-                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
-                <ScalarProperty Name="details" ColumnName="details" />
-                <ScalarProperty Name="file" ColumnName="file" />
-                <ScalarProperty Name="date_finish" ColumnName="date_finish" />
-                <ScalarProperty Name="date_start" ColumnName="date_start" />
-                <ScalarProperty Name="type_justify_id" ColumnName="type_justify_id" />
-                <ScalarProperty Name="employee_id" ColumnName="employee_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

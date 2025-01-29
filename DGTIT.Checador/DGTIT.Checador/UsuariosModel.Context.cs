@@ -34,10 +34,6 @@ namespace DGTIT.Checador
         public virtual DbSet<incident> incidents { get; set; }
         public virtual DbSet<record> records { get; set; }
         public virtual DbSet<subdirectorate> subdirectorates { get; set; }
-        public virtual DbSet<type_files> type_files { get; set; }
-        public virtual DbSet<type_justifies> type_justifies { get; set; }
-        public virtual DbSet<working_hours> working_hours { get; set; }
-        public virtual DbSet<justify> justifies { get; set; }
         public virtual DbSet<notification> notifications { get; set; }
         public virtual DbSet<working_days> working_days { get; set; }
         public virtual DbSet<client> clients { get; set; }
