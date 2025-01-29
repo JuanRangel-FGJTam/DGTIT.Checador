@@ -1,5 +1,4 @@
-﻿using DGTIT.Checador.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
@@ -8,78 +7,80 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net;
+using DGTIT.Checador.Core.Interfaces;
+using DGTIT.Checador.ViewModels;
+using DGTIT.Checador.Core.Entities;
+using DGTIT.Checador.Utilities;
 
 namespace DGTIT.Checador.Services {
-    public class FiscaliaService
+    internal class FiscaliaService
     {
-        private readonly UsuariosDBEntities usuariosDBEntities;
-        private procuraduriaEntities1 procuraduriaEntities;
+        private readonly IEmployeeRepository employeeRepository;
+        private readonly IProcuEmployeeRepo procuEmployeeRepo;
+        private readonly ILog logger;
+        private readonly Uri storagePath;
 
-        public FiscaliaService(procuraduriaEntities1 contextProcu, UsuariosDBEntities contextCheca)
+        //public FiscaliaService(procuraduriaEntities1 contextProcu, UsuariosDBEntities contextCheca)
+        //{
+        //    this.procuraduriaEntities = contextProcu;
+        //    this.usuariosDBEntities = contextCheca;
+        //}
+
+        internal FiscaliaService(IEmployeeRepository empRepo, IProcuEmployeeRepo procuEmployeeRepo)
         {
-            this.procuraduriaEntities = contextProcu;
-            this.usuariosDBEntities = contextCheca;
+            this.employeeRepository = empRepo;
+            this.procuEmployeeRepo = procuEmployeeRepo;
+            this.logger = LogManager.GetLogger(typeof(FiscaliaService));
+            this.storagePath = new Uri(CustomApplicationSettings.GetStoragePath());
         }
-        
+
         public IEnumerable<EmployeeViewModel> SearchEmployees(string search)
         {
-            
-            var empleadosQuery = procuraduriaEntities.EMPLEADO.Where(item => item.NUMEMP != 0);
+            throw new NotImplementedException();
+            //var empleadosQuery = procuraduriaEntities.EMPLEADO.Where(item => item.NUMEMP != 0);
            
-            if (!string.IsNullOrEmpty(search))
-            {
-                empleadosQuery = empleadosQuery.Where(item =>
-                        item.NUMEMP.ToString().Contains(search)
-                        //item.NOMBRE.Contains(search) ||
-                        //item.APELLIDOPATERNO.Contains(search) ||
-                        //item.APELLIDOMATERNO.Contains(search)
-                );
-            }
-
-            // * map the employees for retrieving only the necessary columns
-            var empleados = empleadosQuery.Take(25).ToList().Select(emp => EmployeeViewModel.FromEntity(emp)).ToList();
-
-            //foreach (var emp in empleados)
+            //if (!string.IsNullOrEmpty(search))
             //{
-            //    try
-            //    {
-            //        emp.Area = procuraduriaEntities.AREA.Find(emp.AreaId).AREA1;
-            //    }
-            //    catch (Exception) { }
+            //    empleadosQuery = empleadosQuery.Where(item => item.NUMEMP.ToString().Contains(search) );
             //}
 
-            return empleados;
-            
+            //// * map the employees for retrieving only the necessary columns
+            //var empleados = empleadosQuery.Take(25).ToList().Select(emp => EmployeeViewModel.FromEntity(emp)).ToList();
+
+            //return empleados;
         }
 
-        public Bitmap GetEmployeePhoto(int employeeNumber)
+        public async Task<Bitmap> GetEmployeePhoto(int employeeNumber)
         {
+            // * get the employee 
+            var employee = await employeeRepository.FindByEmployeeNumber(employeeNumber);
 
-            byte[] foto = null;
-
-            try {
-                var taskFoto = Task.Run(() => {
-                    foto = (procuraduriaEntities
-                        .EMPLEADO
-                        .Where(u => u.NUMEMP == employeeNumber)
-                        .Select(u => u.FOTO)
-                        .SingleOrDefault()
-                    );
-                });
-
-                var taskSleep = Task.Run(() => Thread.Sleep(6000));
-
-                var indexTask = Task.WaitAny(taskFoto, taskSleep);
-
-                if(indexTask == 1) {
-                    throw new Exception("Timeoute");
-                }
-                
-            }
-            catch (Exception) {
-            }
-
+            // * Attemp to get the foto from the disk
             Bitmap bmp;
+            try
+            {
+                bmp = this.GetPhotoFromDisk(employee.Photo) ?? throw new KeyNotFoundException("Not foto was found on the disk");
+                return bmp;
+            }
+            catch (Exception err)
+            {
+                logger.Error($"Can't load the foto of the employee '{employeeNumber}' from the disk: {err.Message}", err);
+            }
+            
+            // * attempt to get the foto from the server.
+            byte[] foto = null;
+            try
+            {
+                // * get the employee infor from the RH Database
+                var procuEmployee = await this.procuEmployeeRepo.FindByEmployeeNumber(employeeNumber)
+                        ?? throw new KeyNotFoundException($"The employee number '{employeeNumber}' was not found on the server. ");
+                foto = procuEmployee.Foto;
+            }
+            catch (Exception err)
+            {
+                logger.Error($"Fail at attempt to get the employee data from the RH Database: {err.Message}", err);
+            }
 
             // * if employee has no poto, show a provisional one
             if ( foto == null)
@@ -88,11 +89,41 @@ namespace DGTIT.Checador.Services {
                 return bmp;
             }
 
+            // * store the foto for used the next time
+            StorePhotoToDisk(employee.Photo, foto);
+
             using (var ms = new MemoryStream(foto))
             {
                 bmp = new Bitmap(ms);
             }
             return bmp;
+        }
+
+        // * Method for access the employee photos on the disk
+        private Bitmap GetPhotoFromDisk(string path)
+        {
+            var filePath = Path.Combine(this.storagePath.AbsolutePath, path);
+            if (!File.Exists(filePath))
+            {
+                throw new FileNotFoundException("The specified photo does not exist.", filePath);
+            }
+            using (var ms = new MemoryStream(File.ReadAllBytes(filePath)))
+            {
+                return new Bitmap(ms);
+            }
+        }
+
+        private void StorePhotoToDisk(string path, byte[] foto)
+        {
+            var filePath = new Uri( Path.Combine(this.storagePath.AbsolutePath, path));
+            var directoryPath = Path.GetDirectoryName(filePath.AbsolutePath);
+
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            File.WriteAllBytes(filePath.AbsolutePath, foto);
         }
 
     }

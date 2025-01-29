@@ -188,9 +188,12 @@
       <DependentUpon>UsuariosModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Core\Entities\Employee.cs" />
+    <Compile Include="Core\Entities\ProcuEmployee.cs" />
     <Compile Include="Core\Entities\Record.cs" />
     <Compile Include="Core\Interfaces\IEmployeeRepository.cs" />
+    <Compile Include="Core\Interfaces\IProcuEmployeeRepo.cs" />
     <Compile Include="Core\Interfaces\IRecordRepository.cs" />
+    <Compile Include="Data\Repositories\ProcuEmployeeRepository.cs" />
     <Compile Include="Data\Repositories\SQLClientEmployeeRepository.cs" />
     <Compile Include="Data\Repositories\SQLRecordRepository.cs" />
     <Compile Include="Helpers\HashData.cs" />

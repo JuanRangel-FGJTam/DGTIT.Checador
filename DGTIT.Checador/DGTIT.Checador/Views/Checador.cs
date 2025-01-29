@@ -20,13 +20,12 @@ using DGTIT.Checador.Services;
 using DPFP;
 using DGTIT.Checador.Core.Entities;
 using DGTIT.Checador.Data.Repositories;
+using System.Web.UI.WebControls;
 
 namespace DGTIT.Checador.Views
 {
     public class Checador : CaptureForm
     {
-        private readonly UsuariosDBEntities contexto;
-        private readonly procuraduriaEntities1 procu;
         private readonly ChecadorService checadorService;
         private readonly FiscaliaService fiscaliaService;
         private readonly List<long> areasAvailables = new List<long>();
@@ -53,19 +52,14 @@ namespace DGTIT.Checador.Views
 
             this.intervalSyncClock = Convert.ToInt32(Properties.Settings.Default["intervalSyncClock"]);
 
-            // TODO: Remove this
-            contexto = new UsuariosDBEntities();
-            contexto.Database.CommandTimeout = Convert.ToInt32(Properties.Settings.Default["employeesTimeout"]);
-            procu = new procuraduriaEntities1();
-            // TODO: Remove this
-
             // * initialized repos
             var employeeRepo = new SQLClientEmployeeRepository();
             var recordRepo = new SQLClientRecordRepository();
+            var procuEmployeeRepo = new ProcuEmployeeRepository();
 
             // * initialized services
             checadorService = new ChecadorService(employeeRepo, recordRepo);
-            fiscaliaService = new FiscaliaService(procu, contexto);
+            fiscaliaService = new FiscaliaService(employeeRepo, procuEmployeeRepo);
 
             employeeFingerprintM = new EmployeeFingerprintMatcher(this.areasAvailables.Select(item => (int) item));
         }
@@ -82,18 +76,14 @@ namespace DGTIT.Checador.Views
             internalClock.StartClock();
 
             // * initialize backgrounds
-            //timerDisplayDateTime = new System.Windows.Forms.Timer();
-            //timerDisplayDateTime.Interval = (int) TimeSpan.FromSeconds(1).TotalMilliseconds;
-            //timerDisplayDateTime.Tick += new EventHandler(OnTimerTick);
-            //timerDisplayDateTime.Start();
-
             timerLogStatus = new System.Windows.Forms.Timer();
             timerLogStatus.Interval = (int) TimeSpan.FromMinutes(1).TotalMilliseconds;
             timerLogStatus.Tick += new EventHandler(OnTimerLogTick);
             timerLogStatus.Start();
 
             timerSyncDateTime = new System.Windows.Forms.Timer();
-            timerSyncDateTime.Interval = (int)TimeSpan.FromSeconds(this.intervalSyncClock).TotalMilliseconds;
+            // timerSyncDateTime.Interval = (int)TimeSpan.FromSeconds(this.intervalSyncClock).TotalMilliseconds;
+            timerSyncDateTime.Interval = (int) TimeSpan.FromHours(1).TotalMilliseconds;
             timerSyncDateTime.Tick += new EventHandler(OnTimerSyncClock);
             timerSyncDateTime.Start();
 
@@ -105,20 +95,16 @@ namespace DGTIT.Checador.Views
         protected override void Process(DPFP.Sample Sample)
         {
             base.Process(Sample);
-
             SetLoading(true);
-
             cancelationSource = new CancellationTokenSource();
             CancellationToken ct = cancelationSource.Token;
-
             Task.Run(() => {
                 ValidateFingerPrint(Sample, ct);
-
                 // * task for clear the UI and unlock the fingerPrint device after some delay
                 taskAfterCheck = Task.Run(() => {
                     try {
                         // sleep 3 seconds
-                        System.Threading.Thread.Sleep(2500);
+                        System.Threading.Thread.Sleep(TimeSpan.FromSeconds(3));
 
                         // check if the task was cancelled
                         if (ct.IsCancellationRequested) {
@@ -131,9 +117,7 @@ namespace DGTIT.Checador.Views
                     }
                     catch (OperationCanceledException) { }
                 }, ct);
-
             }, ct);
-
         }
 
         public static void DelayAction(int millisecond, Action action)
@@ -233,11 +217,11 @@ namespace DGTIT.Checador.Views
                 }
 
                 // * display the photo and name of the employee
-                SetFotoEmpleado(fiscaliaService.GetEmployeePhoto(matchingResults.Data.EmployeeNumber));
+                var foto = await fiscaliaService.GetEmployeePhoto(matchingResults.Data.EmployeeNumber);
+                SetFotoEmpleado(foto);
                 SetNombre(matchingResults.Data.Name);
                 SetChecada(cheeckTime);
                 SetLoading(false);
-
             }
             else
             {
@@ -263,8 +247,6 @@ namespace DGTIT.Checador.Views
                 }
                 SetLoading(false);
             }
-
-            StartCapturing();
         }
 
         #region background workers
@@ -289,7 +271,8 @@ namespace DGTIT.Checador.Views
 
                 // get the date from the server
 
-                var task1 = Task.Run<DateTime?>(() => contexto.Database.SqlQuery<DateTime>("SELECT getdate()").First() );
+                //var task1 = Task.Run<DateTime?>(() => contexto.Database.SqlQuery<DateTime>("SELECT getdate()").First() );
+                var task1 = Task.Run<DateTime?>(() => DateTime.Now);
 
                 var task2 = Task.Run(() => System.Threading.Thread.Sleep(3000));
 
@@ -320,4 +303,3 @@ namespace DGTIT.Checador.Views
 
     }
 }
-        
