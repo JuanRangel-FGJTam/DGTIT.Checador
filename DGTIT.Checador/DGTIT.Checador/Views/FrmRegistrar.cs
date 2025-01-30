@@ -1,57 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting.Channels;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Markup.Localizer;
-using System.Windows.Media.Animation;
+using DGTIT.Checador.Core.Entities;
+using DGTIT.Checador.Core.Interfaces;
+using DGTIT.Checador.Data.Repositories;
+using DGTIT.Checador.Helpers;
 using DGTIT.Checador.Services;
 
 namespace DGTIT.Checador
 {
     public partial class FrmRegistrar : Form
     {
-        private readonly ChecadorService checadorService;
+        private readonly IEmployeeRepository employeeRepository;
+        private readonly IProcuEmployeeRepo procuEmployeeRepo;
+        private readonly EmployeeService employeeService;
         private readonly FiscaliaService fiscaliaService;
 
         private DPFP.Template Template;
-        private UsuariosDBEntities contexto;
-        private procuraduriaEntities1 procu;
 
         private readonly int employeeNumber;
-        private employee currentEmployee;
-        private working_hours workingHours;
+        private Employee currentEmployee;
         
         public FrmRegistrar(int employeeNumber)
         {
             InitializeComponent();
             this.employeeNumber = employeeNumber;
 
-
             // * initialize the services
-            contexto = new UsuariosDBEntities();
-            procu = new procuraduriaEntities1();
-            this.checadorService = new ChecadorService(contexto, procu);
-            this.fiscaliaService = new FiscaliaService(procu, contexto);
+            this.employeeRepository = new SQLClientEmployeeRepository();
+            this.procuEmployeeRepo = new ProcuEmployeeRepository();
+
+            this.employeeService = new EmployeeService(employeeRepository, procuEmployeeRepo);
+            this.fiscaliaService = new FiscaliaService(employeeRepository, procuEmployeeRepo);
 
             // * initialize the models
-            this.currentEmployee = checadorService.GetEmployee(employeeNumber);
-            this.workingHours = checadorService.GetWorkinHours(employeeNumber);
+            var taskLoadEmployee = Task.Run(async() => {
+                this.currentEmployee = await this.employeeService.GetEmployee(employeeNumber);
+            });
+            Task.WaitAll(taskLoadEmployee);
 
-            if( currentEmployee.fingerprint != null && currentEmployee.fingerprint.Any()) {
+            if( currentEmployee.Fingerprint != null && currentEmployee.Fingerprint.Any()) {
                 DisableEdition();
             }
-            
         }
         
         private void OnLoaded(object sender, EventArgs e)
@@ -60,36 +57,33 @@ namespace DGTIT.Checador
 
             // * display the employee info
             this.tb_employeeNumber.Text = employeeNumber.ToString();
-            this.txtNombre.Text = currentEmployee.name;
-            this.cboDirGral.SelectedValue = currentEmployee.general_direction_id;
-            this.cboDireccion.SelectedValue = currentEmployee.direction_id;
-            this.cboSubdireccion.SelectedValue = currentEmployee.subdirectorate_id;
-            this.cboDepartamento.SelectedValue = currentEmployee.department_id;
-            this.cb_check.Checked = currentEmployee.status_id == 1;
-            if ( this.workingHours != null)
-            {
-                this.txtEntrada.Text = workingHours.checkin;
-                this.txtComida.Text = workingHours.toeat;
-                this.txtRegreso.Text = workingHours.toarrive;
-                this.txtSalida.Text = workingHours.checkout;
-            }
-
-            lblUpdatedAt.Text = this.currentEmployee.updated_at == null ? "" : this.currentEmployee.updated_at.Value.ToLongDateString();
+            this.txtNombre.Text = currentEmployee.Name;
+            this.cboDirGral.SelectedValue = currentEmployee.GeneralDirectionId;
+            this.cboDireccion.SelectedValue = currentEmployee.DirectionId;
+            this.cboSubdireccion.SelectedValue = currentEmployee.SubdirectorateId;
+            this.cboDepartamento.SelectedValue = currentEmployee.DepartmentId;
+            this.cb_check.Checked = currentEmployee.StatusId == 1;
+            //if ( this.workingHours != null)
+            //{
+            //    this.txtEntrada.Text = workingHours.checkin;
+            //    this.txtComida.Text = workingHours.toeat;
+            //    this.txtRegreso.Text = workingHours.toarrive;
+            //    this.txtSalida.Text = workingHours.checkout;
+            //}
+            lblUpdatedAt.Text = this.currentEmployee.UpdatedAt != null ? this.currentEmployee.UpdatedAt.ToLongDateString() : "";
 
             // * get the image of the fingerprint
-            if (this.currentEmployee.fingerprint != null)
+            if (this.currentEmployee.Fingerprint != null)
             {
                 this.btnRegistrarHuella.Text = "Capturar Huella";
                 //Bitmap bmp = null;
-                //using (var ms = new MemoryStream(this.currentEmployee.fingerprint))
+                //using (var ms = new MemoryStream(this.currentEmployee.Fingerprint))
                 //{
                 //    var sample = new DPFP.Sample(ms);
-                //    var sampleConversion = new DPFP.Capture.SampleConversion();
-                //    sampleConversion.ConvertToPicture(sample, ref bmp);
+                //    bmp = FingerPrint.ConvertSampleToBitmap(sample);
                 //}
-                //this.img_fingerPrint.Image = bmp;
-
-                var x = Convert.ToBase64String(this.currentEmployee.fingerprint);
+                //this.fingerPrintPictureBox.Image = bmp;
+                var x = Convert.ToBase64String(this.currentEmployee.Fingerprint);
                 this.tbFingerPrint.Text = x;
             }
             else
@@ -99,7 +93,10 @@ namespace DGTIT.Checador
 
 
             // * set the employee foto
-            this.img_photo.Image = this.fiscaliaService.GetEmployeePhoto(employeeNumber);
+            var taskEmployeeFoto = Task.Run(async () => {
+                this.img_photo.Image = await this.fiscaliaService.GetEmployeePhoto(employeeNumber);
+            });
+            Task.WaitAll(taskEmployeeFoto);
 
 
             // * attatch events to the inputs
@@ -109,33 +106,32 @@ namespace DGTIT.Checador
             this.cboSubdireccion.SelectedValueChanged += new EventHandler(ComboBoxDirectionChanged);
             this.cboDepartamento.SelectedValueChanged += new EventHandler(ComboBoxDirectionChanged);
 
-            this.txtEntrada.TextChanged += new EventHandler(TextBoxHoursChanged);
-            this.txtComida.TextChanged += new EventHandler(TextBoxHoursChanged);
-            this.txtRegreso.TextChanged += new EventHandler(TextBoxHoursChanged);
-            this.txtSalida.TextChanged += new EventHandler(TextBoxHoursChanged);
-
             //this.cb_active.CheckedChanged += new EventHandler(CheckBoxOptionChanged);
             this.cb_check.CheckedChanged += new EventHandler(CheckBoxOptionChanged);
         }
         
         private void LoadCatalogs()
         {
-            var dirgral = contexto.general_directions.OrderBy(item => item.name).ToList();
+            //var dirgral = contexto.general_directions.OrderBy(item => item.name).ToList();
+            var dirgral =  new List<general_directions>();
             cboDirGral.DataSource = dirgral;
             cboDirGral.ValueMember = "id";
             cboDirGral.DisplayMember = "name";
 
-            var dir = contexto.directions.OrderBy(item => item.name).Where(item => item.general_direction_id == currentEmployee.general_direction_id || item.id == 1).ToList();
+            //var dir = contexto.directions.OrderBy(item => item.name).Where(item => item.general_direction_id == currentEmployee.general_direction_id || item.id == 1).ToList();
+            var dir = new List<direction>();
             cboDireccion.DataSource = dir;
             cboDireccion.ValueMember = "id";
             cboDireccion.DisplayMember = "name";
 
-            var subdir = contexto.subdirectorates.OrderBy(item => item.name).Where(item => item.direction_id == currentEmployee.direction_id || item.id == 1).ToList();
+            //var subdir = contexto.subdirectorates.OrderBy(item => item.name).Where(item => item.direction_id == currentEmployee.direction_id || item.id == 1).ToList();
+            var subdir = new List<subdirectorate>();
             cboSubdireccion.DataSource = subdir;
             cboSubdireccion.ValueMember = "id";
             cboSubdireccion.DisplayMember = "name";
 
-            var depa = contexto.departments.OrderBy(item => item.name).Where(item => item.subdirectorate_id == currentEmployee.subdirectorate_id|| item.id == 1).ToList();
+            //var depa = contexto.departments.OrderBy(item => item.name).Where(item => item.subdirectorate_id == currentEmployee.subdirectorate_id|| item.id == 1).ToList();
+            var depa = new List<department>();
             cboDepartamento.DataSource = depa;
             cboDepartamento.ValueMember = "id";
             cboDepartamento.DisplayMember = "name";
@@ -143,44 +139,21 @@ namespace DGTIT.Checador
 
         private bool ValidateBeforeUdpate()
         {
-            if (string.IsNullOrEmpty(currentEmployee.name))
+            if (string.IsNullOrEmpty(currentEmployee.Name))
             {
                 MessageBox.Show("El nombre del empleado es requerido.", "Error de validacion", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 this.txtNombre.Focus();
                 return false;
             }
 
-            if (currentEmployee.fingerprint == null)
+            if (currentEmployee.Fingerprint == null)
             {
                 MessageBox.Show("La huella digital is requerida.", "Error de validacion", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 this.btnRegistrarHuella.Focus();
                 return false;
             }
-
-
-            if ( string.IsNullOrEmpty(workingHours.checkin))
-            {
-                txtEntrada.Text = "";
-            }
-
-            if (string.IsNullOrEmpty(workingHours.toeat))
-            {
-                txtComida.Text = "";
-            }
-
-            if (string.IsNullOrEmpty(workingHours.toarrive))
-            {
-                txtRegreso.Text = "";
-            }
-
-            if (string.IsNullOrEmpty(workingHours.checkout))
-            {
-                txtSalida.Text = "";
-            }
-
             return true;
         }
-
 
         private void BtnRegistrarHuellaClick(object sender, EventArgs e)
         {
@@ -200,48 +173,26 @@ namespace DGTIT.Checador
 
             // * display a busy dialog
             var busyDialog = new BusyDialog();
-            var dialogTask = Task.Run(() =>
-            {
-                Invoke(new Action(() => busyDialog.ShowDialog()));
-            });
+            var dialogTask = Task.Run(() => Invoke(new Action(() => busyDialog.ShowDialog())));
 
             // * update the employee in a task
-            var updateEmployeeTask = Task.Run<int>(() =>
+            try
             {
-                try
-                {
-                    checadorService.UpdateEmployee(currentEmployee);
-                    checadorService.UpdateWorkingHours(workingHours);
-                    Thread.Sleep(1000);
-                    return 1;
-                }
-                catch(Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                    return 0;
-                }
-            });
-
-            // * wait for the task is done and 
-            var resultsCode = await updateEmployeeTask;
-
-            // * close the busy dialog
-            Invoke(new Action(() => busyDialog.Close()));
-
-
-            if( resultsCode == 1)
-            {
-                MessageBox.Show("Los datos del empleado se actualizaron exitosamente.", "Empleado actualizado", MessageBoxButtons.OK, MessageBoxIcon.Information );
+                await employeeService.UpdateEmployee(currentEmployee);
+                Thread.Sleep(1000);
+                MessageBox.Show("Los datos del empleado se actualizaron exitosamente.", "Empleado actualizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            else
+            catch(Exception)
             {
                 MessageBox.Show("Ocurrió un problema al actualizar los datos del empleado. Por favor, inténtalo de nuevo.", "Error al actualizar", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+            // * close the busy dialog
+            Invoke(new Action(() => busyDialog.Close()));
         }
 
         private void TextBoxNameChanged(object sender, EventArgs e) {
-            this.currentEmployee.name = ( (TextBox) sender).Text;
+            this.currentEmployee.Name = ( (TextBox) sender).Text;
         }
 
         private void ComboBoxDirectionChanged(object sender, EventArgs e)
@@ -251,64 +202,33 @@ namespace DGTIT.Checador
             switch (senderComboBox.Name)
             {
                 case "cboDirGral":
-                    currentEmployee.general_direction_id = selectedId;
-                    cboDireccion.DataSource = contexto.directions
-                        .OrderBy(item => item.name)
-                        .Where(item => item.general_direction_id == selectedId || item.id == 1)
-                        .ToList();
+                    currentEmployee.GeneralDirectionId = selectedId;
+                    //cboDireccion.DataSource = contexto.directions
+                    //    .OrderBy(item => item.name)
+                    //    .Where(item => item.general_direction_id == selectedId || item.id == 1)
+                    //    .ToList();
                     break;
 
                 case "cboDireccion":
-                    currentEmployee.direction_id = selectedId;
-                    cboSubdireccion.DataSource = contexto.subdirectorates
-                        .OrderBy(item => item.name)
-                        .Where(item => item.direction_id == selectedId || item.id == 1)
-                        .ToList();
+                    currentEmployee.DirectionId = selectedId;
+                    //cboSubdireccion.DataSource = contexto.subdirectorates
+                    //    .OrderBy(item => item.name)
+                    //    .Where(item => item.direction_id == selectedId || item.id == 1)
+                    //    .ToList();
                     break;
 
                 case "cboSubdireccion":
-                    currentEmployee.subdirectorate_id = selectedId;
-                    cboDepartamento.DataSource = contexto.departments
-                        .OrderBy(item => item.name)
-                        .Where(item => item.subdirectorate_id == selectedId || item.id == 1)
-                        .ToList();
+                    currentEmployee.SubdirectorateId = selectedId;
+                    //cboDepartamento.DataSource = contexto.departments
+                    //    .OrderBy(item => item.name)
+                    //    .Where(item => item.subdirectorate_id == selectedId || item.id == 1)
+                    //    .ToList();
                     break;
 
                 case "cboDepartamento":
-                    currentEmployee.department_id = selectedId;
+                    currentEmployee.DepartmentId = selectedId;
                     break;
             }
-        }
-
-        private void TextBoxHoursChanged(object sender, EventArgs e)
-        {
-            var senderTextBox = ((MaskedTextBox)sender);
-            DateTime? dateSchedule;
-
-            switch (senderTextBox.Name)
-            {
-                case "txtEntrada":
-                    dateSchedule = (DateTime?) txtEntrada.ValidateText();
-                    workingHours.checkin = (dateSchedule != null) ?dateSchedule.Value.ToString("HH:mm") : null;
-                    break;
-
-                case "txtComida":
-                    dateSchedule = (DateTime?) txtComida.ValidateText();
-                    workingHours.toeat = (dateSchedule != null) ? dateSchedule.Value.ToString("HH:mm") : null;
-                    break;
-
-                case "txtRegreso":
-                    dateSchedule = (DateTime?) txtRegreso.ValidateText();
-                    workingHours.toarrive = (dateSchedule != null) ? dateSchedule.Value.ToString("HH:mm") : null;
-
-                    break;
-
-                case "txtSalida":
-                    dateSchedule = (DateTime?) txtSalida.ValidateText();
-                    workingHours.checkout = (dateSchedule != null) ? dateSchedule.Value.ToString("HH:mm") : null;
-                    break;
-            }
-
         }
 
         private void CheckBoxOptionChanged(object sender, EventArgs e)
@@ -318,10 +238,9 @@ namespace DGTIT.Checador
             switch (senderCheckbox.Name)
             {
                 case "cb_check":
-                    currentEmployee.status_id = cb_check.Checked ? 1 : 0;
+                    currentEmployee.StatusId = cb_check.Checked ? 1 : 0;
                     break;
             }
-
         }
 
         #region fingerprint events
@@ -330,8 +249,8 @@ namespace DGTIT.Checador
             Invoke( new Action (()=>{
                 Template = template;
                 if (Template != null) {
-                    currentEmployee.fingerprint = template.Bytes;
-                    tbFingerPrint.Text = Convert.ToBase64String(currentEmployee.fingerprint);
+                    currentEmployee.Fingerprint = template.Bytes;
+                    tbFingerPrint.Text = Convert.ToBase64String(currentEmployee.Fingerprint);
                     MessageBox.Show("La huella dactilar se ha capturado con éxito.", "Fingerprint Enrollment");
                 }
                 else {
@@ -342,8 +261,8 @@ namespace DGTIT.Checador
         #endregion
     
         
-        private void DisableEdition() {
-
+        private void DisableEdition()
+        {
             this.txtNombre.Enabled = false;
             this.txtEntrada.Enabled = false;
             this.txtComida.Enabled = false;
@@ -354,7 +273,6 @@ namespace DGTIT.Checador
             this.cboDireccion.Enabled = false;
             this.cboSubdireccion.Enabled = false;
             this.cboDepartamento.Enabled = false;
-
         }
     }
 }

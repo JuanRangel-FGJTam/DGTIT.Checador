@@ -63,6 +63,7 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.tbFingerPrint = new System.Windows.Forms.TextBox();
             this.panelActions = new System.Windows.Forms.Panel();
+            this.fingerPrintPictureBox = new System.Windows.Forms.PictureBox();
             this.groupBox_generales.SuspendLayout();
             this.groupBox_horarios.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -70,6 +71,7 @@
             this.groupBox1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.panelActions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fingerPrintPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -359,6 +361,7 @@
             // 
             // panelHours
             // 
+            this.panelHours.Controls.Add(this.fingerPrintPictureBox);
             this.panelHours.Controls.Add(this.groupBox1);
             this.panelHours.Controls.Add(this.groupBox_horarios);
             this.panelHours.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -416,6 +419,14 @@
             this.panelActions.Size = new System.Drawing.Size(675, 44);
             this.panelActions.TabIndex = 13;
             // 
+            // fingerPrintPictureBox
+            // 
+            this.fingerPrintPictureBox.Location = new System.Drawing.Point(426, 25);
+            this.fingerPrintPictureBox.Name = "fingerPrintPictureBox";
+            this.fingerPrintPictureBox.Size = new System.Drawing.Size(60, 68);
+            this.fingerPrintPictureBox.TabIndex = 13;
+            this.fingerPrintPictureBox.TabStop = false;
+            // 
             // FrmRegistrar
             // 
             this.AcceptButton = this.btnAgregar;
@@ -442,6 +453,7 @@
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
             this.panelActions.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.fingerPrintPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -482,5 +494,6 @@
         private System.Windows.Forms.Panel panelHours;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox cb_check;
+        private System.Windows.Forms.PictureBox fingerPrintPictureBox;
     }
 }

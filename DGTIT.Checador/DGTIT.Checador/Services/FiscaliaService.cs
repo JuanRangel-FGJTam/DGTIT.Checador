@@ -21,12 +21,6 @@ namespace DGTIT.Checador.Services {
         private readonly ILog logger;
         private readonly Uri storagePath;
 
-        //public FiscaliaService(procuraduriaEntities1 contextProcu, UsuariosDBEntities contextCheca)
-        //{
-        //    this.procuraduriaEntities = contextProcu;
-        //    this.usuariosDBEntities = contextCheca;
-        //}
-
         internal FiscaliaService(IEmployeeRepository empRepo, IProcuEmployeeRepo procuEmployeeRepo)
         {
             this.employeeRepository = empRepo;
@@ -35,20 +29,18 @@ namespace DGTIT.Checador.Services {
             this.storagePath = new Uri(CustomApplicationSettings.GetStoragePath());
         }
 
-        public IEnumerable<EmployeeViewModel> SearchEmployees(string search)
+        public async Task<IEnumerable<ProcuEmployee>> SearchEmployees(string search)
         {
-            throw new NotImplementedException();
-            //var empleadosQuery = procuraduriaEntities.EMPLEADO.Where(item => item.NUMEMP != 0);
-           
-            //if (!string.IsNullOrEmpty(search))
-            //{
-            //    empleadosQuery = empleadosQuery.Where(item => item.NUMEMP.ToString().Contains(search) );
-            //}
-
-            //// * map the employees for retrieving only the necessary columns
-            //var empleados = empleadosQuery.Take(25).ToList().Select(emp => EmployeeViewModel.FromEntity(emp)).ToList();
-
-            //return empleados;
+            try
+            {
+                var employeesList = await procuEmployeeRepo.SearchByEmployeeNumber(int.Parse(search));
+                return employeesList.ToList();
+            }
+            catch(Exception err)
+            {
+                Console.WriteLine(err);
+                return Array.Empty<ProcuEmployee>();
+            }
         }
 
         public async Task<Bitmap> GetEmployeePhoto(int employeeNumber)

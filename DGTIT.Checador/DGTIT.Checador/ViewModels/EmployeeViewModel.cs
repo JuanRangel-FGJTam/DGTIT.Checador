@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using DGTIT.Checador.Core.Entities;
 
 namespace DGTIT.Checador.ViewModels
 {
@@ -28,6 +28,19 @@ namespace DGTIT.Checador.ViewModels
             item.Materno = entity.APELLIDOMATERNO;
             item.Curp = entity.CURP;
             item.AreaId = entity.IDAREA??0;
+            return item;
+        }
+
+        public static EmployeeViewModel FromEntity(ProcuEmployee entity)
+        {
+            var item = new EmployeeViewModel();
+            item.Id = entity.Id;
+            item.NumEmpleado = entity.NumeroEmpleado;
+            item.Nombre = entity.Nombre;
+            item.Paterno = entity.ApellidoPaterno;
+            item.Materno = entity.ApellidoMaterno;
+            item.Curp = entity.CURP;
+            item.AreaId = entity.AreaId;
             return item;
         }
     }

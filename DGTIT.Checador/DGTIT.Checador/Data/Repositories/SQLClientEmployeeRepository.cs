@@ -207,5 +207,21 @@ namespace DGTIT.Checador.Data.Repositories
             return responseEntity;
         }
 
+        public async Task UpdateEmployee(Employee employee)
+        {
+            using (var sqlConnection = new SqlConnection(connectionString))
+            {
+                await sqlConnection.OpenAsync();
+                var query = @"UPDATE [dbo].[employees]
+                    SET	fingerprint = @fingerPrint, fingerprint_updated_at = @fingerPrintUpdatedAt
+                    WHERE id = @employeeId;";
+                var command = new SqlCommand(query, sqlConnection);
+                command.Parameters.AddWithValue("@employeeId", employee.Id);
+                command.Parameters.AddWithValue("@fingerPrint", employee.Fingerprint);
+                command.Parameters.AddWithValue("@fingerPrintUpdatedAt", employee.FingerPrintUpdatedAt);
+                var r =  await command.ExecuteNonQueryAsync();
+                sqlConnection.Close();
+            }
+        }
     }
 }

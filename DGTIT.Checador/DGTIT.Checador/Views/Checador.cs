@@ -26,6 +26,7 @@ namespace DGTIT.Checador.Views
 {
     public class Checador : CaptureForm
     {
+        private readonly EmployeeService employeeService;
         private readonly ChecadorService checadorService;
         private readonly FiscaliaService fiscaliaService;
         private readonly List<long> areasAvailables = new List<long>();
@@ -60,6 +61,7 @@ namespace DGTIT.Checador.Views
             // * initialized services
             checadorService = new ChecadorService(employeeRepo, recordRepo);
             fiscaliaService = new FiscaliaService(employeeRepo, procuEmployeeRepo);
+            employeeService = new EmployeeService(employeeRepo, procuEmployeeRepo);
 
             employeeFingerprintM = new EmployeeFingerprintMatcher(this.areasAvailables.Select(item => (int) item));
         }
@@ -183,7 +185,7 @@ namespace DGTIT.Checador.Views
             IEnumerable<Employee> employees = Array.Empty<Employee>();
             try
             {
-                employees = await this.checadorService.GetEmployees();
+                employees = await this.employeeService.GetEmployees();
             }
             catch (Exception err)
             {

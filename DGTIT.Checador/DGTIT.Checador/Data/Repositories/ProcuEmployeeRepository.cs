@@ -38,7 +38,8 @@ namespace DGTIT.Checador.Data.Repositories
 					    FOTO,
 					    FECHAFOTO,
 					    [ACTIVO] = Cast( (Case When IDESTADOEMPLEADO in (1,6,7,8) Then 1 Else 0 End) as bit),
-					    Genero = s.Sexo
+					    Genero = s.Sexo,
+                        IDAREA
 				    From [dbo].[EMPLEADO] e
 				    Inner Join [dbo].[SEXO] s on e.IDSEXO = s.IDSEXO
 				    WHERE NUMEMP = @numEmpleado";
@@ -54,6 +55,45 @@ namespace DGTIT.Checador.Data.Repositories
                 sqlConnection.Close();
             }
             return responseEntity;
+        }
+
+        public async Task<IEnumerable<ProcuEmployee>> SearchByEmployeeNumber(int employeeNumber)
+        {
+            var responseList = new List<ProcuEmployee>();
+            using (var sqlConnection = new SqlConnection(connectionString))
+            {
+                await sqlConnection.OpenAsync();
+                var query = @"SELECT
+					    IDEMPLEADO,
+					    NUMEMP,
+					    NOMBRE,
+					    APELLIDOPATERNO,
+					    APELLIDOMATERNO,
+					    IDESTADOEMPLEADO,
+					    FECHA_NAC,
+					    FECHA_ALTA,
+					    FECHABAJA,
+					    CURP,
+					    FOTO,
+					    FECHAFOTO,
+					    [ACTIVO] = Cast( (Case When IDESTADOEMPLEADO in (1,6,7,8) Then 1 Else 0 End) as bit),
+					    Genero = s.Sexo,
+                        IDAREA
+				    From [dbo].[EMPLEADO] e
+				    Inner Join [dbo].[SEXO] s on e.IDSEXO = s.IDSEXO
+				    WHERE NUMEMP like CONCAT(@numEmpleado, '%')";
+                var command = new SqlCommand(query, sqlConnection);
+                command.Parameters.AddWithValue("@numEmpleado", employeeNumber);
+                using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                {
+                    while (reader.Read())
+                    {
+                        responseList.Add(ProcuEmployee.FromDataReader(reader));
+                    }
+                }
+                sqlConnection.Close();
+            }
+            return responseList;
         }
     }
 }

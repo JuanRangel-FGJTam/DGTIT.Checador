@@ -7,9 +7,11 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using DGTIT.Checador.Core.Interfaces;
+using DGTIT.Checador.Data.Repositories;
 using DGTIT.Checador.Helpers;
 using DGTIT.Checador.Services;
 using DGTIT.Checador.ViewModels;
@@ -20,25 +22,24 @@ namespace DGTIT.Checador
     {
         private readonly FiscaliaService fiscaliaService;
 
-        private UsuariosDBEntities contexto;
-        private procuraduriaEntities1 procu;
+        private IEmployeeRepository employeeRepository;
+        private IProcuEmployeeRepo procuEmployeeRepo;
         private int serachEmployeeNumber = 0;
         private int selectedEmployeeNumber = 0;
         private string nombreEmpleado = "";
-        
 
         public FrmEmpleados()
         {
             InitializeComponent();
-            
+
             // * initialized the dbContext 
-            contexto = new UsuariosDBEntities();
-            procu = new procuraduriaEntities1();
-            
+            employeeRepository = new SQLClientEmployeeRepository();
+            procuEmployeeRepo = new ProcuEmployeeRepository();
+
             // * initialized services
-            fiscaliaService = new FiscaliaService(procu, contexto);
+            fiscaliaService = new FiscaliaService(employeeRepository, procuEmployeeRepo);
                
-            // hidden search box
+            // * hidden search box
             txtSearch.Enabled = false;
             txtSearch.Visible = false;
             txtEmployeeNumber.Text = "";
@@ -86,31 +87,24 @@ namespace DGTIT.Checador
             txtEmployeeNumber.Select();
         }
 
-        private void ListarEmpleados()
+        private async Task ListarEmpleados()
         {
-
             // * clear selection 
-            this.btnEdit.Text = "EDITAR EMPLEADO";
-            this.btnEdit.Enabled = false;
-            this.btnEdit.Visible = false;
+            DisabledEditButton();
             this.selectedEmployeeNumber = 0;
             this.nombreEmpleado = "";
-
 
             try
             {
                 dataGridEmpleados.DataSource = null;
 
                 // * ensured that at least one filter is specified to prevent display all the employees
-                if (serachEmployeeNumber.ToString().Length <= 3)
-                {
-                    return;
-                }
+                if (serachEmployeeNumber.ToString().Length <= 3) return;
 
                 // * retrive the employees
-                var empleados = fiscaliaService.SearchEmployees(serachEmployeeNumber.ToString()).ToList();
-                dataGridEmpleados.DataSource = empleados;
-
+                var empleados = await fiscaliaService.SearchEmployees(serachEmployeeNumber.ToString());
+                var empleadosVM = empleados.Select(e => EmployeeViewModel.FromEntity(e)).ToList();
+                dataGridEmpleados.DataSource = empleadosVM;
             }
             catch (Exception ex)
             {
@@ -118,15 +112,15 @@ namespace DGTIT.Checador
             }
         }
 
-        private void TextBoxEmployeeNumberChanged(object sender, EventArgs e)
+        private async void TextBoxEmployeeNumberChanged(object sender, EventArgs e)
         {
             serachEmployeeNumber = Convert.ToInt32( txtEmployeeNumber.ValidateText() );
-            ListarEmpleados();
+            await ListarEmpleados();
         }
         
-        private void TextBoxSearchTextChanged(object sender, EventArgs e)
+        private async void TextBoxSearchTextChanged(object sender, EventArgs e)
         {
-            ListarEmpleados();
+            await ListarEmpleados();
         }
         
         private void DataGridSelectionChanged(object sender, EventArgs e)
@@ -139,20 +133,14 @@ namespace DGTIT.Checador
                     string nombre = row.Cells[1].Value.ToString();
                     string paterno = row.Cells[2].Value.ToString();
                     string materno = row.Cells[3].Value.ToString();
-
                     nombreEmpleado = paterno + ' ' + materno + ' ' + nombre;
-                    this.btnEdit.Text = $"EDITAR: {nombreEmpleado}";
-                    this.btnEdit.Enabled = true;
-                    this.btnEdit.Visible = true;
+                    EnabledEditButton();
                 }
             }
             else
             {
-                this.btnEdit.Text = "EDITAR EMPLEADO";
-                this.btnEdit.Enabled = false;
-                this.btnEdit.Visible = false;
+                DisabledEditButton();
             }
-
         }
            
         private void BtnEditarClick(object sender, EventArgs e)
@@ -164,10 +152,9 @@ namespace DGTIT.Checador
             txtEmployeeNumber.Select();
         }
 
-
         private void DataGridEmpleadosDoubleClick(object sender, DataGridViewCellMouseEventArgs e) {
             var row = dataGridEmpleados.Rows[e.RowIndex];
-            var data = (EmployeeViewModel)row.DataBoundItem;
+            var data = (EmployeeViewModel) row.DataBoundItem;
 
             var formRegistrar = new FrmRegistrar(data.NumEmpleado);
             formRegistrar.ShowDialog(this);
@@ -175,5 +162,20 @@ namespace DGTIT.Checador
             txtEmployeeNumber.Focus();
             txtEmployeeNumber.Select();
         }
+    
+        private void DisabledEditButton()
+        {
+            this.btnEdit.Text = "EDITAR EMPLEADO";
+            this.btnEdit.Enabled = false;
+            this.btnEdit.Visible = false;
+        }
+
+        private void EnabledEditButton()
+        {
+            this.btnEdit.Text = $"EDITAR: {nombreEmpleado}";
+            this.btnEdit.Enabled = true;
+            this.btnEdit.Visible = true;
+        }
+
     }
 }
