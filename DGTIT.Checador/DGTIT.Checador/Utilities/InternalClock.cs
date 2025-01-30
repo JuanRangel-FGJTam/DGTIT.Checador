@@ -28,7 +28,6 @@ namespace DGTIT.Checador.Utilities {
         private void UpdateTime(object sender, EventArgs e) {
             try {
                 _currentTime = _currentTime.AddSeconds(1);
-                Console.WriteLine("(-) CurrentTime: " + _currentTime.ToLongTimeString());
             }
             catch(Exception err) {
                 Console.WriteLine("Fail at update the internal clock: " + err.Message );

@@ -30,14 +30,9 @@ namespace DGTIT.Checador.Views
         private readonly ChecadorService checadorService;
         private readonly FiscaliaService fiscaliaService;
         private readonly List<long> areasAvailables = new List<long>();
-        private readonly int intervalSyncClock = 600;
 
         private EmployeeFingerprintMatcher employeeFingerprintM;
-
-        // private System.Windows.Forms.Timer timerDisplayDateTime;
         private System.Windows.Forms.Timer timerLogStatus;
-        private System.Windows.Forms.Timer timerSyncDateTime;
-
         private DPFP.Verification.Verification Verificator;
         private Task taskAfterCheck;
         private CancellationTokenSource cancelationSource;
@@ -45,13 +40,11 @@ namespace DGTIT.Checador.Views
         private InternalClock internalClock;
 
         
-        public Checador() : base() {
+        public Checador() : base()
+        {
+            
             // * read configurations
-
-            // this.areasAvailables = Properties.Settings.Default["generalDirectionId"].ToString().Split(',').Select(i => Convert.ToInt64(i)).ToList();
             this.areasAvailables = CustomApplicationSettings.GetGeneralDirections().Split(';').Select( i => Convert.ToInt64(i)).ToList();
-
-            this.intervalSyncClock = Convert.ToInt32(Properties.Settings.Default["intervalSyncClock"]);
 
             // * initialized repos
             var employeeRepo = new SQLClientEmployeeRepository();
@@ -62,7 +55,6 @@ namespace DGTIT.Checador.Views
             checadorService = new ChecadorService(employeeRepo, recordRepo);
             fiscaliaService = new FiscaliaService(employeeRepo, procuEmployeeRepo);
             employeeService = new EmployeeService(employeeRepo, procuEmployeeRepo);
-
             employeeFingerprintM = new EmployeeFingerprintMatcher(this.areasAvailables.Select(item => (int) item));
         }
 
@@ -83,15 +75,8 @@ namespace DGTIT.Checador.Views
             timerLogStatus.Tick += new EventHandler(OnTimerLogTick);
             timerLogStatus.Start();
 
-            timerSyncDateTime = new System.Windows.Forms.Timer();
-            // timerSyncDateTime.Interval = (int)TimeSpan.FromSeconds(this.intervalSyncClock).TotalMilliseconds;
-            timerSyncDateTime.Interval = (int) TimeSpan.FromHours(1).TotalMilliseconds;
-            timerSyncDateTime.Tick += new EventHandler(OnTimerSyncClock);
-            timerSyncDateTime.Start();
-
-            // * force to fetch the time at the begining
-            OnTimerSyncClock(null, null);
-
+            // * sync the time
+            SyncClockTime();
         }
 
         protected override void Process(DPFP.Sample Sample)
@@ -120,19 +105,6 @@ namespace DGTIT.Checador.Views
                     catch (OperationCanceledException) { }
                 }, ct);
             }, ct);
-        }
-
-        public static void DelayAction(int millisecond, Action action)
-        {
-            var timer = new DispatcherTimer();
-            timer.Tick += delegate
-            {
-                action.Invoke();
-                timer.Stop();
-            };
-
-            timer.Interval = TimeSpan.FromMilliseconds(millisecond);
-            timer.Start();
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e) {
@@ -251,9 +223,31 @@ namespace DGTIT.Checador.Views
             }
         }
 
+        private void SyncClockTime()
+        {
+            try
+            {
+                MakeReport("Obteniendo hora del servidor.", EventLevel.Informational);
+
+                // get the date from the server
+                var task1 = Task.Run<DateTime?>( async () => await this.checadorService.GetServerTime() );
+                Task.WaitAll(task1);
+                DateTime? serverDate = task1.Result;
+
+                if (serverDate == null) throw new Exception("La fecha no se pudo recuperar del servidor.");
+                if (internalClock == null) throw new Exception("El error interno no esta inicializado.");
+                internalClock.SyncClock(serverDate.Value);
+                MakeReport("Reloj interno sincronizado.", EventLevel.Informational);
+            }
+            catch (Exception err)
+            {
+                MakeReport("Error al obtener la fecha del servidor", err);
+            }
+        }
+
         #region background workers
-        private void OnTimerLogTick(object sender, EventArgs e) {
-            
+        private void OnTimerLogTick(object sender, EventArgs e)
+        {   
             // TODO: Moved this logic to a service
 
             //try {
@@ -264,42 +258,6 @@ namespace DGTIT.Checador.Views
             //catch (Exception err) {
             //    MakeReport(err.Message, err);
             //}
-        }
-
-        private void OnTimerSyncClock(object sender, EventArgs e) {
-            try {
-
-                MakeReport("Obteniendo hora del servidor.", EventLevel.Informational);
-
-                // get the date from the server
-
-                //var task1 = Task.Run<DateTime?>(() => contexto.Database.SqlQuery<DateTime>("SELECT getdate()").First() );
-                var task1 = Task.Run<DateTime?>(() => DateTime.Now);
-
-                var task2 = Task.Run(() => System.Threading.Thread.Sleep(3000));
-
-                var taskIndex = Task.WaitAny(task1, task2);
-                if (taskIndex == 1) {
-                    throw new TimeoutException("Timeout at get the server date");
-                }
-
-                DateTime? serverDate = task1.Result;
-
-                if(serverDate == null) {
-                    throw new Exception("La fecha no se pudo recuperar del servidor.");
-                }
-
-                if(internalClock == null) {
-                    throw new Exception("El error interno no esta inicializado.");
-                }
-
-                internalClock.SyncClock(serverDate.Value);
-
-                MakeReport("Reloj interno sincronizado.", EventLevel.Informational);
-            }
-            catch (Exception err) {
-                MakeReport("Error al obtener la fecha del servidor", err);
-            }
         }
         #endregion
 

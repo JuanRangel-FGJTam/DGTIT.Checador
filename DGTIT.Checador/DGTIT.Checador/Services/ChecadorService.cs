@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -21,7 +23,7 @@ namespace DGTIT.Checador.Services {
 
         public async Task<DateTime> CheckInEmployee(int employeeNumber)
         {
-            var serverTime = DateTime.Now;
+            var serverTime = await GetServerTime();
 
             // * Get the employee id
             var employee = await this.employeeRepository.FindByEmployeeNumber(employeeNumber) 
@@ -41,6 +43,19 @@ namespace DGTIT.Checador.Services {
             }
             return serverTime;
         }
-    
+        
+        public async Task<DateTime> GetServerTime()
+        {
+            DateTime servertime;
+            var connectionString = ConfigurationManager.ConnectionStrings["UsuariosDB"].ConnectionString;
+            using (var sqlConnection = new SqlConnection(connectionString))
+            {
+                await sqlConnection.OpenAsync();
+                var command = new SqlCommand("SELECT GetDate() as time", sqlConnection);
+                servertime = Convert.ToDateTime( await command.ExecuteScalarAsync());
+                sqlConnection.Close();
+            }
+            return servertime;
+        }
     }
 }
