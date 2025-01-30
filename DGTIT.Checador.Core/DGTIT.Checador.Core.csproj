@@ -41,9 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Department.cs" />
+    <Compile Include="Entities\Direction.cs" />
     <Compile Include="Entities\Employee.cs" />
+    <Compile Include="Entities\GeneralDirection.cs" />
     <Compile Include="Entities\ProcuEmployee.cs" />
     <Compile Include="Entities\Record.cs" />
+    <Compile Include="Entities\SubDirectorate.cs" />
+    <Compile Include="Interfaces\ICatalogsRepository.cs" />
     <Compile Include="Interfaces\IEmployeeRepository.cs" />
     <Compile Include="Interfaces\IProcuEmployeeRepo.cs" />
     <Compile Include="Interfaces\IRecordRepository.cs" />

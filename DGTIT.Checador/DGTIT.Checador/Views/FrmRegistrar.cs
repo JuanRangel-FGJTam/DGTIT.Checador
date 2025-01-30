@@ -20,6 +20,7 @@ namespace DGTIT.Checador
     {
         private readonly IEmployeeRepository employeeRepository;
         private readonly IProcuEmployeeRepo procuEmployeeRepo;
+        private readonly ICatalogsRepository catalogsRepository;
         private readonly EmployeeService employeeService;
         private readonly FiscaliaService fiscaliaService;
 
@@ -36,6 +37,7 @@ namespace DGTIT.Checador
             // * initialize the services
             this.employeeRepository = new SQLClientEmployeeRepository();
             this.procuEmployeeRepo = new ProcuEmployeeRepository();
+            this.catalogsRepository = new CatalogsRepository();
 
             this.employeeService = new EmployeeService(employeeRepository, procuEmployeeRepo);
             this.fiscaliaService = new FiscaliaService(employeeRepository, procuEmployeeRepo);
@@ -51,9 +53,9 @@ namespace DGTIT.Checador
             }
         }
         
-        private void OnLoaded(object sender, EventArgs e)
+        private async void OnLoaded(object sender, EventArgs e)
         {
-            LoadCatalogs();
+            await LoadCatalogs();
 
             // * display the employee info
             this.tb_employeeNumber.Text = employeeNumber.ToString();
@@ -110,31 +112,27 @@ namespace DGTIT.Checador
             this.cb_check.CheckedChanged += new EventHandler(CheckBoxOptionChanged);
         }
         
-        private void LoadCatalogs()
+        private async Task LoadCatalogs()
         {
-            //var dirgral = contexto.general_directions.OrderBy(item => item.name).ToList();
-            var dirgral =  new List<general_directions>();
-            cboDirGral.DataSource = dirgral;
-            cboDirGral.ValueMember = "id";
-            cboDirGral.DisplayMember = "name";
+            var dirgral = await this.catalogsRepository.FindAllGeneralDirections();
+            cboDirGral.DataSource = dirgral.ToList();
+            cboDirGral.ValueMember = "Id";
+            cboDirGral.DisplayMember = "Name";
 
-            //var dir = contexto.directions.OrderBy(item => item.name).Where(item => item.general_direction_id == currentEmployee.general_direction_id || item.id == 1).ToList();
-            var dir = new List<direction>();
-            cboDireccion.DataSource = dir;
-            cboDireccion.ValueMember = "id";
-            cboDireccion.DisplayMember = "name";
+            var dir = await this.catalogsRepository.FindAllDirections();
+            cboDireccion.DataSource = dir.ToList();
+            cboDireccion.ValueMember = "Id";
+            cboDireccion.DisplayMember = "Name";
 
-            //var subdir = contexto.subdirectorates.OrderBy(item => item.name).Where(item => item.direction_id == currentEmployee.direction_id || item.id == 1).ToList();
-            var subdir = new List<subdirectorate>();
-            cboSubdireccion.DataSource = subdir;
-            cboSubdireccion.ValueMember = "id";
-            cboSubdireccion.DisplayMember = "name";
+            var subdir = await this.catalogsRepository.FindAllSubdirectorates();
+            cboSubdireccion.DataSource = subdir.ToList();
+            cboSubdireccion.ValueMember = "Id";
+            cboSubdireccion.DisplayMember = "Name";
 
-            //var depa = contexto.departments.OrderBy(item => item.name).Where(item => item.subdirectorate_id == currentEmployee.subdirectorate_id|| item.id == 1).ToList();
-            var depa = new List<department>();
-            cboDepartamento.DataSource = depa;
-            cboDepartamento.ValueMember = "id";
-            cboDepartamento.DisplayMember = "name";
+            var depa = await this.catalogsRepository.FindAllDepartment();
+            cboDepartamento.DataSource = depa.ToList();
+            cboDepartamento.ValueMember = "Id";
+            cboDepartamento.DisplayMember = "Name";
         }
 
         private bool ValidateBeforeUdpate()
@@ -165,7 +163,6 @@ namespace DGTIT.Checador
         
         private async void BtnUpdateClick(object sender, EventArgs e)
         {
-
             if (!ValidateBeforeUdpate())
             {
                 return;
@@ -195,7 +192,7 @@ namespace DGTIT.Checador
             this.currentEmployee.Name = ( (TextBox) sender).Text;
         }
 
-        private void ComboBoxDirectionChanged(object sender, EventArgs e)
+        private async void ComboBoxDirectionChanged(object sender, EventArgs e)
         {
             var senderComboBox = ((ComboBox) sender);
             var selectedId = Convert.ToInt32(senderComboBox.SelectedValue);
@@ -203,26 +200,26 @@ namespace DGTIT.Checador
             {
                 case "cboDirGral":
                     currentEmployee.GeneralDirectionId = selectedId;
-                    //cboDireccion.DataSource = contexto.directions
-                    //    .OrderBy(item => item.name)
-                    //    .Where(item => item.general_direction_id == selectedId || item.id == 1)
-                    //    .ToList();
+                    cboDireccion.DataSource = (await this.catalogsRepository.FindAllDirections())
+                        .OrderBy(item => item.Name)
+                        .Where(item => item.GeneralDirectionId == selectedId || item.Id == 1)
+                        .ToList();
                     break;
 
                 case "cboDireccion":
                     currentEmployee.DirectionId = selectedId;
-                    //cboSubdireccion.DataSource = contexto.subdirectorates
-                    //    .OrderBy(item => item.name)
-                    //    .Where(item => item.direction_id == selectedId || item.id == 1)
-                    //    .ToList();
+                    cboSubdireccion.DataSource = (await this.catalogsRepository.FindAllSubdirectorates())
+                        .OrderBy(item => item.Name)
+                        .Where(item => item.DirectionId == selectedId || item.Id == 1)
+                        .ToList();
                     break;
 
                 case "cboSubdireccion":
                     currentEmployee.SubdirectorateId = selectedId;
-                    //cboDepartamento.DataSource = contexto.departments
-                    //    .OrderBy(item => item.name)
-                    //    .Where(item => item.subdirectorate_id == selectedId || item.id == 1)
-                    //    .ToList();
+                    cboDepartamento.DataSource = (await this.catalogsRepository.FindAllDepartment())
+                        .OrderBy(item => item.Name)
+                        .Where(item => item.SubDirectorateId == selectedId || item.Id == 1)
+                        .ToList();
                     break;
 
                 case "cboDepartamento":

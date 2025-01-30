@@ -187,6 +187,7 @@
     <Compile Include="clientsStatusLog.cs">
       <DependentUpon>UsuariosModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\Repositories\CatalogsRepository.cs" />
     <Compile Include="Data\Repositories\ProcuEmployeeRepository.cs" />
     <Compile Include="Data\Repositories\SQLClientEmployeeRepository.cs" />
     <Compile Include="Data\Repositories\SQLRecordRepository.cs" />
