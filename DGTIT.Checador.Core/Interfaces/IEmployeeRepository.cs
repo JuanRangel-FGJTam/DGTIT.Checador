@@ -6,12 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DGTIT.Checador.Core.Interfaces {
-    internal interface IEmployeeRepository
+    public interface IEmployeeRepository
     {
         Task<IEnumerable<Employee>> FindAll();
         Task<IEnumerable<Employee>> FindByGeneralDirection(int generalDirectionId);
         Task<IEnumerable<Employee>> FindByGeneralDirection(IEnumerable<int> generalDirectionIds);
         Task<Employee> FindById(int employeeId);
         Task<Employee> FindByEmployeeNumber(int employeeId);
+        Task UpdateEmployee(Employee employee);
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DGTIT.Checador.Core.Entities
 {
-    internal class ProcuEmployee
+    public class ProcuEmployee
     {
         public int Id { get; set; }
         public int NumeroEmpleado{ get; set; }
@@ -23,8 +23,9 @@ namespace DGTIT.Checador.Core.Entities
         public DateTime? FechaFoto { get; set; }
         public bool Activo { get; set; }
         public string Genero { get; set; }
+        public int AreaId { get; set; }
 
-        internal static ProcuEmployee FromDataReader(IDataReader reader)
+        public static ProcuEmployee FromDataReader(IDataReader reader)
         {
              var employee = new ProcuEmployee {
                 Id = Convert.ToInt32(reader["IDEMPLEADO"]),
@@ -45,7 +46,8 @@ namespace DGTIT.Checador.Core.Entities
                     : null,
                  FechaBaja = (!reader.IsDBNull(reader.GetOrdinal("FECHABAJA")))
                     ? (DateTime?)Convert.ToDateTime(reader["FECHABAJA"])
-                    : null
+                    : null,
+                 AreaId = Convert.ToInt32(reader["IDAREA"])
              };
             return employee;
         }

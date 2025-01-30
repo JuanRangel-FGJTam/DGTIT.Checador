@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace DGTIT.Checador.Core.Interfaces
 {
-    internal interface IProcuEmployeeRepo
+    public interface IProcuEmployeeRepo
     {
         Task<ProcuEmployee> FindByEmployeeNumber(int employeeNumber);
+        Task<IEnumerable<ProcuEmployee>> SearchByEmployeeNumber(int employeeNumber);
     }
 }

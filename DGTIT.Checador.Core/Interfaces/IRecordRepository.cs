@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DGTIT.Checador.Core.Interfaces {
-    internal interface IRecordRepository {
+    public interface IRecordRepository {
         Task<int> AddRecord(Record record);
     }
 }

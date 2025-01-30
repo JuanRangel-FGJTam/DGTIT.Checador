@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DGTIT.Checador.Core.Entities {
-    internal class Employee {
+    public class Employee {
         public int Id { get; set; }
         public int GeneralDirectionId { get; set; }
         public int DirectionId { get; set; }
@@ -25,7 +25,7 @@ namespace DGTIT.Checador.Core.Entities {
         public DateTime FingerPrintUpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
 
-        internal static Employee FromDataReader(IDataReader reader)
+        public static Employee FromDataReader(IDataReader reader)
         {
             var employee = new Employee {
                 Id = Convert.ToInt32(reader["id"]),
