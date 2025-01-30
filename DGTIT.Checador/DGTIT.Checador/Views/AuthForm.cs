@@ -11,7 +11,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
-namespace DGTIT.Checador.Views {
+namespace DGTIT.Checador.Views
+{
     public partial class AuthForm : Form {
 
         private readonly UsuariosDBEntities contexto;
@@ -25,11 +26,11 @@ namespace DGTIT.Checador.Views {
         private void BtnValidar_Click(object sender, EventArgs e) {
             Cursor = Cursors.WaitCursor;
 
-            var _hashedPassword = HashPasswordSHA1(tbPassword.Text);
+            var _hashedPassword = DGTIT.Checador.Helpers.HashData.HashSHA1(tbPassword.Text);
 
-            var _client = contexto.clients.FirstOrDefault(item => item.user == "checador@fgjtam.gob.mx" && item.password.ToLower() == _hashedPassword);
-
-            if(_client == null) {
+            //var _client = contexto.clients.FirstOrDefault(item => item.user == "checador@fgjtam.gob.mx" && item.password.ToLower() == _hashedPassword);
+            var _client = _hashedPassword.Equals("c0b13654c22164e7b3af8c4e1ed0783ae918a905") ? "ok" : null;
+            if (_client == null) {
                 MessageBox.Show("Contraseña inválida, intente de nuevo.", "No autorizado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 count++;
 
@@ -38,7 +39,6 @@ namespace DGTIT.Checador.Views {
                     Cursor = Cursors.Default;
                     return;
                 }
-
                 return;
             }
 
@@ -46,21 +46,5 @@ namespace DGTIT.Checador.Views {
             this.DialogResult = DialogResult.Yes;
         }
 
-        private static string HashPasswordSHA1(string password) {
-            // Convert the input string to a byte array
-            byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
-
-            // Initialize SHA1 and compute the hash
-            using (SHA1 sha1 = SHA1.Create()) {
-                byte[] hashBytes = sha1.ComputeHash(passwordBytes);
-
-                // Convert the byte array to a hexadecimal string
-                StringBuilder sb = new StringBuilder();
-                foreach (byte b in hashBytes) {
-                    sb.Append(b.ToString("x2"));  // Converts each byte to a 2-character hex string
-                }
-                return sb.ToString();
-            }
-        }
     }
 }
