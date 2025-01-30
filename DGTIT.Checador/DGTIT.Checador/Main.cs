@@ -15,7 +15,6 @@ namespace DGTIT.Checador
 {
     public partial class Main : Form
     {
-
         private Views.Checador checadorForm;
 
         bool ctrlKPressed = false; 
@@ -38,9 +37,6 @@ namespace DGTIT.Checador
             var empleados = new FrmEmpleados();
             empleados.ShowDialog(this);
             this.Visible = true;
-
-            //FrmRegistrar registrar = new FrmRegistrar();
-            //registrar.ShowDialog();
         }
 
         private void BtnVerificar_Click(object sender, EventArgs e)
@@ -84,7 +80,6 @@ namespace DGTIT.Checador
                 ca.ShowDialog(this);
             }
         }
-
 
     }
 }
