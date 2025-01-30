@@ -345,5 +345,30 @@ namespace ChecadorService.Services {
             }
         }
 
+        public async Task UpdateRemoteEmployee(Employee employee)
+        {
+            logger.Info($"Updating the employee with number: '{employee.EmployeeNumber}'.");
+
+            // * get the connection string
+            string serverConnectionString = ConfigurationManager.ConnectionStrings["UsuariosDBEntities"].ConnectionString;
+            if (String.IsNullOrEmpty(serverConnectionString))  throw new ArgumentNullException("The UsuariosDBLocal connection string is null or empty.");
+
+            // * get the users
+            using (var sqlConnection = new SqlConnection(serverConnectionString))
+            {
+                sqlConnection.Open();
+                var query = @"UPDATE [dbo].[employees]
+                      SET	[fingerprint] = @fi,
+		                    [updated_at] = @up
+                    WHERE id = @id ";
+                var command = new SqlCommand(query, sqlConnection);
+                command.Parameters.AddWithValue("@id", employee.Id);
+                command.Parameters.AddWithValue("@fi", employee.Fingerprint);
+                command.Parameters.AddWithValue("@up", employee.FingerprintUpdatedAt);
+                await command.ExecuteNonQueryAsync();
+                sqlConnection.Close();
+            }
+        }
+
     }
 }
