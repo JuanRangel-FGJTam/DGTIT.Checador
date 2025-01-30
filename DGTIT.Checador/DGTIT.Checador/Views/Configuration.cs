@@ -1,4 +1,7 @@
-﻿using DGTIT.Checador.Properties;
+﻿using DGTIT.Checador.Core.Entities;
+using DGTIT.Checador.Core.Interfaces;
+using DGTIT.Checador.Data.Repositories;
+using DGTIT.Checador.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,18 +19,18 @@ namespace DGTIT.Checador.Views
 {
     public partial class Configuration : Form
     {
-
+        private ICatalogsRepository catalogsRepository;
         private string name = string.Empty;
         private bool playSoundOnFail = false;
         private List<long> selectedIds = new List<long>();
-        private List<general_directions> generalDirections;
+        private List<GeneralDirection> generalDirections;
         private int intervalSyncClock;
         private int employeesTimeout;
 
         public Configuration()
         {
             InitializeComponent();
-
+            catalogsRepository = new CatalogsRepository();
             this.name = (string) Properties.Settings.Default["name"];
             this.selectedIds = Properties.Settings.Default["generalDirectionId"].ToString().Split(',').Select( d => Convert.ToInt64(d)).ToList();
             this.playSoundOnFail = Properties.Settings.Default["playSoundOnFail"].ToString() == "1";
@@ -36,19 +39,18 @@ namespace DGTIT.Checador.Views
             this.Load += new EventHandler(LoadedDone);
         }
 
-        private void LoadedDone(object sender, EventArgs e)
+        private async void LoadedDone(object sender, EventArgs e)
         {
 
             // * load the general directions
-            var entities = new UsuariosDBEntities();
-            this.generalDirections = entities.general_directions.ToList();
+            this.generalDirections = (await catalogsRepository.FindAllGeneralDirections()).ToList();
 
 
             // * initialize the checklist
             this.checkListAreas.DisplayMember = "name";
             foreach (var item in this.generalDirections)
             {
-                this.checkListAreas.Items.Add(item, this.selectedIds.Contains(item.id) );
+                this.checkListAreas.Items.Add(item, this.selectedIds.Contains(item.Id) );
             }
             this.checkListAreas.SelectedValue = selectedIds.ToArray();
 
@@ -79,8 +81,8 @@ namespace DGTIT.Checador.Views
             foreach (var checkedItem in checkListAreas.CheckedItems)
             {
                 // Cast the checked item back to MyItem to access its properties
-                var item = (general_directions)checkedItem;
-                listIds.Add(item.id);
+                var item = (GeneralDirection) checkedItem;
+                listIds.Add(item.Id);
             }
             // * set the properties
             Properties.Settings.Default["name"] = this.name;

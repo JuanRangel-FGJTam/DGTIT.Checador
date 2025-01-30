@@ -18,19 +18,6 @@ namespace DGTIT.Checador.ViewModels
         public int AreaId{ get; set; }
         public string Area { get; set; }
 
-        public static EmployeeViewModel FromEntity(EMPLEADO entity)
-        {
-            var item = new EmployeeViewModel();
-            item.Id = entity.IDEMPLEADO;
-            item.NumEmpleado = entity.NUMEMP.Value;
-            item.Nombre = entity.NOMBRE;
-            item.Paterno = entity.APELLIDOPATERNO;
-            item.Materno = entity.APELLIDOMATERNO;
-            item.Curp = entity.CURP;
-            item.AreaId = entity.IDAREA??0;
-            return item;
-        }
-
         public static EmployeeViewModel FromEntity(ProcuEmployee entity)
         {
             var item = new EmployeeViewModel();

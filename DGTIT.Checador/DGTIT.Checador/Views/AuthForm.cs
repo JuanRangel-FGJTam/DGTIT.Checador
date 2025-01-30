@@ -15,20 +15,15 @@ namespace DGTIT.Checador.Views
 {
     public partial class AuthForm : Form {
 
-        private readonly UsuariosDBEntities contexto;
-
         private int count = 0;
         public AuthForm() {
             InitializeComponent();
-            contexto = new UsuariosDBEntities();
         }
 
         private void BtnValidar_Click(object sender, EventArgs e) {
             Cursor = Cursors.WaitCursor;
 
             var _hashedPassword = DGTIT.Checador.Helpers.HashData.HashSHA1(tbPassword.Text);
-
-            //var _client = contexto.clients.FirstOrDefault(item => item.user == "checador@fgjtam.gob.mx" && item.password.ToLower() == _hashedPassword);
             var _client = _hashedPassword.Equals("c0b13654c22164e7b3af8c4e1ed0783ae918a905") ? "ok" : null;
             if (_client == null) {
                 MessageBox.Show("Contraseña inválida, intente de nuevo.", "No autorizado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -45,6 +40,5 @@ namespace DGTIT.Checador.Views
             Cursor = Cursors.Default;
             this.DialogResult = DialogResult.Yes;
         }
-
     }
 }

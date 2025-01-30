@@ -178,15 +178,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AREA.cs">
-      <DependentUpon>procuraduria.tt</DependentUpon>
-    </Compile>
-    <Compile Include="client.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="clientsStatusLog.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Data\Repositories\CatalogsRepository.cs" />
     <Compile Include="Data\Repositories\ProcuEmployeeRepository.cs" />
     <Compile Include="Data\Repositories\SQLClientEmployeeRepository.cs" />
@@ -198,9 +189,6 @@
     <Compile Include="Utilities\EmployeeFingerprintMatcher.cs" />
     <Compile Include="Utilities\InternalClock.cs" />
     <Compile Include="Helpers\FingerPrint.cs" />
-    <Compile Include="notification.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -219,10 +207,10 @@
     <Compile Include="Views\BusyDialog.Designer.cs">
       <DependentUpon>BusyDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="CapturarHuella.cs">
+    <Compile Include="Views\CapturarHuella.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CapturarHuella.Designer.cs">
+    <Compile Include="Views\CapturarHuella.Designer.cs">
       <DependentUpon>CapturarHuella.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\CaptureForm.cs">
@@ -230,24 +218,6 @@
     </Compile>
     <Compile Include="Views\CaptureForm.Designer.cs">
       <DependentUpon>CaptureForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="department.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="direction.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EMPLEADO.cs">
-      <DependentUpon>procuraduria.tt</DependentUpon>
-    </Compile>
-    <Compile Include="employee.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="FrmCaptura.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmCaptura.Designer.cs">
-      <DependentUpon>FrmCaptura.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\CollectionsHelper.cs" />
     <Compile Include="Services\ChecadorService.cs" />
@@ -262,6 +232,12 @@
     <Compile Include="Views\Configuration.Designer.cs">
       <DependentUpon>Configuration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\FrmCaptura.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\FrmCaptura.Designer.cs">
+      <DependentUpon>FrmCaptura.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\FrmEmpleados.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -274,83 +250,32 @@
     <Compile Include="Views\FrmRegistrar.Designer.cs">
       <DependentUpon>FrmRegistrar.cs</DependentUpon>
     </Compile>
-    <Compile Include="general_directions.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="incident.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="incident_states.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="incident_types.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="procuraduria.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>procuraduria.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="procuraduria.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>procuraduria.tt</DependentUpon>
-    </Compile>
-    <Compile Include="procuraduria.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>procuraduria.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="record.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="subdirectorate.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="UsuariosModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UsuariosModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="UsuariosModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="UsuariosModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UsuariosModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="working_days.cs">
-      <DependentUpon>UsuariosModel.tt</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="Views\AuthForm.resx">
       <DependentUpon>AuthForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\BusyDialog.resx">
       <DependentUpon>BusyDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CapturarHuella.resx">
+    <EmbeddedResource Include="Views\CapturarHuella.resx">
       <DependentUpon>CapturarHuella.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\CaptureForm.resx">
       <DependentUpon>CaptureForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmCaptura.resx">
-      <DependentUpon>FrmCaptura.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Views\Configuration.resx">
       <DependentUpon>Configuration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\FrmCaptura.resx">
+      <DependentUpon>FrmCaptura.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\FrmEmpleados.resx">
       <DependentUpon>FrmEmpleados.cs</DependentUpon>
@@ -368,15 +293,7 @@
     </EmbeddedResource>
     <None Include="App.Config" />
     <Fakes Include="Fakes\DPFPDevNET.fakes" />
-    <None Include="DemoDP4500_TemporaryKey.pfx" />
     <None Include="packages.config" />
-    <EntityDeploy Include="procuraduria.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>procuraduria.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="procuraduria.edmx.diagram">
-      <DependentUpon>procuraduria.edmx</DependentUpon>
-    </None>
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -387,26 +304,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EntityDeploy Include="UsuariosModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>UsuariosModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="UsuariosModel.edmx.diagram">
-      <DependentUpon>UsuariosModel.edmx</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
-    <Content Include="procuraduria.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>procuraduria.edmx</DependentUpon>
-      <LastGenOutput>procuraduria.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="procuraduria.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>procuraduria.edmx</DependentUpon>
-      <LastGenOutput>procuraduria.cs</LastGenOutput>
-    </Content>
     <None Include="Resources\cross.png" />
     <None Include="Resources\employee_unknow.bmp" />
     <None Include="Resources\user%282%29.png" />
@@ -429,16 +329,6 @@
     <None Include="Resources\loading2.gif" />
     <None Include="Resources\loading.gif" />
     <None Include="Resources\lost-connection.png" />
-    <Content Include="UsuariosModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>UsuariosModel.Context.cs</LastGenOutput>
-      <DependentUpon>UsuariosModel.edmx</DependentUpon>
-    </Content>
-    <Content Include="UsuariosModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>UsuariosModel.edmx</DependentUpon>
-      <LastGenOutput>UsuariosModel.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
