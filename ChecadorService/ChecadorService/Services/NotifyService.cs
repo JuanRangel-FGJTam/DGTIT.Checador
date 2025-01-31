@@ -38,7 +38,7 @@ namespace ChecadorService.Services
                 }
             }catch(Exception err)
             {
-                log.Error("Fail at attempt to send the notifycation to the remote server", err);
+                log.Error("Fail at attempt to send the notification to the remote server", err);
             }
         }
 

@@ -16,13 +16,16 @@ namespace ChecadorService.Jobs {
     internal class LogJob : IJob {
 
         private readonly NotifyService notifyService;
+        private readonly ILog log;
         public LogJob(NotifyService service)
         {
             notifyService = service;
+            log = LogManager.GetLogger(typeof(LogJob));
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
+            log.Info("Sending the notification signal to the server.");
             await notifyService.Notify();
         }
     }
