@@ -1,19 +1,16 @@
-﻿using DGTIT.Checador.Core.Entities;
-using DGTIT.Checador.Core.Interfaces;
-using DGTIT.Checador.Data.Repositories;
-using DGTIT.Checador.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Drawing.Printing;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
+using DGTIT.Checador.Core.Entities;
+using DGTIT.Checador.Core.Interfaces;
+using DGTIT.Checador.Data.Repositories;
+using DGTIT.Checador.Properties;
+using DGTIT.Checador.Utilities;
 
 namespace DGTIT.Checador.Views
 {
@@ -21,31 +18,25 @@ namespace DGTIT.Checador.Views
     {
         private ICatalogsRepository catalogsRepository;
         private string name = string.Empty;
-        private bool playSoundOnFail = false;
+        private string storagePath = string.Empty;
         private List<long> selectedIds = new List<long>();
         private List<GeneralDirection> generalDirections;
-        private int intervalSyncClock;
-        private int employeesTimeout;
-
+        
         public Configuration()
         {
             InitializeComponent();
             catalogsRepository = new CatalogsRepository();
-            this.name = (string) Properties.Settings.Default["name"];
-            this.selectedIds = Properties.Settings.Default["generalDirectionId"].ToString().Split(',').Select( d => Convert.ToInt64(d)).ToList();
-            this.playSoundOnFail = Properties.Settings.Default["playSoundOnFail"].ToString() == "1";
-            this.intervalSyncClock = Convert.ToInt32(Properties.Settings.Default["intervalSyncClock"]);
-            this.employeesTimeout = Convert.ToInt32(Properties.Settings.Default["employeesTimeout"]);
+            this.name = CustomApplicationSettings.GetAppName();
+            this.storagePath = CustomApplicationSettings.GetStoragePath();
+            this.selectedIds = CustomApplicationSettings.GetGeneralDirections().ToString().Split(';').Select( d => Convert.ToInt64(d)).ToList();
             this.Load += new EventHandler(LoadedDone);
         }
 
         private async void LoadedDone(object sender, EventArgs e)
         {
-
             // * load the general directions
             this.generalDirections = (await catalogsRepository.FindAllGeneralDirections()).ToList();
-
-
+            
             // * initialize the checklist
             this.checkListAreas.DisplayMember = "name";
             foreach (var item in this.generalDirections)
@@ -54,23 +45,14 @@ namespace DGTIT.Checador.Views
             }
             this.checkListAreas.SelectedValue = selectedIds.ToArray();
 
-
-            // * initialize the textbox
+            // * initialize the textboxw
+            this.tb_storagePath.Text = this.storagePath;
             this.txtName.Text = this.name;
             this.txtName.TextChanged += new EventHandler((object sender2, EventArgs e2) =>
             {
                 name = txtName.Text;
             });
             this.button1.Click += new EventHandler(OnActulizarClick);
-
-            this.chbPlayOnFail.Checked = this.playSoundOnFail;
-            this.chbPlayOnFail.CheckedChanged += new EventHandler((object sender3, EventArgs e3) => {
-                playSoundOnFail = chbPlayOnFail.Checked;
-            });
-
-            this.tb_intervalClock.Value = this.intervalSyncClock;
-
-            this.tb_connectionTimeout.Value = this.employeesTimeout;
         }
 
 
@@ -85,16 +67,11 @@ namespace DGTIT.Checador.Views
                 listIds.Add(item.Id);
             }
             // * set the properties
-            Properties.Settings.Default["name"] = this.name;
-            Properties.Settings.Default["generalDirectionId"] = string.Join(",", listIds.ToArray());
-            Properties.Settings.Default["playSoundOnFail"] = this.playSoundOnFail?"1":"0";
-            Properties.Settings.Default["intervalSyncClock"] = ((int)this.tb_intervalClock.Value).ToString();
-            Properties.Settings.Default["employeesTimeout"] = ((int)this.tb_connectionTimeout.Value).ToString();
-
-            Properties.Settings.Default.Save();
+            CustomApplicationSettings.SetAppName(this.name.Trim());
+            CustomApplicationSettings.SetGeneralDirection(string.Join(";", listIds.ToArray()));
             MessageBox.Show("Configuracion actualizada", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
-
+        
     }
 }

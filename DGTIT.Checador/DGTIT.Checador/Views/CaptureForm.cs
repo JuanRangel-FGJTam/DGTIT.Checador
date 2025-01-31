@@ -28,7 +28,6 @@ namespace DGTIT.Checador
 	{
         private DPFP.Capture.Capture Capturer;
         private bool _allowCapture = false;
-        private readonly bool playSoundOnFail = false;
         private EventLog eventLog;
         private CancellationTokenSource cancellationTokenSource;
         public EventLog CurrentEventLog { get => this.eventLog; }
@@ -66,9 +65,6 @@ namespace DGTIT.Checador
             this.btnClose.Enabled = true;
             this.lblStatus.ForeColor = Color.FromArgb(255,65, 94, 179);
 
-            // * load settings
-            this.playSoundOnFail = Properties.Settings.Default["playSoundOnFail"].ToString() == "1";
-            
             // * attach event handlers
             btnClose.Click += new EventHandler((object s, EventArgs ee) => {
                 this.Close();
@@ -220,11 +216,10 @@ namespace DGTIT.Checador
         }
         
         protected virtual void PlayFailSound() {
-            try {
-                if (playSoundOnFail) {
-                    System.Media.SoundPlayer player = new System.Media.SoundPlayer(Resources.fail_sound);
-                    player.Play();
-                }
+            try
+            {
+                System.Media.SoundPlayer player = new System.Media.SoundPlayer(Resources.fail_sound);
+                player.Play();
             }
             catch (Exception) {}
         }

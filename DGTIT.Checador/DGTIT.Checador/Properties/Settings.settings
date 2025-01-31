@@ -1,21 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DGTIT.Checador.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
   <Profiles />
-  <Settings>
-    <Setting Name="name" Type="System.String" Scope="User">
-      <Value Profile="(Default)">app-name</Value>
-    </Setting>
-    <Setting Name="generalDirectionId" Type="System.String" Scope="User">
-      <Value Profile="(Default)">1</Value>
-    </Setting>
-    <Setting Name="playSoundOnFail" Type="System.String" Scope="User">
-      <Value Profile="(Default)">1</Value>
-    </Setting>
-    <Setting Name="intervalSyncClock" Type="System.String" Scope="User">
-      <Value Profile="(Default)">600</Value>
-    </Setting>
-    <Setting Name="employeesTimeout" Type="System.String" Scope="User">
-      <Value Profile="(Default)">12</Value>
-    </Setting>
-  </Settings>
+  <Settings />
 </SettingsFile>

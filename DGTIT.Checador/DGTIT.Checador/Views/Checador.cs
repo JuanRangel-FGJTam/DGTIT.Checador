@@ -36,7 +36,6 @@ namespace DGTIT.Checador.Views
         private DPFP.Verification.Verification Verificator;
         private Task taskAfterCheck;
         private CancellationTokenSource cancelationSource;
-        private bool errorConexion = false;
         private InternalClock internalClock;
 
         

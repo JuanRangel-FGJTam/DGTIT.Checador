@@ -2,6 +2,8 @@
 using Quartz;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,50 +11,45 @@ using System.Threading.Tasks;
 namespace ChecadorService.Utils {
     internal class CustomApplicationSettings {
 
-        public static string GetGeneralDirections() {
-            string registryPath = @"SOFTWARE\DGTIT\Checador";
-            string valueName = "generalDirection";
+        public static string GetGeneralDirections()
+        {
             string settingValue = String.Empty;
-
-            // Try reading from 64-bit registry first
-            settingValue = GetRegistryValue(RegistryHive.LocalMachine, registryPath, valueName, RegistryView.Registry64);
-            if(!string.IsNullOrEmpty(settingValue))
+            using (SqlConnection sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["UsuariosDBLocal"].ConnectionString))
             {
-                return settingValue;
+                sqlConnection.Open();
+                var command = new SqlCommand("SELECT [VALUE] FROM [system].[options] WHERE [name] = 'AREAS'", sqlConnection);
+                settingValue = command.ExecuteScalar().ToString();
+                sqlConnection.Close();
             }
+            return settingValue;
+        }
 
-            // If not found, try reading from 32-bit registry
-            settingValue = GetRegistryValue(RegistryHive.LocalMachine, registryPath, valueName, RegistryView.Registry32);
+        public static string GetStoragePath()
+        {
+            string settingValue = String.Empty;
+            using (SqlConnection sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["UsuariosDBLocal"].ConnectionString))
+            {
+                sqlConnection.Open();
+                var command = new SqlCommand("SELECT [VALUE] FROM [system].[options] WHERE [name] = 'STORAGEPATH'", sqlConnection);
+                settingValue = command.ExecuteScalar().ToString();
+                sqlConnection.Close();
+            }
             return settingValue;
         }
 
         public static string GetAppName()
+
         {
-            string registryPath = @"SOFTWARE\DGTIT\Checador";
-            string valueName = "name";
             string settingValue = String.Empty;
-
-            // Try reading from 64-bit registry first
-            settingValue = GetRegistryValue(RegistryHive.LocalMachine, registryPath, valueName, RegistryView.Registry64);
-            if (!string.IsNullOrEmpty(settingValue))
+            using (SqlConnection sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["UsuariosDBLocal"].ConnectionString))
             {
-                return settingValue;
+                sqlConnection.Open();
+                var command = new SqlCommand("SELECT [VALUE] FROM [system].[options] WHERE [name] = 'NAME'", sqlConnection);
+                settingValue = command.ExecuteScalar().ToString();
+                sqlConnection.Close();
             }
-
-            // If not found, try reading from 32-bit registry
-            settingValue = GetRegistryValue(RegistryHive.LocalMachine, registryPath, valueName, RegistryView.Registry32);
             return settingValue;
-        }
+        }   
 
-        static string GetRegistryValue(RegistryHive hive, string subKey, string valueName, RegistryView view) {
-            using (RegistryKey baseKey = RegistryKey.OpenBaseKey(hive, view))
-            using (RegistryKey key = baseKey.OpenSubKey(subKey)) {
-                if (key != null) {
-                    object value = key.GetValue(valueName);
-                    return value?.ToString();
-                }
-            }
-            return null;
-        }
     }
 }
