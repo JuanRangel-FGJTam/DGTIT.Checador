@@ -122,7 +122,7 @@
     <Compile Include="Data\Repositories\RecordServerRepo.cs" />
     <Compile Include="Data\Repositories\SQLRecordRepository.cs" />
     <Compile Include="Jobs\DataSyncJob.cs" />
-    <Compile Include="Jobs\LogTimeJob.cs" />
+    <Compile Include="Jobs\LogJob.cs" />
     <Compile Include="Jobs\UpdateEmployeeJob.cs" />
     <Compile Include="Jobs\UploadRecordsJob.cs" />
     <Compile Include="Models\Record.cs" />
@@ -136,6 +136,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\EmployeeService.cs" />
     <Compile Include="Services\IRecordService.cs" />
+    <Compile Include="Services\NotifyService.cs" />
     <Compile Include="Services\RecordService.cs" />
     <Compile Include="Utils\CustomApplicationSettings.cs" />
   </ItemGroup>

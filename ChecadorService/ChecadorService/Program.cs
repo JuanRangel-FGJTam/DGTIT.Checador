@@ -30,6 +30,7 @@ namespace ChecadorService {
             ContainerBuilder containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterType<ChecadorWService>().AsSelf().InstancePerLifetimeScope();
             containerBuilder.RegisterType<EmployeeService>().AsSelf().InstancePerDependency();
+            containerBuilder.RegisterType<NotifyService>().AsSelf().InstancePerDependency();
             containerBuilder.RegisterType<SQLRecordRepository>().As<IRecordRepository>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<RecordServerRepo>().As<IRecordServerRepository>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<RecordService>().As<IRecordService>().InstancePerLifetimeScope();
@@ -46,10 +47,10 @@ namespace ChecadorService {
                 hostConfigurator.SetServiceName("DGTIT - Checador service");
                 hostConfigurator.SetDisplayName("Checador service");
                 hostConfigurator.SetDescription("Servicio utilizado por el checador para sincronizar datos con el servidor.");
-                //hostConfigurator.RunAsLocalSystem();
-                hostConfigurator.RunAs("Usuario", "j6r3uwb9");
+                hostConfigurator.RunAsLocalSystem();
                 hostConfigurator.UseLog4Net();
                 hostConfigurator.UseAutofacContainer(container);
+                hostConfigurator.StartAutomatically();
                 
                 hostConfigurator.Service<ChecadorWService>(serviceConfigurator => {
                     serviceConfigurator.ConstructUsingAutofacContainer();
