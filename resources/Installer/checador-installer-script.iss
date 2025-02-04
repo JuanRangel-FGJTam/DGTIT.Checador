@@ -2,24 +2,25 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Checador"
-#define MyAppVersion "3.0.6.2"
+#define MyAppVersion "3.1.0.1"
 #define MyAppPublisher "DGTIT"
 #define MyAppURL "https://www.fgjtam.gob.mx/"
 #define MyAppExeName "Checador.exe"
+#define MyAppExeServiceName "ChecadorService.exe"
 #define MyAppAssocName MyAppName + " File"
 #define MyAppAssocExt ".myp"
 #define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
 
-#define OutpuFileName "installer-checador-" + MyAppVersion
-#define ProyectPath "D:\Development\Proyectos\DGTIT.Checador\"
-
+#define OutpuFileName "checador-installer-" + MyAppVersion
+#define ProyectPath "D:\Development\Proyectos\DGTIT.Checador"
+  
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{769DD1FF-F547-4D54-9C20-F56FB0C56AA1}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
-;AppVerName={#MyAppName} {#MyAppVersion}
+AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
@@ -28,17 +29,16 @@ DefaultDirName={autopf}\DGTIT_Checador
 ChangesAssociations=yes
 DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
-;PrivilegesRequired=lowest
-OutputDir="{#ProyectPath}\resources\Installer"
+PrivilegesRequired=admin 
+OutputDir="{#ProyectPath}\resources\installer"
 OutputBaseFilename={#OutpuFileName}
-SetupIconFile="{#ProyectPath}\resources\Images\icon.ico"
+SetupIconFile="{#ProyectPath}\resources\installer\resources\icon.ico"
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
 
 [Languages]
 Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
-Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
@@ -46,7 +46,12 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "{#ProyectPath}\DGTIT.Checador\DGTIT.Checador\bin\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#ProyectPath}\DGTIT.Checador\DGTIT.Checador\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "resources\dgtitEventlog.ps1"; DestDir: "{app}\resources\"; Flags: ignoreversion recursesubdirs
+
+Source: "{#ProyectPath}\ChecadorService\ChecadorService\bin\Release\{#MyAppExeServiceName}"; DestDir: "{app}\service"; Flags: ignoreversion
+Source: "{#ProyectPath}\ChecadorService\ChecadorService\bin\Release\*"; DestDir: "{app}\service"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+Source: "resources\scripts\createTask.ps1"; DestDir: "{app}\resources\"; Flags: ignoreversion recursesubdirs
+Source: "resources\scripts\dgtitEventlog.ps1"; DestDir: "{app}\resources\"; Flags: ignoreversion recursesubdirs
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
@@ -63,5 +68,10 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-Filename: "schtasks.exe"; Parameters: "/create /tn ""ChecadorV3"" /tr ""{app}\{#MyAppExeName} --ch"" /sc onlogon /rl highest /f"; Flags: runhidden
-Filename: "powershell"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\resources\dgtitEventlog.ps1""";
+Filename: "{app}\service\{#MyAppExeServiceName}"; Parameters: "install"; StatusMsg: Instalando servicio de windows;
+Filename: "powershell"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\resources\createTask.ps1"" -p1 ""{app}"""; StatusMsg:Creando Tarea de windows; Flags: runhidden waituntilterminated;
+Filename: "powershell"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\resources\dgtitEventlog.ps1"""; StatusMsg:Preparando Log de windows; Flags: runhidden waituntilterminated;
+
+[UninstallRun]
+Filename: "{app}\service\{#MyAppExeServiceName}"; Parameters: "uninstall"; RunOnceId: UninstallService;
+Filename: "schtasks.exe"; Parameters: "/delete /tn ""ChecadorV3"" /f"; Flags: runhidden waituntilterminated; RunOnceId: UninstallWindowsTask;
