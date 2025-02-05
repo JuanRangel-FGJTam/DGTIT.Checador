@@ -56,7 +56,7 @@ namespace ChecadorService {
 
             ITrigger trigger4 = TriggerBuilder.Create()
                .WithIdentity(typeof(UpdateEmployeeJob).Name + "Trigger", SchedulerConstants.DefaultGroup)
-               .WithCronSchedule("0 0 /6 * * ?")
+               .WithCronSchedule("0 0 0/6 * * ?")
                .ForJob(job4)
                .Build();
 
