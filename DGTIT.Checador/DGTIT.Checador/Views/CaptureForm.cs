@@ -78,7 +78,7 @@ namespace DGTIT.Checador
         }
 
         private void CaptureForm_Load(object sender, EventArgs e) {
-            ToogleFullScreen(false);
+            ToogleFullScreen(true);
             LimpiarCampos();
             lblFecha.Text = "Cargando...";
             Init();
