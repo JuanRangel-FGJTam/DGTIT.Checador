@@ -22,7 +22,7 @@ The Windows Forms app provides a graphical interface for users, while the Window
 ### Windows Service
 Runs some processes in the background to maintain data synchronization between the local and remote databases. The processes include:
 - **Update the employees**: Every 3 hour downloads employee data from the server and saves it into the local database.
-- **Send check-ins**: Every 10 minutes sends employee check-ins to the server. Upon successful transfer, the check-ins are moved from the original table to a history table.
+- **Send check-ins**: Every minute sends employee check-ins to the server. Upon successful transfer, the check-ins are moved from the original table to a history table.
 - **Send signal**: Sends a signal every minute to the server to verify if the local machine has a connection with the remote server.
 - **Update fingerprints**: The Windows Forms app allows fingerprint updates for employees. This task checks if any employee has an updated fingerprint by comparing timestamps in the employee records. If an update exists, it is sent to the server, this is done every 6 hours.
 
@@ -36,7 +36,7 @@ This project uses [Inno Setup](https://jrsoftware.org/isinfo.php) for making the
 ## Prerequisites
 - Windows OS
 - .NET Runtime 4.7+
-- SQL Server 2016 +
+- SQL Server 2019 +
 
 
 # Logging Mechanism

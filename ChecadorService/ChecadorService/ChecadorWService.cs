@@ -50,7 +50,7 @@ namespace ChecadorService {
 
             ITrigger trigger3 = TriggerBuilder.Create()
                 .WithIdentity(typeof(UploadRecordsJob).Name + "Trigger", SchedulerConstants.DefaultGroup)
-                .WithCronSchedule("0 0/10 * * * ?")
+                .WithCronSchedule("0 * * * * ?")
                 .ForJob(job3)
                 .Build();
 
