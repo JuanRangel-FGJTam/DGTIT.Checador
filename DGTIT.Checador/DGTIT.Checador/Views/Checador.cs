@@ -33,6 +33,7 @@ namespace DGTIT.Checador.Views
 
         private EmployeeFingerprintMatcher employeeFingerprintM;
         private System.Windows.Forms.Timer timerLogStatus;
+        private System.Windows.Forms.Timer timerSyncDateTime;
         private DPFP.Verification.Verification Verificator;
         private Task taskAfterCheck;
         private CancellationTokenSource cancelationSource;
@@ -75,7 +76,11 @@ namespace DGTIT.Checador.Views
             timerLogStatus.Start();
 
             // * sync the time
-            SyncClockTime();
+            timerSyncDateTime = new System.Windows.Forms.Timer();
+            timerSyncDateTime.Interval = (int)TimeSpan.FromMinutes(1).TotalMilliseconds;
+            timerSyncDateTime.Tick += new EventHandler(SyncClockTime);
+            timerSyncDateTime.Start();
+            SyncClockTime(null, null);
         }
 
         protected override void Process(DPFP.Sample Sample)
@@ -222,28 +227,6 @@ namespace DGTIT.Checador.Views
             }
         }
 
-        private void SyncClockTime()
-        {
-            try
-            {
-                MakeReport("Obteniendo hora del servidor.", EventLevel.Informational);
-
-                // get the date from the server
-                var task1 = Task.Run<DateTime?>( async () => await this.checadorService.GetServerTime() );
-                Task.WaitAll(task1);
-                DateTime? serverDate = task1.Result;
-
-                if (serverDate == null) throw new Exception("La fecha no se pudo recuperar del servidor.");
-                if (internalClock == null) throw new Exception("El error interno no esta inicializado.");
-                internalClock.SyncClock(serverDate.Value);
-                MakeReport("Reloj interno sincronizado.", EventLevel.Informational);
-            }
-            catch (Exception err)
-            {
-                MakeReport("Error al obtener la fecha del servidor", err);
-            }
-        }
-
         #region background workers
         private void OnTimerLogTick(object sender, EventArgs e)
         {   
@@ -258,7 +241,27 @@ namespace DGTIT.Checador.Views
             //    MakeReport(err.Message, err);
             //}
         }
-        #endregion
+        private void SyncClockTime(object sender, EventArgs e)
+        {
+            try
+            {
+                MakeReport("Obteniendo hora del servidor.", EventLevel.Informational);
 
+                // get the date from the server
+                var task1 = Task.Run<DateTime?>(async () => await this.checadorService.GetServerTime());
+                Task.WaitAll(task1);
+                DateTime? serverDate = task1.Result;
+
+                if (serverDate == null) throw new Exception("La fecha no se pudo recuperar del servidor.");
+                if (internalClock == null) throw new Exception("El error interno no esta inicializado.");
+                internalClock.SyncClock(serverDate.Value);
+                MakeReport("Reloj interno sincronizado.", EventLevel.Informational);
+            }
+            catch (Exception err)
+            {
+                MakeReport("Error al obtener la fecha del servidor", err);
+            }
+        }
+        #endregion
     }
 }
