@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using DGTIT.Checador.Core.Entities;
 using DGTIT.Checador.Core.Interfaces;
 using DGTIT.Checador.Data.Repositories;
 using DGTIT.Checador.Helpers;
@@ -24,6 +25,7 @@ namespace DGTIT.Checador
 
         private IEmployeeRepository employeeRepository;
         private IProcuEmployeeRepo procuEmployeeRepo;
+        private EmployeeService employeeService;
         private int serachEmployeeNumber = 0;
         private int selectedEmployeeNumber = 0;
         private string nombreEmpleado = "";
@@ -38,7 +40,8 @@ namespace DGTIT.Checador
 
             // * initialized services
             fiscaliaService = new FiscaliaService(employeeRepository, procuEmployeeRepo);
-               
+            employeeService = new EmployeeService(employeeRepository, procuEmployeeRepo);
+
             // * hidden search box
             txtSearch.Enabled = false;
             txtSearch.Visible = false;
@@ -145,18 +148,65 @@ namespace DGTIT.Checador
            
         private void BtnEditarClick(object sender, EventArgs e)
         {
-            var formRegistrar = new FrmRegistrar(this.selectedEmployeeNumber);
+            // * load the employee
+            Employee currentEmployee = null;
+            var taskLoadEmployee = Task.Run(async () => {
+                try
+                {
+                    currentEmployee = await employeeService.GetEmployee(this.selectedEmployeeNumber);
+                }
+                catch(Exception) { }
+            });
+            Task.WaitAll(taskLoadEmployee);
+
+            if (currentEmployee == null)
+            {
+                this.Activate();
+                MessageBox.Show(this, "El empleado no pertenece a este departamento.", "Empleado no encontrado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // * show the form
+            var formRegistrar = new FrmRegistrar(currentEmployee);
             formRegistrar.ShowDialog(this);
 
             txtEmployeeNumber.Focus();
             txtEmployeeNumber.Select();
         }
 
-        private void DataGridEmpleadosDoubleClick(object sender, DataGridViewCellMouseEventArgs e) {
-            var row = dataGridEmpleados.Rows[e.RowIndex];
-            var data = (EmployeeViewModel) row.DataBoundItem;
+        private void DataGridEmpleadosDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            // * attempt to get the employee data from the table row
+            DataGridViewRow row;
+            EmployeeViewModel data;
+            try
+            {
+                row = dataGridEmpleados.Rows[e.RowIndex];
+                data = (EmployeeViewModel) row.DataBoundItem;
+            }
+            catch (Exception) { }
 
-            var formRegistrar = new FrmRegistrar(data.NumEmpleado);
+            // * load the employee
+            Employee currentEmployee = null;
+            var taskLoadEmployee = Task.Run(async () =>
+            {
+                try
+                {
+                    currentEmployee = await employeeService.GetEmployee(this.selectedEmployeeNumber);
+                }
+                catch (Exception) { }
+            });
+            Task.WaitAll(taskLoadEmployee);
+
+            if (currentEmployee == null)
+            {
+                this.Activate();
+                MessageBox.Show(this, "El empleado no pertenece a este departamento.", "Empleado no encontrado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            
+            // * show the form
+            var formRegistrar = new FrmRegistrar(currentEmployee);
             formRegistrar.ShowDialog(this);
 
             txtEmployeeNumber.Focus();

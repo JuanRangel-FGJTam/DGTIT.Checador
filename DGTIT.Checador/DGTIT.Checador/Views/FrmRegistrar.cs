@@ -25,15 +25,12 @@ namespace DGTIT.Checador
         private readonly FiscaliaService fiscaliaService;
 
         private DPFP.Template Template;
-
-        private readonly int employeeNumber;
-        private Employee currentEmployee;
+        private readonly Employee currentEmployee;
         
-        public FrmRegistrar(int employeeNumber)
+        public FrmRegistrar(Employee employee)
         {
             InitializeComponent();
-            this.employeeNumber = employeeNumber;
-
+            
             // * initialize the services
             this.employeeRepository = new SQLClientEmployeeRepository();
             this.procuEmployeeRepo = new ProcuEmployeeRepository();
@@ -43,11 +40,7 @@ namespace DGTIT.Checador
             this.fiscaliaService = new FiscaliaService(employeeRepository, procuEmployeeRepo);
 
             // * initialize the models
-            var taskLoadEmployee = Task.Run(async() => {
-                this.currentEmployee = await this.employeeService.GetEmployee(employeeNumber);
-            });
-            Task.WaitAll(taskLoadEmployee);
-
+            this.currentEmployee = employee;
             if( currentEmployee.Fingerprint != null && currentEmployee.Fingerprint.Any()) {
                 DisableEdition();
             }
@@ -58,7 +51,7 @@ namespace DGTIT.Checador
             await LoadCatalogs();
 
             // * display the employee info
-            this.tb_employeeNumber.Text = employeeNumber.ToString();
+            this.tb_employeeNumber.Text = this.currentEmployee.EmployeeNumber.ToString();
             this.txtNombre.Text = currentEmployee.Name;
             this.cboDirGral.SelectedValue = currentEmployee.GeneralDirectionId;
             this.cboDireccion.SelectedValue = currentEmployee.DirectionId;
@@ -96,7 +89,7 @@ namespace DGTIT.Checador
 
             // * set the employee foto
             var taskEmployeeFoto = Task.Run(async () => {
-                this.img_photo.Image = await this.fiscaliaService.GetEmployeePhoto(employeeNumber);
+                this.img_photo.Image = await this.fiscaliaService.GetEmployeePhoto(this.currentEmployee.EmployeeNumber);
             });
             Task.WaitAll(taskEmployeeFoto);
 

@@ -158,7 +158,6 @@
             this.Name = "FrmEmpleados";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DGTIT - Empleados";
-            this.TopMost = true;
             this.Load += new System.EventHandler(this.FormOnLoad);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridEmpleados)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
