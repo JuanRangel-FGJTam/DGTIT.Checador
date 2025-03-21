@@ -156,7 +156,7 @@ namespace DGTIT.Checador
             this.lblVersion.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
             this.lblVersion.Size = new System.Drawing.Size(386, 49);
             this.lblVersion.TabIndex = 13;
-            this.lblVersion.Text = "Creado por DGTIT v3.1.2";
+            this.lblVersion.Text = "Creado por DGTIT v3.1.3";
             this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // paneluser
@@ -296,7 +296,7 @@ namespace DGTIT.Checador
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1280, 720);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(1280, 720);
+            this.MinimumSize = new System.Drawing.Size(1278, 688);
             this.Name = "CaptureForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.CaptureForm_Load);
