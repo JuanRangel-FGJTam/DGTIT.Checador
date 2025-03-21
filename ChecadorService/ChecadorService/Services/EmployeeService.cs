@@ -137,7 +137,7 @@ namespace ChecadorService.Services {
 		                    [deleted_at],
 		                    [fingerprint_updated_at]
                     FROM [UsuariosDB].[dbo].[employees]
-                    WHERE 1 = (CASE WHEN @generalDirection = '0' THEN 1 ELSE ( CASE WHEN general_direction_id in (SELECT VALUE FROM STRING_SPLIT(@generalDirection,';')) THEN 1 ELSE 0 END ) END )
+                    WHERE 1 = (CASE WHEN @generalDirection = '0' THEN 1 ELSE ( CASE WHEN general_direction_id in (SELECT VALUE FROM [dbo].[SplitString](@generalDirection,';')) THEN 1 ELSE 0 END ) END )
                         AND 1 = ( CASE WHEN @includeDelete = 1 THEN 1 ELSE (CASE WHEN [deleted_at] IS NULL THEN 1 ELSE 0 END) END) ";
                 var command = new SqlCommand(query, sqlConnection);
                 command.Parameters.AddWithValue("@generalDirection", generalDirections.Trim(';'));
@@ -332,7 +332,7 @@ namespace ChecadorService.Services {
             using (var sqlConnection = new SqlConnection(serverConnectionString))
             {
                 sqlConnection.Open();
-                var query = @"UPDATE [dbo].[employees] set deleted_at = GetDate() WHERE id NOT IN (SELECT VALUE FROM STRING_SPLIT(@employeeIds, ';'))";
+                var query = @"UPDATE [dbo].[employees] set deleted_at = GetDate() WHERE id NOT IN (SELECT VALUE FROM dbo.SplitString(@employeeIds, ';'))";
 
                 using (var command = new SqlCommand(query, sqlConnection))
                 {
