@@ -88,7 +88,14 @@ namespace DGTIT.Checador.Services {
             }
 
             // * store the foto for used the next time
-            StorePhotoToDisk(employee.Photo, foto);
+            try
+            {
+                StorePhotoToDisk(employee.Photo, foto);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                this.logger.Error($"Can't save the photo of the employee :'{employeeNumber}': {ex.Message}");
+            }
 
             using (var ms = new MemoryStream(foto))
             {

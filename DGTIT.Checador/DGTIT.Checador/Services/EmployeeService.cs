@@ -5,18 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using DGTIT.Checador.Core.Entities;
 using DGTIT.Checador.Core.Interfaces;
+using DGTIT.Checador.Data.Repositories;
+using DGTIT.Checador.Utilities;
 
 namespace DGTIT.Checador.Services
 {
     internal class EmployeeService
     {
         private readonly IEmployeeRepository employeeRepository;
+        private readonly IEmployeeRepository centralEmployeeRepository;
         private readonly IProcuEmployeeRepo procuEmployeeRepo;
 
-        public EmployeeService(IEmployeeRepository employeeRepo, IProcuEmployeeRepo pocuEmployeeRepo)
+        public EmployeeService()
         {
-            this.employeeRepository = employeeRepo;
-            this.procuEmployeeRepo = pocuEmployeeRepo;
+            this.procuEmployeeRepo = new ProcuEmployeeRepository();
+            this.centralEmployeeRepository = new SQLCentralEmployeeRepository();
+            this.employeeRepository = new SQLClientEmployeeRepository();
         }
 
         public async Task<IEnumerable<Employee>> GetEmployees()
@@ -94,6 +98,60 @@ namespace DGTIT.Checador.Services
         {
             emp.FingerPrintUpdatedAt = DateTime.Now;
             await this.employeeRepository.UpdateEmployee(emp);
+        }
+    
+        /// <summary>
+        ///  Attempt to clone or create the employee from the central DB to the local DB
+        /// </summary>
+        /// <param name="employeeNumber"></param>
+        /// <returns></returns>
+        /// <exception cref="KeyNotFoundException">The employee is not found</exception>
+        public async Task<Employee> CreateEmployee(int employeeNumber)
+        {
+            // * Chek if the employee exist on the cental DB
+            Employee employee = await this.centralEmployeeRepository.FindByEmployeeNumber(employeeNumber);
+            if(employee != null)
+            {
+                // clone the central DB employee record to the local DB
+                await CloneEmployee(employee.Id);
+                return await GetEmployee(employeeNumber);
+            }
+
+            // *  Retrive the employee data from RH
+            var employeeRH = await this.procuEmployeeRepo.FindByEmployeeNumber(employeeNumber);
+            if(employeeRH == null)
+            {
+                throw new KeyNotFoundException("The employee is not found on the RH database");
+            }
+
+            // attempt to create a new employee on central DB
+            var firstGeneralDirectionId = CustomApplicationSettings.GetGeneralDirections().ToString().Split(';').Select(d => Convert.ToInt64(d)).ToList().FirstOrDefault();
+            var newEmployee = new Employee() {
+                GeneralDirectionId = (int) firstGeneralDirectionId,
+                DirectionId = 0,
+                SubdirectorateId = 0,
+                DepartmentId = 0,
+                Photo = string.Format("photos/{0}.jpg", employeeRH.RFC),
+                PlantillaId = Convert.ToInt64(string.Format("1{0}", employeeNumber)),
+                Name = string.Join(" ", employeeRH.Nombre, employeeRH.ApellidoPaterno, employeeRH.ApellidoMaterno),
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+                StatusId = 1,
+                Active = true,
+                EmployeeNumber = employeeNumber,
+            };
+            var newEmployeeId = await centralEmployeeRepository.CreateEmployee(newEmployee);
+
+            // clone the central DB employee record to the local DB
+            await CloneEmployee(newEmployeeId);
+
+            return await GetEmployee(employeeNumber);
+        }
+
+        private async Task CloneEmployee(long employeeId)
+        {
+            var centralEmployee = await this.centralEmployeeRepository.FindById((int) employeeId) ?? throw new KeyNotFoundException("Employee not found");
+            await this.employeeRepository.CreateEmployee(centralEmployee, centralEmployee.Id);
         }
     }
 }

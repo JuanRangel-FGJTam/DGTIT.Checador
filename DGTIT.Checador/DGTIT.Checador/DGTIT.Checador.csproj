@@ -180,6 +180,7 @@
   <ItemGroup>
     <Compile Include="Data\Repositories\CatalogsRepository.cs" />
     <Compile Include="Data\Repositories\ProcuEmployeeRepository.cs" />
+    <Compile Include="Data\Repositories\SQLCentralEmployeeRepository.cs" />
     <Compile Include="Data\Repositories\SQLClientEmployeeRepository.cs" />
     <Compile Include="Data\Repositories\SQLRecordRepository.cs" />
     <Compile Include="Helpers\HashData.cs" />

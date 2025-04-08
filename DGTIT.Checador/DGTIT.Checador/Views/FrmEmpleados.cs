@@ -40,7 +40,7 @@ namespace DGTIT.Checador
 
             // * initialized services
             fiscaliaService = new FiscaliaService(employeeRepository, procuEmployeeRepo);
-            employeeService = new EmployeeService(employeeRepository, procuEmployeeRepo);
+            employeeService = new EmployeeService();
 
             // * hidden search box
             txtSearch.Enabled = false;
@@ -159,19 +159,38 @@ namespace DGTIT.Checador
             });
             Task.WaitAll(taskLoadEmployee);
 
-            if (currentEmployee == null)
+            if (currentEmployee != null)
             {
-                this.Activate();
-                MessageBox.Show(this, "El empleado no pertenece a este departamento.", "Empleado no encontrado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                // * show employee on the form
+                ShowEmployeeForm(currentEmployee);
                 return;
             }
 
-            // * show the form
-            var formRegistrar = new FrmRegistrar(currentEmployee);
-            formRegistrar.ShowDialog(this);
+            // * check if the employee exist on central DB
+            this.Activate();
+            MessageBox.Show(this, "El empleado no pertenece a este departamento.", "Empleado no encontrado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            var result = MessageBox.Show("¿Desea crear el registro del empleado?", "Crear nuevo empleado", MessageBoxButtons.YesNo);
+            if(result == DialogResult.No)
+            {
+                return;
+            }
 
-            txtEmployeeNumber.Focus();
-            txtEmployeeNumber.Select();
+            // Attempt to create the employee record
+            var taskCreateEmployee = Task.Run(async () => {
+                try
+                {
+                    currentEmployee  = await this.employeeService.CreateEmployee(this.selectedEmployeeNumber);
+                }
+                catch (Exception err) {
+                    MessageBox.Show("Error al registrar el empleado: " + err.Message, "Error registro de empleado", MessageBoxButtons.OK);
+                }
+            });
+            Task.WaitAll(taskCreateEmployee);
+
+            if(currentEmployee != null)
+            {
+                ShowEmployeeForm(currentEmployee);
+            }
         }
 
         private void DataGridEmpleadosDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -226,6 +245,14 @@ namespace DGTIT.Checador
             this.btnEdit.Enabled = true;
             this.btnEdit.Visible = true;
         }
-
+    
+        private void ShowEmployeeForm(Employee emp)
+        {
+            // * show employee on the form
+            var formRegistrar = new FrmRegistrar(emp);
+            formRegistrar.ShowDialog(this);
+            txtEmployeeNumber.Focus();
+            txtEmployeeNumber.Select();
+        }
     }
 }

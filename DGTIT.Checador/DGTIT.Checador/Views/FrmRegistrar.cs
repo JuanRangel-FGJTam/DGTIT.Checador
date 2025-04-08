@@ -36,7 +36,7 @@ namespace DGTIT.Checador
             this.procuEmployeeRepo = new ProcuEmployeeRepository();
             this.catalogsRepository = new CatalogsRepository();
 
-            this.employeeService = new EmployeeService(employeeRepository, procuEmployeeRepo);
+            this.employeeService = new EmployeeService();
             this.fiscaliaService = new FiscaliaService(employeeRepository, procuEmployeeRepo);
 
             // * initialize the models

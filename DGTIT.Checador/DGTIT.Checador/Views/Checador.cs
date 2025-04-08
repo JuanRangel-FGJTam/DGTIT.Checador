@@ -54,7 +54,7 @@ namespace DGTIT.Checador.Views
             // * initialized services
             checadorService = new ChecadorService(employeeRepo, recordRepo);
             fiscaliaService = new FiscaliaService(employeeRepo, procuEmployeeRepo);
-            employeeService = new EmployeeService(employeeRepo, procuEmployeeRepo);
+            employeeService = new EmployeeService();
             employeeFingerprintM = new EmployeeFingerprintMatcher(this.areasAvailables.Select(item => (int) item));
         }
 
