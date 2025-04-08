@@ -45,9 +45,9 @@ namespace ChecadorService.Services {
                     sqlConnection.Open();
                     var query = @"SELECT [id]
                           ,[general_direction_id]
-                          ,[direction_id]
-                          ,[subdirectorate_id]
-                          ,[department_id]
+                          ,[direction_id] = IsNull(direction_id, 0)
+                          ,[subdirectorate_id] = IsNull(subdirectorate_id, 0)
+                          ,[department_id] = IsNull(department_id, 0)
                           ,[plantilla_id]
                           ,[name]
                           ,[photo]

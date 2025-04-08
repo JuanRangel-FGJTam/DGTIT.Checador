@@ -20,6 +20,7 @@ namespace DGTIT.Checador.Core.Entities
         public DateTime FechaAlta { get; set; }
         public DateTime? FechaBaja { get; set; }
         public string CURP { get; set; }
+        public string RFC { get; set; }
         public DateTime? FechaFoto { get; set; }
         public bool Activo { get; set; }
         public string Genero { get; set; }
@@ -36,7 +37,8 @@ namespace DGTIT.Checador.Core.Entities
                 FechaNacimiento = Convert.ToDateTime(reader["FECHA_NAC"].ToString()),
                 FechaAlta = Convert.ToDateTime(reader["FECHA_ALTA"].ToString()),
                 CURP = reader["CURP"].ToString(),
-                Activo = Convert.ToBoolean(reader["ACTIVO"]),
+                RFC = reader["RFC"].ToString(),
+                 Activo = Convert.ToBoolean(reader["ACTIVO"]),
                 Genero = reader["Genero"].ToString(),
                 Foto = (!reader.IsDBNull(reader.GetOrdinal("FOTO")))
                     ? (byte[])reader["FOTO"]

@@ -7,18 +7,19 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
 
 namespace DGTIT.Checador.Data.Repositories
 {
-    internal class SQLClientEmployeeRepository : IEmployeeRepository
+    internal class SQLCentralEmployeeRepository : IEmployeeRepository
     {
         private readonly string connectionString = String.Empty;
-        public SQLClientEmployeeRepository()
+        public SQLCentralEmployeeRepository()
         {
-            connectionString = ConfigurationManager.ConnectionStrings["UsuariosDB"].ConnectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["UsuariosDBEntities"].ConnectionString;
         }
 
         public async Task<IEnumerable<Employee>> FindAll()
@@ -42,7 +43,7 @@ namespace DGTIT.Checador.Data.Repositories
 		                    [active],
 		                    [employee_number],
 		                    [deleted_at],
-		                    [fingerprint_updated_at]
+                            [fingerprint_updated_at] = null
                     FROM [UsuariosDB].[dbo].[employees]";
                 var command = new SqlCommand(query, sqlConnection);
                 using (SqlDataReader reader = await command.ExecuteReaderAsync())
@@ -78,7 +79,7 @@ namespace DGTIT.Checador.Data.Repositories
 		                    [active],
 		                    [employee_number],
 		                    [deleted_at],
-		                    [fingerprint_updated_at]
+                            [fingerprint_updated_at] = null
                     FROM [UsuariosDB].[dbo].[employees]
                     WHERE [general_direction_id] = @generalDirectionId";
                 var command = new SqlCommand(query, sqlConnection);
@@ -115,7 +116,7 @@ namespace DGTIT.Checador.Data.Repositories
 		                    [active],
 		                    [employee_number],
 		                    [deleted_at],
-		                    [fingerprint_updated_at]
+                            [fingerprint_updated_at] = null
                     FROM [UsuariosDB].[dbo].[employees]
                     WHERE [general_direction_id] in ( SELECT VALUE FROM string_split(@generalDirectionsIds, ';') )";
                 var command = new SqlCommand(query, sqlConnection);
@@ -152,7 +153,7 @@ namespace DGTIT.Checador.Data.Repositories
 		                    [active],
 		                    [employee_number],
 		                    [deleted_at],
-		                    [fingerprint_updated_at]
+                            [fingerprint_updated_at] = null
                     FROM [UsuariosDB].[dbo].[employees]
                     WHERE id = @employeeId";
                 var command = new SqlCommand(query, sqlConnection);
@@ -190,7 +191,7 @@ namespace DGTIT.Checador.Data.Repositories
 		                    [active],
 		                    [employee_number],
 		                    [deleted_at],
-		                    [fingerprint_updated_at]
+                            [fingerprint_updated_at] = null
                     FROM [UsuariosDB].[dbo].[employees]
                     WHERE employee_number = @employeeNumber";
                 var command = new SqlCommand(query, sqlConnection);
@@ -209,19 +210,8 @@ namespace DGTIT.Checador.Data.Repositories
 
         public async Task UpdateEmployee(Employee employee)
         {
-            using (var sqlConnection = new SqlConnection(connectionString))
-            {
-                await sqlConnection.OpenAsync();
-                var query = @"UPDATE [dbo].[employees]
-                    SET	fingerprint = @fingerPrint, fingerprint_updated_at = @fingerPrintUpdatedAt
-                    WHERE id = @employeeId;";
-                var command = new SqlCommand(query, sqlConnection);
-                command.Parameters.AddWithValue("@employeeId", employee.Id);
-                command.Parameters.AddWithValue("@fingerPrint", employee.Fingerprint);
-                command.Parameters.AddWithValue("@fingerPrintUpdatedAt", employee.FingerPrintUpdatedAt);
-                var r =  await command.ExecuteNonQueryAsync();
-                sqlConnection.Close();
-            }
+            await Task.CompletedTask;
+            throw new NotImplementedException();
         }
 
         public async Task<long> CreateEmployee(Employee employee)
@@ -240,14 +230,12 @@ namespace DGTIT.Checador.Data.Repositories
 	                    [department_id],
 	                    [plantilla_id],
 	                    [name],
-	                    [photo],
-	                    [fingerprint],
+                        [photo],
 	                    [created_at],
 	                    [updated_at],
 	                    [status_id],
-	                    [active],
-                        [fingerprint_updated_at])
-                    VALUES(@en, @gd, @dr, @sd, @de, @pla, @na, @ph, @fi, @cr, @up, @st, @ac, GetDate() );
+	                    [active])
+                    VALUES(@en, @gd, @dr, @sd, @de, @pla, @na, @ph, @cr, @up, @st, @ac);
                     SELECT SCOPE_IDENTITY(); ";
 
                 using (var command = new SqlCommand(query, sqlConnection))
@@ -262,7 +250,6 @@ namespace DGTIT.Checador.Data.Repositories
                     command.Parameters.AddWithValue("@pla", employee.PlantillaId);
                     command.Parameters.AddWithValue("@na", employee.Name);
                     command.Parameters.AddWithValue("@ph", employee.Photo);
-                    command.Parameters.AddWithValue("@fi", employee.Fingerprint);
                     command.Parameters.AddWithValue("@st", employee.StatusId);
                     command.Parameters.AddWithValue("@ac", employee.Active);
                     command.Parameters.AddWithValue("@cr", employee.CreatedAt);
@@ -296,14 +283,12 @@ namespace DGTIT.Checador.Data.Repositories
 	                    [department_id],
 	                    [plantilla_id],
 	                    [name],
-	                    [photo],
-	                    [fingerprint],
+                        [photo]
 	                    [created_at],
 	                    [updated_at],
 	                    [status_id],
-	                    [active],
-                        [fingerprint_updated_at])
-                    VALUES(@id, @en, @gd, @dr, @sd, @de, @pla, @na, @ph, @fi, @cr, @up, @st, @ac, GetDate());
+	                    [active])
+                    VALUES(@id, @en, @gd, @dr, @sd, @de, @pla, @na, @ph, @cr, @up, @st, @ac );
                     SET IDENTITY_INSERT [dbo].[employees] OFF;
                     SELECT SCOPE_IDENTITY(); ";
 
@@ -319,7 +304,6 @@ namespace DGTIT.Checador.Data.Repositories
                     command.Parameters.AddWithValue("@pla", employee.PlantillaId);
                     command.Parameters.AddWithValue("@na", employee.Name);
                     command.Parameters.AddWithValue("@ph", employee.Photo);
-                    command.Parameters.AddWithValue("@fi", employee.Fingerprint);
                     command.Parameters.AddWithValue("@st", employee.StatusId);
                     command.Parameters.AddWithValue("@ac", employee.Active);
                     command.Parameters.AddWithValue("@cr", employee.CreatedAt);

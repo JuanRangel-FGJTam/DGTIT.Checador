@@ -41,7 +41,9 @@ namespace DGTIT.Checador.Core.Entities {
                 StatusId = Convert.ToInt32(reader["status_id"]),
                 Active = Convert.ToBoolean(reader["active"]),
                 EmployeeNumber = Convert.ToInt32(reader["employee_number"]),
-                FingerPrintUpdatedAt = Convert.ToDateTime(reader["fingerprint_updated_at"]),
+                FingerPrintUpdatedAt = (!reader.IsDBNull(reader.GetOrdinal("fingerprint_updated_at")))
+                    ? Convert.ToDateTime(reader["fingerprint_updated_at"])
+                    : Convert.ToDateTime(reader["updated_at"]),
                 Fingerprint = (!reader.IsDBNull(reader.GetOrdinal("fingerprint")))
                     ? (byte[])reader["fingerprint"]
                     : Array.Empty<byte>(),

@@ -14,5 +14,20 @@ namespace DGTIT.Checador.Core.Interfaces {
         Task<Employee> FindById(int employeeId);
         Task<Employee> FindByEmployeeNumber(int employeeId);
         Task UpdateEmployee(Employee employee);
+        
+        /// <summary>
+        ///  Create a new employee
+        /// </summary>
+        /// <param name="employee">Employee data</param>
+        /// <returns></returns>
+        Task<long> CreateEmployee(Employee employee);
+
+        /// <summary>
+        /// Create a new employee with a specific id
+        /// </summary>
+        /// <param name="employee">Employee data</param>
+        /// <param name="employeeId">Id of the new employee</param>
+        /// <returns></returns>
+        Task<long> CreateEmployee(Employee employee, long employeeId);
     }
 }
