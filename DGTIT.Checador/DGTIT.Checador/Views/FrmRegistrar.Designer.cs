@@ -58,20 +58,20 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.img_photo = new System.Windows.Forms.Label();
             this.panelHours = new System.Windows.Forms.Panel();
+            this.fingerPrintPictureBox = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cb_check = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.tbFingerPrint = new System.Windows.Forms.TextBox();
             this.panelActions = new System.Windows.Forms.Panel();
-            this.fingerPrintPictureBox = new System.Windows.Forms.PictureBox();
             this.groupBox_generales.SuspendLayout();
             this.groupBox_horarios.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panelHours.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fingerPrintPictureBox)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.panelActions.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fingerPrintPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -369,6 +369,15 @@
             this.panelHours.Name = "panelHours";
             this.panelHours.Size = new System.Drawing.Size(495, 229);
             this.panelHours.TabIndex = 12;
+            this.panelHours.Visible = false;
+            // 
+            // fingerPrintPictureBox
+            // 
+            this.fingerPrintPictureBox.Location = new System.Drawing.Point(426, 25);
+            this.fingerPrintPictureBox.Name = "fingerPrintPictureBox";
+            this.fingerPrintPictureBox.Size = new System.Drawing.Size(60, 68);
+            this.fingerPrintPictureBox.TabIndex = 13;
+            this.fingerPrintPictureBox.TabStop = false;
             // 
             // groupBox1
             // 
@@ -419,14 +428,6 @@
             this.panelActions.Size = new System.Drawing.Size(675, 44);
             this.panelActions.TabIndex = 13;
             // 
-            // fingerPrintPictureBox
-            // 
-            this.fingerPrintPictureBox.Location = new System.Drawing.Point(426, 25);
-            this.fingerPrintPictureBox.Name = "fingerPrintPictureBox";
-            this.fingerPrintPictureBox.Size = new System.Drawing.Size(60, 68);
-            this.fingerPrintPictureBox.TabIndex = 13;
-            this.fingerPrintPictureBox.TabStop = false;
-            // 
             // FrmRegistrar
             // 
             this.AcceptButton = this.btnAgregar;
@@ -448,12 +449,12 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.panelHours.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.fingerPrintPictureBox)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
             this.panelActions.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.fingerPrintPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }

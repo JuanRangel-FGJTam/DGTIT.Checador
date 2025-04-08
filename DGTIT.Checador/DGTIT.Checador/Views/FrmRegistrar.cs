@@ -41,9 +41,10 @@ namespace DGTIT.Checador
 
             // * initialize the models
             this.currentEmployee = employee;
-            if( currentEmployee.Fingerprint != null && currentEmployee.Fingerprint.Any()) {
-                DisableEdition();
-            }
+            //if( currentEmployee.Fingerprint != null && currentEmployee.Fingerprint.Any()) {
+            //    DisableEdition();
+            //}
+            DisableEdition();
         }
         
         private async void OnLoaded(object sender, EventArgs e)
